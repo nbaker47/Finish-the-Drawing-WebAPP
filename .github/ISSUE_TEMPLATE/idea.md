@@ -1,6 +1,8 @@
 ---
 name: Idea
 about: Suggest an idea for the project
+title: "[IDEA]"
+labels: "idea"
 ---
 
 ## Idea Description
