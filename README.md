@@ -17,10 +17,10 @@ Every day we generate a random scribble and a new word. Your goal is to use your
 
 # Services
 
-| Service  | Tool                                                                                                           | Doc | Image |
-| -------- | -------------------------------------------------------------------------------------------------------------- | --- | ----- |
-| api      | <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" />, GORM, Gin    | -   | -     |
-| frontend | <img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" /> | -   | -     |
+| Service  | Tool                                                                                                           | Doc      | Image                                                            |
+| -------- | -------------------------------------------------------------------------------------------------------------- | -------- | ---------------------------------------------------------------- |
+| api      | <img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" />, GORM, Gin    | -        | [ghcr](https://github.com/nbaker47/ftd/pkgs/container/ftd%2Fapi) |
+| frontend | <img src="https://img.shields.io/badge/next%20js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white" /> | [ghcr]() | -                                                                |
 
 # CICD
 
