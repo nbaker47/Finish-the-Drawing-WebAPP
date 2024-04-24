@@ -4,7 +4,7 @@
 
   <h1>Finish the Drawing!</h1>
 
-  <h3>🖍️ Daily competitiions to finish the drawing</h3>
+  <h3>✏️ Daily competitiions to finish the drawing</h3>
 
 </div>
 
@@ -18,7 +18,12 @@ Every day we generate a random scribble and a new word. Your goal is to use your
 
 Users invite other people either via username or from their friends list to play in a private game.
 
--
+- Players swap roles each round
+- During the start of each round user perform a task for their role, unaware of what the other users are doing
+- There is a "scribbler" role, who draws the initial scribble
+  - They use a limited pallet of ink
+- There is an "author" role, who sets the word
+- Then all users must use the scribble to draw the word
 
 # Services
 
