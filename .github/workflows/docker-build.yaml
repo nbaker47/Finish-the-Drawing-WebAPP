@@ -1,10 +1,13 @@
 name: Docker Build and Push
 
 on:
+  # push:
+  #   paths:
+  #     - "frontend/**"
+  #     - "api/**"
   push:
-    paths:
-      - "frontend/**"
-      - "api/**"
+    branches:
+      - main
 
 jobs:
   docker-api:
