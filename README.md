@@ -24,4 +24,4 @@ Every day we generate a random scribble and a new word. Your goal is to use your
 
 # CICD
 
-GitHub Workflows will handle the building and pushing of the containers when the relevant service has been modified. Our pods will pull the latest one on restart.
+GitHub Workflows will handle the building and pushing of the containers when the commit message used t push to main contains the relevant command: `build-api` or `build-frontend`. Our pods will pull the latest one on restart.
