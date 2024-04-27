@@ -41,7 +41,7 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 		return
 	}
 	// Call the service to create the drawing
-	err := h.DrawingService.CreateDrawing(&drawing)
+	err := h.DrawingService.Create(&drawing)
 	util.HandleError(c, err)
 	// Return the response
 	c.JSON(http.StatusCreated, drawing.ID)
