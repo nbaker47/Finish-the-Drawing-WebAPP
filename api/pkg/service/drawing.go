@@ -12,9 +12,9 @@ type DrawingService interface {
 	Create(drawing *model.Drawing) error
 	GetAll() ([]model.Drawing, error)
 	GetByID(id string) (*model.Drawing, error)
+	Delete(id string) error
 	Like(id string) error
 	Dislike(id string) error
-	Delete(id string) error
 }
 
 // IMPLEMENTATION
