@@ -34,12 +34,15 @@ func main() {
 	drawingService := service.NewDrawingService(DB)
 
 	// Handlers
-	drawingHandler := handler.NewDrawingHandler(drawingService)
-	userHandler := handler.NewUserHandler(userService)
+	handlers := []handler.Handler{
+		handler.NewUserHandler(userService),
+		handler.NewDrawingHandler(drawingService),
+	}
 
 	// Register routes
-	userHandler.RegisterRoutes(r)
-	drawingHandler.RegisterRoutes(r)
+	for _, h := range handlers {
+		h.RegisterRoutes(r)
+	}
 
 	// Start the server
 	err := r.Run(":8080")

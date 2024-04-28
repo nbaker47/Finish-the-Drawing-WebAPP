@@ -14,9 +14,9 @@ type UserHandler struct {
 }
 
 // INIT
-func NewUserHandler(userService service.UserService) *UserHandler {
+func NewUserHandler(userService *service.UserService) *UserHandler {
 	return &UserHandler{
-		UserService: userService,
+		UserService: *userService,
 	}
 }
 
@@ -32,7 +32,7 @@ func (h *UserHandler) RegisterRoutes(router *gin.Engine) {
 
 // HANDLERS:
 
-// CREATE USER | GENERIC
+// CREATE USER
 func (h *UserHandler) createUser(c *gin.Context) {
 	var user model.User
 	// Bind the request body to the user struct
@@ -47,14 +47,14 @@ func (h *UserHandler) createUser(c *gin.Context) {
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
 
-// GET ALL USERS | GENERIC
+// GET ALL USERS
 func (h *UserHandler) getAllUsers(c *gin.Context) {
 	users, err := h.UserService.GetAll()
 	util.HandleError(c, err)
 	c.JSON(http.StatusOK, users)
 }
 
-// GET USER BY ID | GENERIC
+// GET USER BY ID
 func (h *UserHandler) getUser(c *gin.Context) {
 	userID := c.Param("id")
 	user, err := h.UserService.GetByID(userID)
@@ -62,7 +62,7 @@ func (h *UserHandler) getUser(c *gin.Context) {
 	c.JSON(http.StatusOK, user)
 }
 
-// UPDATE USER | GENERIC
+// UPDATE USER
 func (h *UserHandler) updateUser(c *gin.Context) {
 	//userID := c.Param("id")
 	var updatedUser model.User
@@ -78,7 +78,7 @@ func (h *UserHandler) updateUser(c *gin.Context) {
 	c.JSON(http.StatusOK, updatedUser)
 }
 
-// DELETE USER | GENERIC
+// DELETE USER
 func (h *UserHandler) deleteUser(c *gin.Context) {
 	userID := c.Param("id")
 	err := h.UserService.Delete(userID)

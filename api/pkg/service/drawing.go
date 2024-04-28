@@ -7,24 +7,14 @@ import (
 	"gorm.io/gorm"
 )
 
-// INTERFACE
-type DrawingService interface {
-	Create(drawing *model.Drawing) error
-	GetAll() ([]model.Drawing, error)
-	GetByID(id string) (*model.Drawing, error)
-	Delete(id string) error
-	Like(id string) error
-	Dislike(id string) error
-}
-
 // IMPLEMENTATION
-type DrawingServiceImpl struct {
+type DrawingService struct {
 	repo repository.GenericRepository[model.Drawing]
 }
 
 // INIT
-func NewDrawingService(db *gorm.DB) DrawingService {
-	return &DrawingServiceImpl{
+func NewDrawingService(db *gorm.DB) *DrawingService {
+	return &DrawingService{
 		repo: repository.NewGenericRepository[model.Drawing](db),
 	}
 }
@@ -32,39 +22,36 @@ func NewDrawingService(db *gorm.DB) DrawingService {
 // METHODS :
 
 // CREATE DRAWING
-func (s *DrawingServiceImpl) Create(drawing *model.Drawing) error {
+func (s *DrawingService) Create(drawing *model.Drawing) error {
 	// extract the drawing from the drawing.Image
 	// upload drawing to the cloud -> get the image URL
 	// set the drawing.Image to the URL
 	// create the drawing
-	err := s.repo.Create(*drawing)
-	if err != nil {
-		return err
-	}
-	return nil
+	return s.repo.Create(*drawing)
 }
 
 // GET ALL DRAWINGS
-func (s *DrawingServiceImpl) GetAll() ([]model.Drawing, error) {
-	var drawings []model.Drawing
-	err := s.repo.GetAll(&drawings)
+func (s *DrawingService) GetAll() (*[]model.Drawing, error) {
+	var store []model.Drawing
+	err := s.repo.GetAll(&store)
 	if err != nil {
 		return nil, err
 	}
-	return drawings, nil
+	return &store, nil
 }
 
-// VIEW DRAWING
-func (s *DrawingServiceImpl) GetByID(id string) (*model.Drawing, error) {
-	drawing, err := s.repo.GetByID(id)
-	if err != nil {
-		return nil, err
-	}
-	return &drawing, nil
+// GET DRAWING
+func (s *DrawingService) GetByID(id string) (model.Drawing, error) {
+	return s.repo.GetByID(id)
+}
+
+// DELETE DRAWING
+func (s *DrawingService) Delete(id string) error {
+	return s.repo.Delete(id)
 }
 
 // LIKE
-func (s *DrawingServiceImpl) Like(id string) error {
+func (s *DrawingService) Like(id string) error {
 	drawing, err := s.repo.GetByID(id)
 	if err != nil {
 		return err
@@ -75,7 +62,7 @@ func (s *DrawingServiceImpl) Like(id string) error {
 }
 
 // DISLIKE
-func (s *DrawingServiceImpl) Dislike(id string) error {
+func (s *DrawingService) Dislike(id string) error {
 	drawing, err := s.repo.GetByID(id)
 	if err != nil {
 		return err
@@ -83,9 +70,4 @@ func (s *DrawingServiceImpl) Dislike(id string) error {
 
 	drawing.Dislikes++
 	return s.repo.Update(drawing)
-}
-
-// DELETE
-func (s *DrawingServiceImpl) Delete(id string) error {
-	return s.repo.Delete(id)
 }

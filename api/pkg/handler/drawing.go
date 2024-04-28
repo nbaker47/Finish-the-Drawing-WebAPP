@@ -14,9 +14,9 @@ type DrawingHandler struct {
 }
 
 // INIT
-func NewDrawingHandler(drawingService service.DrawingService) *DrawingHandler {
+func NewDrawingHandler(drawingService *service.DrawingService) *DrawingHandler {
 	return &DrawingHandler{
-		DrawingService: drawingService,
+		DrawingService: *drawingService,
 	}
 }
 
@@ -32,7 +32,7 @@ func (h *DrawingHandler) RegisterRoutes(router *gin.Engine) {
 
 // HANDLERS:
 
-// CREATE DRAWING | GENERIC
+// CREATE DRAWING
 func (h *DrawingHandler) createDrawing(c *gin.Context) {
 	var drawing model.Drawing
 	// Bind the request body to the drawing struct
@@ -47,14 +47,14 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 	c.JSON(http.StatusCreated, drawing.ID)
 }
 
-// GET ALL DRAWINGS | GENERIC
+// GET ALL DRAWINGS
 func (h *DrawingHandler) getAllDrawings(c *gin.Context) {
 	drawings, err := h.DrawingService.GetAll()
 	util.HandleError(c, err)
 	c.JSON(http.StatusOK, drawings)
 }
 
-// GET DRAWING BY ID | GENERIC
+// GET DRAWING BY ID
 func (h *DrawingHandler) GetDrawing(c *gin.Context) {
 	id := c.Param("id")
 	drawing, err := h.DrawingService.GetByID(id)
@@ -62,7 +62,7 @@ func (h *DrawingHandler) GetDrawing(c *gin.Context) {
 	c.JSON(http.StatusOK, drawing)
 }
 
-// DELETE DRAWING | GENERIC
+// DELETE DRAWING
 func (h *DrawingHandler) DeleteDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Delete(id)
