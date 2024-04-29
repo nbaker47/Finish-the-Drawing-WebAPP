@@ -1,13 +1,10 @@
-package model
+package domainObject
 
 import (
 	"time"
-
-	"gorm.io/gorm"
 )
 
 type Drawing struct {
-	gorm.Model
 	DatePosted  time.Time
 	Image       string
 	ID          uint

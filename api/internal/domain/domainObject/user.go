@@ -1,9 +1,6 @@
-package model
-
-import "gorm.io/gorm"
+package domainObject
 
 type User struct {
-	gorm.Model
 	ID             uint
 	Name           string
 	Email          string

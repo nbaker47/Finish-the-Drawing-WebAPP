@@ -1,28 +1,28 @@
 package service
 
 import (
-	"api/pkg/model"
-	"api/pkg/repository"
+	"api/internal/domain/domainObject"
+	"api/internal/domain/repository"
 
-	"gorm.io/gorm"
+	"api/internal/infra/repositoryImpl"
 )
 
 // IMPLEMENTATION
 type DrawingService struct {
-	repo repository.GenericRepository[model.Drawing]
+	repo repository.GenericRepository[domainObject.Drawing]
 }
 
 // INIT
-func NewDrawingService(db *gorm.DB) *DrawingService {
+func NewDrawingService() *DrawingService {
 	return &DrawingService{
-		repo: repository.NewGenericRepository[model.Drawing](db),
+		repo: repositoryImpl.NewGenericRepository[domainObject.Drawing](),
 	}
 }
 
 // METHODS :
 
 // CREATE DRAWING
-func (s *DrawingService) Create(drawing *model.Drawing) error {
+func (s *DrawingService) Create(drawing *domainObject.Drawing) error {
 	// extract the drawing from the drawing.Image
 	// upload drawing to the cloud -> get the image URL
 	// set the drawing.Image to the URL
@@ -31,8 +31,8 @@ func (s *DrawingService) Create(drawing *model.Drawing) error {
 }
 
 // GET ALL DRAWINGS
-func (s *DrawingService) GetAll() (*[]model.Drawing, error) {
-	var store []model.Drawing
+func (s *DrawingService) GetAll() (*[]domainObject.Drawing, error) {
+	var store []domainObject.Drawing
 	err := s.repo.GetAll(&store)
 	if err != nil {
 		return nil, err
@@ -41,7 +41,7 @@ func (s *DrawingService) GetAll() (*[]model.Drawing, error) {
 }
 
 // GET DRAWING
-func (s *DrawingService) GetByID(id string) (model.Drawing, error) {
+func (s *DrawingService) GetByID(id string) (domainObject.Drawing, error) {
 	return s.repo.GetByID(id)
 }
 

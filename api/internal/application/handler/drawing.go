@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"api/pkg/model"
-	"api/pkg/service"
+	"api/internal/domain/domainObject"
+	"api/internal/domain/service"
 	"api/pkg/util"
 	"net/http"
 
@@ -34,7 +34,7 @@ func (h *DrawingHandler) RegisterRoutes(router *gin.Engine) {
 
 // CREATE DRAWING
 func (h *DrawingHandler) createDrawing(c *gin.Context) {
-	var drawing model.Drawing
+	var drawing domainObject.Drawing
 	// Bind the request body to the drawing struct
 	if err := c.ShouldBindJSON(&drawing); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -42,7 +42,7 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 	}
 	// Call the service to create the drawing
 	err := h.DrawingService.Create(&drawing)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	// Return the response
 	c.JSON(http.StatusCreated, drawing.ID)
 }
@@ -50,7 +50,7 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 // GET ALL DRAWINGS
 func (h *DrawingHandler) getAllDrawings(c *gin.Context) {
 	drawings, err := h.DrawingService.GetAll()
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, drawings)
 }
 
@@ -58,7 +58,7 @@ func (h *DrawingHandler) getAllDrawings(c *gin.Context) {
 func (h *DrawingHandler) GetDrawing(c *gin.Context) {
 	id := c.Param("id")
 	drawing, err := h.DrawingService.GetByID(id)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, drawing)
 }
 
@@ -66,7 +66,7 @@ func (h *DrawingHandler) GetDrawing(c *gin.Context) {
 func (h *DrawingHandler) DeleteDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Delete(id)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -74,7 +74,7 @@ func (h *DrawingHandler) DeleteDrawing(c *gin.Context) {
 func (h *DrawingHandler) LikeDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Like(id)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -82,6 +82,6 @@ func (h *DrawingHandler) LikeDrawing(c *gin.Context) {
 func (h *DrawingHandler) DislikeDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Dislike(id)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

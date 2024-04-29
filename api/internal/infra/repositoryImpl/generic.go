@@ -1,17 +1,10 @@
-package repository
+package repositoryImpl
 
 import (
+	"api/internal/infra/interfaces"
+
 	"gorm.io/gorm"
 )
-
-// INTERFACE
-type GenericRepository[T any] interface {
-	Create(value T) error
-	GetAll(result *[]T) error
-	GetByID(id string) (T, error)
-	Update(value T) error
-	Delete(id string) error
-}
 
 // IMPLEMENTATION
 type GenericRepositoryImpl[T any] struct {
@@ -19,9 +12,9 @@ type GenericRepositoryImpl[T any] struct {
 }
 
 // INIT
-func NewGenericRepository[T any](db *gorm.DB) *GenericRepositoryImpl[T] {
+func NewGenericRepository[T any]() *GenericRepositoryImpl[T] {
 	return &GenericRepositoryImpl[T]{
-		DB: db,
+		DB: interfaces.GetGormDBConnection(),
 	}
 }
 

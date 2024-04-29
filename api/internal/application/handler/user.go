@@ -1,8 +1,8 @@
 package handler
 
 import (
-	"api/pkg/model"
-	"api/pkg/service"
+	"api/internal/domain/domainObject"
+	"api/internal/domain/service"
 	"api/pkg/util"
 	"net/http"
 
@@ -34,7 +34,7 @@ func (h *UserHandler) RegisterRoutes(router *gin.Engine) {
 
 // CREATE USER
 func (h *UserHandler) createUser(c *gin.Context) {
-	var user model.User
+	var user domainObject.User
 	// Bind the request body to the user struct
 	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -42,7 +42,7 @@ func (h *UserHandler) createUser(c *gin.Context) {
 	}
 	// Call the service to create the user
 	err := h.UserService.Create(&user)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	// Return the response
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
@@ -50,7 +50,7 @@ func (h *UserHandler) createUser(c *gin.Context) {
 // GET ALL USERS
 func (h *UserHandler) getAllUsers(c *gin.Context) {
 	users, err := h.UserService.GetAll()
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, users)
 }
 
@@ -58,14 +58,14 @@ func (h *UserHandler) getAllUsers(c *gin.Context) {
 func (h *UserHandler) getUser(c *gin.Context) {
 	userID := c.Param("id")
 	user, err := h.UserService.GetByID(userID)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, user)
 }
 
 // UPDATE USER
 func (h *UserHandler) updateUser(c *gin.Context) {
 	//userID := c.Param("id")
-	var updatedUser model.User
+	var updatedUser domainObject.User
 	// Bind the request body to the user struct
 	if err := c.ShouldBindJSON(&updatedUser); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -73,7 +73,7 @@ func (h *UserHandler) updateUser(c *gin.Context) {
 	}
 	// update via service
 	err := h.UserService.Update(&updatedUser)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	// return response
 	c.JSON(http.StatusOK, updatedUser)
 }
@@ -82,13 +82,13 @@ func (h *UserHandler) updateUser(c *gin.Context) {
 func (h *UserHandler) deleteUser(c *gin.Context) {
 	userID := c.Param("id")
 	err := h.UserService.Delete(userID)
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
 // GET HALL OF FAMERS
 func (h *UserHandler) getHallOfFame(c *gin.Context) {
 	hallOfFame, err := h.UserService.GetHallOfFame()
-	util.HandleError(c, err)
+	util.HandleGinError(c, err)
 	c.JSON(http.StatusOK, hallOfFame)
 }

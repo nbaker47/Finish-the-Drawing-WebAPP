@@ -1,27 +1,22 @@
 package main
 
 import (
-	"api/pkg/handler"
-	"api/pkg/model"
-	"api/pkg/service"
+	"api/internal/application/handler"
+
+	"api/internal/domain/domainObject"
+	"api/internal/domain/service"
+
+	"api/internal/infra/interfaces"
+
 	"fmt"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/driver/sqlite"
-	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
-
 func init() {
-	database, err := gorm.Open(sqlite.Open("test.db"), &gorm.Config{})
-
-	if err != nil {
-		panic("Failed to connect to database!")
-	}
-
-	database.AutoMigrate(&model.User{})
-	DB = database
+	// migrate the schema
+	database := interfaces.GetGormDBConnection()
+	database.AutoMigrate(&domainObject.User{})
 }
 
 func main() {
@@ -30,8 +25,8 @@ func main() {
 	r := gin.Default()
 
 	// services
-	userService := service.NewUserService(DB)
-	drawingService := service.NewDrawingService(DB)
+	userService := service.NewUserService()
+	drawingService := service.NewDrawingService()
 
 	// Handlers
 	handlers := []handler.Handler{

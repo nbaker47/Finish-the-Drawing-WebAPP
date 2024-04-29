@@ -1,40 +1,40 @@
 package service
 
 import (
-	"api/pkg/model"
-	"api/pkg/repository"
+	"api/internal/domain/domainObject"
+	"api/internal/domain/repository"
 
-	"gorm.io/gorm"
+	"api/internal/infra/repositoryImpl"
 )
 
 // IMPLEMENTATION
 type UserService struct {
-	repo repository.GenericRepository[model.User]
+	repo repository.GenericRepository[domainObject.User]
 }
 
 // INIT
-func NewUserService(db *gorm.DB) *UserService {
+func NewUserService() *UserService {
 	return &UserService{
-		repo: repository.NewGenericRepository[model.User](db),
+		repo: repositoryImpl.NewGenericRepository[domainObject.User](),
 	}
 }
 
 // METHODS :
 
 // CREATE USER
-func (s *UserService) Create(user *model.User) error {
+func (s *UserService) Create(user *domainObject.User) error {
 	// Will return an error if fail-case occurs
 	return s.repo.Create(*user)
 }
 
 // UPDATE USER
-func (s *UserService) Update(user *model.User) error {
+func (s *UserService) Update(user *domainObject.User) error {
 	return s.repo.Update(*user)
 }
 
 // GET ALL USERS
-func (s *UserService) GetAll() (*[]model.User, error) {
-	var store []model.User
+func (s *UserService) GetAll() (*[]domainObject.User, error) {
+	var store []domainObject.User
 	err := s.repo.GetAll(&store)
 	if err != nil {
 		return nil, err
@@ -43,7 +43,7 @@ func (s *UserService) GetAll() (*[]model.User, error) {
 }
 
 // GET USER
-func (s *UserService) GetByID(id string) (model.User, error) {
+func (s *UserService) GetByID(id string) (domainObject.User, error) {
 	return s.repo.GetByID(id)
 }
 
@@ -53,8 +53,8 @@ func (s *UserService) Delete(id string) error {
 }
 
 // GET HALL OF FAME
-func (s *UserService) GetHallOfFame() ([]model.User, error) {
-	var allUsers []model.User
+func (s *UserService) GetHallOfFame() ([]domainObject.User, error) {
+	var allUsers []domainObject.User
 	if err := s.repo.GetAll(&allUsers); err != nil {
 		return nil, err
 	}
