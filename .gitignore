@@ -1,4 +1,6 @@
 bin/
 *credentials.json
+*.db
 *.db*
 *.sqlite3*
+*.sqlite3
