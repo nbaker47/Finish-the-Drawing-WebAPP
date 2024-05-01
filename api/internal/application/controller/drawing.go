@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"api/internal/domain/domainObject"
@@ -8,28 +8,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type DrawingHandler struct {
+type DrawingController struct {
 	DrawingService service.DrawingService
 }
 
 // INIT
-func NewDrawingHandler(drawingService *service.DrawingService) *DrawingHandler {
-	return &DrawingHandler{
+func NewDrawingController(drawingService *service.DrawingService) *DrawingController {
+	return &DrawingController{
 		DrawingService: *drawingService,
 	}
 }
-
-// ROUTER
-func (h *DrawingHandler) RegisterRoutes(router *gin.Engine) {
-	router.POST("/drawing", h.createDrawing)
-	router.GET("/drawing", h.getAllDrawings)
-	router.GET("/drawing/:id", h.GetDrawing)
-	router.DELETE("/drawing/:id", h.DeleteDrawing)
-	router.POST("/drawing/:id/like", h.LikeDrawing)
-	router.POST("/drawing/:id/dislike", h.DislikeDrawing)
-}
-
-// HANDLERS:
 
 // CREATE DRAWING
 // @Summary Create a new drawing object
@@ -42,7 +30,7 @@ func (h *DrawingHandler) RegisterRoutes(router *gin.Engine) {
 // @Failure 400 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [post]
-func (h *DrawingHandler) createDrawing(c *gin.Context) {
+func (h *DrawingController) CreateDrawing(c *gin.Context) {
 	var drawing domainObject.Drawing
 	// Bind the request body to the drawing struct
 	if err := c.ShouldBindJSON(&drawing); err != nil {
@@ -51,7 +39,10 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 	}
 	// Call the service to create the drawing
 	err := h.DrawingService.Create(&drawing)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	// Return the response
 	c.JSON(http.StatusCreated, drawing.ID)
 }
@@ -64,9 +55,12 @@ func (h *DrawingHandler) createDrawing(c *gin.Context) {
 // @Success 200 {array} domainObject.Drawing
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [get]
-func (h *DrawingHandler) getAllDrawings(c *gin.Context) {
+func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 	drawings, err := h.DrawingService.GetAll()
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, drawings)
 }
 
@@ -80,10 +74,13 @@ func (h *DrawingHandler) getAllDrawings(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id} [get]
-func (h *DrawingHandler) GetDrawing(c *gin.Context) {
+func (h *DrawingController) GetDrawing(c *gin.Context) {
 	id := c.Param("id")
 	drawing, err := h.DrawingService.GetByID(id)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, drawing)
 }
 
@@ -96,10 +93,13 @@ func (h *DrawingHandler) GetDrawing(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id} [delete]
-func (h *DrawingHandler) DeleteDrawing(c *gin.Context) {
+func (h *DrawingController) DeleteDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Delete(id)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -112,10 +112,13 @@ func (h *DrawingHandler) DeleteDrawing(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/like [post]
-func (h *DrawingHandler) LikeDrawing(c *gin.Context) {
+func (h *DrawingController) LikeDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Like(id)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
@@ -128,9 +131,12 @@ func (h *DrawingHandler) LikeDrawing(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/dislike [post]
-func (h *DrawingHandler) DislikeDrawing(c *gin.Context) {
+func (h *DrawingController) DislikeDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Dislike(id)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }

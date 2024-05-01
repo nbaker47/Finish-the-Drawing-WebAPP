@@ -1,4 +1,4 @@
-package handler
+package controller
 
 import (
 	"api/internal/domain/domainObject"
@@ -8,31 +8,29 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type UserHandler struct {
+type UserController struct {
 	UserService service.UserService
 }
 
 // INIT
-func NewUserHandler(userService *service.UserService) *UserHandler {
-	return &UserHandler{
+func NewUserController(userService *service.UserService) *UserController {
+	return &UserController{
 		UserService: *userService,
 	}
 }
 
-// ROUTER
-func (h *UserHandler) RegisterRoutes(router *gin.Engine) {
-	router.POST("/users", h.createUser)
-	router.GET("/users", h.getAllUsers)
-	router.GET("/users/hall-of-fame", h.getHallOfFame)
-	router.GET("/users/:id", h.getUser)
-	router.PATCH("/users/:id", h.updateUser)
-	router.DELETE("/users/:id", h.deleteUser)
-}
-
-// HANDLERS:
-
 // CREATE USER
-func (h *UserHandler) createUser(c *gin.Context) {
+// @Summary Create user
+// @Description Create user
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param user body domainObject.User true "User object"
+// @Success 201 {object} map[string]interface{}
+// @Failure 400 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /users [post]
+func (h *UserController) CreateUser(c *gin.Context) {
 	var user domainObject.User
 	// Bind the request body to the user struct
 	if err := c.ShouldBindJSON(&user); err != nil {
@@ -41,7 +39,10 @@ func (h *UserHandler) createUser(c *gin.Context) {
 	}
 	// Call the service to create the user
 	err := h.UserService.Create(&user)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	// Return the response
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
 }
@@ -55,9 +56,12 @@ func (h *UserHandler) createUser(c *gin.Context) {
 // @Success 200 {object} []domainObject.User
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [get]
-func (h *UserHandler) getAllUsers(c *gin.Context) {
+func (h *UserController) GetAllUsers(c *gin.Context) {
 	users, err := h.UserService.GetAll()
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, users)
 }
 
@@ -72,10 +76,13 @@ func (h *UserHandler) getAllUsers(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [get]
-func (h *UserHandler) getUser(c *gin.Context) {
+func (h *UserController) GetUser(c *gin.Context) {
 	userID := c.Param("id")
 	user, err := h.UserService.GetByID(userID)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, user)
 }
 
@@ -92,7 +99,7 @@ func (h *UserHandler) getUser(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [patch]
-func (h *UserHandler) updateUser(c *gin.Context) {
+func (h *UserController) UpdateUser(c *gin.Context) {
 	//userID := c.Param("id")
 	var updatedUser domainObject.User
 	// Bind the request body to the user struct
@@ -102,7 +109,10 @@ func (h *UserHandler) updateUser(c *gin.Context) {
 	}
 	// update via service
 	err := h.UserService.Update(&updatedUser)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	// return response
 	c.JSON(http.StatusOK, updatedUser)
 }
@@ -118,10 +128,13 @@ func (h *UserHandler) updateUser(c *gin.Context) {
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [delete]
-func (h *UserHandler) deleteUser(c *gin.Context) {
+func (h *UserController) DeleteUser(c *gin.Context) {
 	userID := c.Param("id")
 	err := h.UserService.Delete(userID)
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
@@ -134,8 +147,11 @@ func (h *UserHandler) deleteUser(c *gin.Context) {
 // @Success 200 {object} []domainObject.User
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/hall-of-fame [get]
-func (h *UserHandler) getHallOfFame(c *gin.Context) {
+func (h *UserController) GetHallOfFame(c *gin.Context) {
 	hallOfFame, err := h.UserService.GetHallOfFame()
-	HandleGinError(c, err)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
 	c.JSON(http.StatusOK, hallOfFame)
 }

@@ -1,7 +1,8 @@
 package main
 
 import (
-	"api/internal/application/handler"
+	"api/internal/application/controller"
+	"api/internal/application/router"
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
 	"api/internal/infra/interfacer"
@@ -31,16 +32,13 @@ func main() {
 	userService := service.NewUserService()
 	drawingService := service.NewDrawingService()
 
-	// Handlers
-	handlers := []handler.Handler{
-		handler.NewUserHandler(userService),
-		handler.NewDrawingHandler(drawingService),
-	}
+	// controllers
+	userController := controller.NewUserController(userService)
+	drawingController := controller.NewDrawingController(drawingService)
 
-	// Register routes
-	for _, h := range handlers {
-		h.RegisterRoutes(r)
-	}
+	// routers
+	router.RegisterUserRoutes(r, userController)
+	router.RegisterDrawingRoutes(r, drawingController)
 
 	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
