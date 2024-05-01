@@ -19,7 +19,7 @@ func NewGenericRepository[T any]() *GenericRepositoryImpl[T] {
 }
 
 // CREATE
-func (r *GenericRepositoryImpl[T]) Create(value T) error {
+func (r *GenericRepositoryImpl[T]) Create(value *T) error {
 	// Will return an error if fail-case occurs
 	if err := r.DB.Create(value).Error; err != nil {
 		return err

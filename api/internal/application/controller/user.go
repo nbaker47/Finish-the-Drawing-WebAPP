@@ -31,20 +31,22 @@ func NewUserController(userService *service.UserService) *UserController {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [post]
 func (h *UserController) CreateUser(c *gin.Context) {
-	var user domainObject.User
+	userP := &domainObject.User{}
 	// Bind the request body to the user struct
-	if err := c.ShouldBindJSON(&user); err != nil {
+	if err := c.ShouldBindJSON(userP); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// Call the service to create the user
-	err := h.UserService.Create(&user)
+	err := h.UserService.Create(userP)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	// Bind the user to the response struct
+	userResponse := domainObject.UserToUserResponse(*userP)
 	// Return the response
-	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully"})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": userResponse})
 }
 
 // GET ALL USERS
@@ -57,12 +59,17 @@ func (h *UserController) CreateUser(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [get]
 func (h *UserController) GetAllUsers(c *gin.Context) {
-	users, err := h.UserService.GetAll()
+	usersP, err := h.UserService.GetAll()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, users)
+	// Bind the users to the response struct
+	var usersResponse []domainObject.UserResponse
+	for _, user := range *usersP {
+		usersResponse = append(usersResponse, domainObject.UserToUserResponse(user))
+	}
+	c.JSON(http.StatusOK, usersResponse)
 }
 
 // GET USER BY ID
@@ -83,7 +90,9 @@ func (h *UserController) GetUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, user)
+	// Bind the user to the response struct
+	userResponse := domainObject.UserToUserResponse(user)
+	c.JSON(http.StatusOK, userResponse)
 }
 
 // UPDATE USER
@@ -113,8 +122,9 @@ func (h *UserController) UpdateUser(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	// return response
-	c.JSON(http.StatusOK, updatedUser)
+	// Bind the user to the response struct
+	userResponse := domainObject.UserToUserResponse(updatedUser)
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": userResponse})
 }
 
 // DELETE USER
@@ -153,5 +163,10 @@ func (h *UserController) GetHallOfFame(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, hallOfFame)
+	// Bind the users to the response struct
+	var hallOfFameResponse []domainObject.UserResponse
+	for _, user := range hallOfFame {
+		hallOfFameResponse = append(hallOfFameResponse, domainObject.UserToUserResponse(user))
+	}
+	c.JSON(http.StatusOK, hallOfFameResponse)
 }

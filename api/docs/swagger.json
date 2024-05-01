@@ -542,6 +542,13 @@
         },
         "domainObject.User": {
             "type": "object",
+            "required": [
+                "background",
+                "email",
+                "password",
+                "profile_picture",
+                "username"
+            ],
             "properties": {
                 "background": {
                     "type": "string"
@@ -552,10 +559,13 @@
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "password": {
                     "type": "string"
                 },
-                "profilePicture": {
+                "profile_picture": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

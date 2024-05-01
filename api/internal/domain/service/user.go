@@ -3,8 +3,9 @@ package service
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
-
 	"api/internal/infra/repositoryImpl"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 // IMPLEMENTATION
@@ -23,8 +24,14 @@ func NewUserService() *UserService {
 
 // CREATE USER
 func (s *UserService) Create(user *domainObject.User) error {
+	// hash the password
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	if err != nil {
+		return err
+	}
+	user.Password = string(bytes)
 	// Will return an error if fail-case occurs
-	return s.repo.Create(*user)
+	return s.repo.Create(user)
 }
 
 // UPDATE USER

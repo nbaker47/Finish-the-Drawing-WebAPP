@@ -552,6 +552,13 @@ const docTemplate = `{
         },
         "domainObject.User": {
             "type": "object",
+            "required": [
+                "background",
+                "email",
+                "password",
+                "profile_picture",
+                "username"
+            ],
             "properties": {
                 "background": {
                     "type": "string"
@@ -562,10 +569,13 @@ const docTemplate = `{
                 "id": {
                     "type": "integer"
                 },
-                "name": {
+                "password": {
                     "type": "string"
                 },
-                "profilePicture": {
+                "profile_picture": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

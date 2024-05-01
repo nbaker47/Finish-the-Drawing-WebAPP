@@ -27,7 +27,7 @@ func (s *DrawingService) Create(drawing *domainObject.Drawing) error {
 	// upload drawing to the cloud -> get the image URL
 	// set the drawing.Image to the URL
 	// create the drawing
-	return s.repo.Create(*drawing)
+	return s.repo.Create(drawing)
 }
 
 // GET ALL DRAWINGS

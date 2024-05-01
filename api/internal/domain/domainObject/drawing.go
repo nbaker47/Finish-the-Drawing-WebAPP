@@ -5,9 +5,9 @@ import (
 )
 
 type Drawing struct {
+	ID          uint
 	DatePosted  time.Time
 	Image       string
-	ID          uint
 	User        User
 	Description string
 	Word        string
