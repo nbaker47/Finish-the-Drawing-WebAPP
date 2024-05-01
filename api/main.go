@@ -2,23 +2,26 @@ package main
 
 import (
 	"api/internal/application/handler"
-
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
-
-	"api/internal/infra/interfaces"
+	"api/internal/infra/interfacer"
 
 	"fmt"
 
+	_ "api/docs"
+
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func init() {
 	// migrate the schema
-	database := interfaces.GetGormDBConnection()
+	database := interfacer.GetGormDBConnection()
 	database.AutoMigrate(&domainObject.User{})
 }
 
+// @title	Finish the Drawing API
 func main() {
 
 	// Gin
@@ -38,6 +41,9 @@ func main() {
 	for _, h := range handlers {
 		h.RegisterRoutes(r)
 	}
+
+	// Swagger
+	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Start the server
 	err := r.Run(":8080")

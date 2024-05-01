@@ -1,4 +1,4 @@
-package interfaces
+package interfacer
 
 import (
 	"gorm.io/driver/sqlite"

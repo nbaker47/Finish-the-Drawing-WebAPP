@@ -1,7 +1,7 @@
 package repositoryImpl
 
 import (
-	"api/internal/infra/interfaces"
+	"api/internal/infra/interfacer"
 
 	"gorm.io/gorm"
 )
@@ -14,7 +14,7 @@ type GenericRepositoryImpl[T any] struct {
 // INIT
 func NewGenericRepository[T any]() *GenericRepositoryImpl[T] {
 	return &GenericRepositoryImpl[T]{
-		DB: interfaces.GetGormDBConnection(),
+		DB: interfacer.GetGormDBConnection(),
 	}
 }
 

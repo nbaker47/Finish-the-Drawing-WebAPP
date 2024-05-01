@@ -1,0 +1,350 @@
+definitions:
+  domainObject.Drawing:
+    properties:
+      datePosted:
+        type: string
+      description:
+        type: string
+      dislikedBy:
+        items:
+          $ref: '#/definitions/domainObject.User'
+        type: array
+      dislikes:
+        type: integer
+      id:
+        type: integer
+      image:
+        type: string
+      likedBy:
+        items:
+          $ref: '#/definitions/domainObject.User'
+        type: array
+      likes:
+        type: integer
+      user:
+        $ref: '#/definitions/domainObject.User'
+      word:
+        type: string
+    type: object
+  domainObject.User:
+    properties:
+      background:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      profilePicture:
+        type: string
+    type: object
+info:
+  contact: {}
+  title: Finish the Drawing API
+paths:
+  /drawing:
+    get:
+      description: Get all drawings
+      operationId: get-all-drawings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domainObject.Drawing'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all drawings
+    post:
+      consumes:
+      - application/json
+      description: Create a new drawing object with the given data
+      operationId: create-drawing
+      parameters:
+      - description: Drawing object
+        in: body
+        name: drawing
+        required: true
+        schema:
+          $ref: '#/definitions/domainObject.Drawing'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: ID of the created drawing
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Create a new drawing object
+  /drawing/{id}:
+    delete:
+      description: Delete a drawing by its ID
+      operationId: delete-drawing
+      parameters:
+      - description: Drawing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete a drawing
+    get:
+      description: Get a drawing by its ID
+      operationId: get-drawing-by-id
+      parameters:
+      - description: Drawing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domainObject.Drawing'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get a drawing by ID
+  /drawing/{id}/dislike:
+    post:
+      description: Dislike a drawing by its ID
+      operationId: dislike-drawing
+      parameters:
+      - description: Drawing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Dislike a drawing
+  /drawing/{id}/like:
+    post:
+      description: Like a drawing by its ID
+      operationId: like-drawing
+      parameters:
+      - description: Drawing ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Like a drawing
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domainObject.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all users
+      tags:
+      - Users
+  /users/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Delete user
+      tags:
+      - Users
+    get:
+      consumes:
+      - application/json
+      description: Get user by ID
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domainObject.User'
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get user by ID
+      tags:
+      - Users
+    patch:
+      consumes:
+      - application/json
+      description: Update user
+      parameters:
+      - description: User ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: User object
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/domainObject.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domainObject.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties: true
+            type: object
+        "404":
+          description: Not Found
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Update user
+      tags:
+      - Users
+  /users/hall-of-fame:
+    get:
+      consumes:
+      - application/json
+      description: Get hall of famers
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domainObject.User'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get hall of famers
+      tags:
+      - Users
+swagger: "2.0"

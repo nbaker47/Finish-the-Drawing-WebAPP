@@ -13,6 +13,6 @@ type Drawing struct {
 	Word        string
 	Likes       int
 	Dislikes    int
-	LikedBy     []User `gorm:"many2many:user_likes;"`
-	DislikedBy  []User `gorm:"many2many:user_dislikes;"`
+	LikedBy     []User
+	DislikedBy  []User
 }

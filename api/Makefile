@@ -4,7 +4,7 @@ build:
 	go build -o bin/ftd_api cmd/main.go
 
 run:
-	go run cmd/main.go
+	go run main.go
 
 test:
 	go test ./...
