@@ -6,6 +6,7 @@ import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
 	"api/internal/infra/interfacer"
+	"api/internal/infra/repositoryImpl"
 
 	"fmt"
 
@@ -29,8 +30,8 @@ func main() {
 	r := gin.Default()
 
 	// services
-	userService := service.NewUserService()
-	drawingService := service.NewDrawingService()
+	userService := service.NewUserService(repositoryImpl.NewGenericRepository[domainObject.User]())
+	drawingService := service.NewDrawingService(repositoryImpl.NewGenericRepository[domainObject.Drawing]())
 
 	// controllers
 	userController := controller.NewUserController(userService)

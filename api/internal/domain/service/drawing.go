@@ -3,8 +3,6 @@ package service
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
-
-	"api/internal/infra/repositoryImpl"
 )
 
 // IMPLEMENTATION
@@ -13,9 +11,9 @@ type DrawingService struct {
 }
 
 // INIT
-func NewDrawingService() *DrawingService {
+func NewDrawingService(repo repository.GenericRepository[domainObject.Drawing]) *DrawingService {
 	return &DrawingService{
-		repo: repositoryImpl.NewGenericRepository[domainObject.Drawing](),
+		repo: repo,
 	}
 }
 

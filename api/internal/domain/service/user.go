@@ -3,7 +3,6 @@ package service
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
-	"api/internal/infra/repositoryImpl"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,9 +13,9 @@ type UserService struct {
 }
 
 // INIT
-func NewUserService() *UserService {
+func NewUserService(repo repository.GenericRepository[domainObject.User]) *UserService {
 	return &UserService{
-		repo: repositoryImpl.NewGenericRepository[domainObject.User](),
+		repo: repo,
 	}
 }
 
@@ -49,7 +48,7 @@ func (s *UserService) GetAll() (*[]domainObject.User, error) {
 	return &store, nil
 }
 
-// GET USER
+// GET USER BY ID
 func (s *UserService) GetByID(id string) (domainObject.User, error) {
 	return s.repo.GetByID(id)
 }
