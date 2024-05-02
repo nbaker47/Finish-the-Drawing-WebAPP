@@ -29,9 +29,13 @@ func main() {
 	// Gin
 	r := gin.Default()
 
+	// repo impl
+	userRepoImpl := repositoryImpl.NewGenericRepository[domainObject.User]()
+	drawingRepoImpl := repositoryImpl.NewGenericRepository[domainObject.Drawing]()
+
 	// services
-	userService := service.NewUserService(repositoryImpl.NewGenericRepository[domainObject.User]())
-	drawingService := service.NewDrawingService(repositoryImpl.NewGenericRepository[domainObject.Drawing]())
+	userService := service.NewUserService(userRepoImpl)
+	drawingService := service.NewDrawingService(drawingRepoImpl)
 
 	// controllers
 	userController := controller.NewUserController(userService)
