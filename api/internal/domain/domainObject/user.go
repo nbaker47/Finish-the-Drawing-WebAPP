@@ -17,7 +17,7 @@ type UserResponse struct {
 	ProfilePicture string `json:"profile_picture"`
 }
 
-func UserToUserResponse(user User) UserResponse {
+func ConvertToUserResponse(user User) UserResponse {
 	return UserResponse{
 		ID:             user.ID,
 		Username:       user.Username,

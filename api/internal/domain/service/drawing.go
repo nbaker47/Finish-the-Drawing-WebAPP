@@ -3,6 +3,7 @@ package service
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
+	"strconv"
 )
 
 // IMPLEMENTATION
@@ -32,7 +33,6 @@ func (s *DrawingService) Create(drawing *domainObject.Drawing) error {
 	return s.repo.Create(drawing)
 }
 
-// GET ALL DRAWINGS
 func (s *DrawingService) GetAll() (*[]domainObject.DrawingResponse, error) {
 	var store []domainObject.Drawing
 	err := s.repo.GetAll(&store)
@@ -40,12 +40,18 @@ func (s *DrawingService) GetAll() (*[]domainObject.DrawingResponse, error) {
 		return nil, err
 	}
 
-	var safeDrawings []domainObject.DrawingResponse
+	var drawingsResponse []domainObject.DrawingResponse
 	for _, drawing := range store {
-		safeDrawings = append(safeDrawings, domainObject.ConvertDrawingResponse(drawing))
+		drawingSafe := domainObject.ConvertDrawingResponse(drawing)
+		user, err := s.userRepo.GetByID(strconv.Itoa(int(drawing.User)))
+		if err != nil {
+			return nil, err
+		}
+		drawingSafe.User = domainObject.ConvertToUserResponse(user)
+		drawingsResponse = append(drawingsResponse, drawingSafe)
 	}
 
-	return &safeDrawings, nil
+	return &drawingsResponse, nil
 }
 
 // GET DRAWING
@@ -54,8 +60,13 @@ func (s *DrawingService) GetByID(id string) (domainObject.DrawingResponse, error
 	if err != nil {
 		return domainObject.DrawingResponse{}, err
 	}
-
-	return domainObject.ConvertDrawingResponse(drawing), nil
+	drawingSafe := domainObject.ConvertDrawingResponse(drawing)
+	user, err := s.userRepo.GetByID(strconv.Itoa(int(drawing.User)))
+	if err != nil {
+		return domainObject.DrawingResponse{}, err
+	}
+	drawingSafe.User = domainObject.ConvertToUserResponse(user)
+	return drawingSafe, nil
 }
 
 // DELETE DRAWING

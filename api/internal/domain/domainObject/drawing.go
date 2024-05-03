@@ -16,7 +16,7 @@ type Drawing struct {
 type DrawingResponse struct {
 	ID          uint
 	Image       string
-	User        uint
+	User        UserResponse
 	Description string
 	Word        string
 	Likes       int
@@ -29,31 +29,20 @@ func ConvertDrawingResponse(drawing Drawing) DrawingResponse {
 	var safeDrawing DrawingResponse
 	safeDrawing.ID = drawing.ID
 	safeDrawing.Image = drawing.Image
-	safeDrawing.User = drawing.User
 	safeDrawing.Description = drawing.Description
 	safeDrawing.Word = drawing.Word
 	safeDrawing.Likes = drawing.Likes
 	safeDrawing.Dislikes = drawing.Dislikes
 
 	for _, user := range drawing.LikedBy {
-		safeDrawing.LikedBy = append(safeDrawing.LikedBy, UserResponse{
-			ID:             user.ID,
-			Username:       user.Username,
-			Email:          user.Email,
-			Background:     user.Background,
-			ProfilePicture: user.ProfilePicture,
-		})
+		safeDrawing.LikedBy = append(safeDrawing.LikedBy, ConvertToUserResponse(user))
 	}
 
 	for _, user := range drawing.DislikedBy {
-		safeDrawing.DislikedBy = append(safeDrawing.DislikedBy, UserResponse{
-			ID:             user.ID,
-			Username:       user.Username,
-			Email:          user.Email,
-			Background:     user.Background,
-			ProfilePicture: user.ProfilePicture,
-		})
+		safeDrawing.DislikedBy = append(safeDrawing.DislikedBy, ConvertToUserResponse(user))
 	}
+
+	// safeDrawing.User = ConvertToUserResponse(drawing.User)
 
 	return safeDrawing
 }

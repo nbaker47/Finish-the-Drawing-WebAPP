@@ -44,7 +44,7 @@ func (h *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.UserToUserResponse(*userP)
+	userResponse := domainObject.ConvertToUserResponse(*userP)
 	// Return the response
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": userResponse})
 }
@@ -67,7 +67,7 @@ func (h *UserController) GetAllUsers(c *gin.Context) {
 	// Bind the users to the response struct
 	var usersResponse []domainObject.UserResponse
 	for _, user := range *usersP {
-		usersResponse = append(usersResponse, domainObject.UserToUserResponse(user))
+		usersResponse = append(usersResponse, domainObject.ConvertToUserResponse(user))
 	}
 	c.JSON(http.StatusOK, usersResponse)
 }
@@ -91,7 +91,7 @@ func (h *UserController) GetUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.UserToUserResponse(user)
+	userResponse := domainObject.ConvertToUserResponse(user)
 	c.JSON(http.StatusOK, userResponse)
 }
 
@@ -123,7 +123,7 @@ func (h *UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.UserToUserResponse(updatedUser)
+	userResponse := domainObject.ConvertToUserResponse(updatedUser)
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": userResponse})
 }
 
@@ -166,7 +166,7 @@ func (h *UserController) GetHallOfFame(c *gin.Context) {
 	// Bind the users to the response struct
 	var hallOfFameResponse []domainObject.UserResponse
 	for _, user := range hallOfFame {
-		hallOfFameResponse = append(hallOfFameResponse, domainObject.UserToUserResponse(user))
+		hallOfFameResponse = append(hallOfFameResponse, domainObject.ConvertToUserResponse(user))
 	}
 	c.JSON(http.StatusOK, hallOfFameResponse)
 }
