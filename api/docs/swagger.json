@@ -167,6 +167,15 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -206,6 +215,15 @@
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -501,14 +519,14 @@
     "definitions": {
         "domainObject.Drawing": {
             "type": "object",
+            "required": [
+                "image"
+            ],
             "properties": {
-                "datePosted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },
-                "dislikedBy": {
+                "disliked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -523,7 +541,7 @@
                 "image": {
                     "type": "string"
                 },
-                "likedBy": {
+                "liked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -533,7 +551,7 @@
                     "type": "integer"
                 },
                 "user": {
-                    "$ref": "#/definitions/domainObject.User"
+                    "type": "integer"
                 },
                 "word": {
                     "type": "string"

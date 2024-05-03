@@ -21,6 +21,7 @@ func init() {
 	// migrate the schema
 	database := interfacer.GetGormDBConnection()
 	database.AutoMigrate(&domainObject.User{})
+	database.AutoMigrate(&domainObject.Drawing{})
 }
 
 // @title	Finish the Drawing API
@@ -30,12 +31,12 @@ func main() {
 	r := gin.Default()
 
 	// repo impl
-	userRepoImpl := repositoryImpl.NewGenericRepository[domainObject.User]()
-	drawingRepoImpl := repositoryImpl.NewGenericRepository[domainObject.Drawing]()
+	userRepoImpl := repositoryImpl.NewUserRepository()
+	drawingRepoImpl := repositoryImpl.NewDrawingRepository()
 
 	// services
 	userService := service.NewUserService(userRepoImpl)
-	drawingService := service.NewDrawingService(drawingRepoImpl)
+	drawingService := service.NewDrawingService(drawingRepoImpl, userRepoImpl)
 
 	// controllers
 	userController := controller.NewUserController(userService)

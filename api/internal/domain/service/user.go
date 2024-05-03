@@ -34,8 +34,14 @@ func (s *UserService) Create(user *domainObject.User) error {
 }
 
 // UPDATE USER
-func (s *UserService) Update(user *domainObject.User) error {
-	return s.repo.Update(*user)
+func (s *UserService) Update(userID string, user *domainObject.User) error {
+	// hash the password
+	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	if err != nil {
+		return err
+	}
+	user.Password = string(bytes)
+	return s.repo.Update(userID, user)
 }
 
 // GET ALL USERS

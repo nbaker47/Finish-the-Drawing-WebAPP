@@ -4,6 +4,7 @@ import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -108,13 +109,20 @@ func (h *DrawingController) DeleteDrawing(c *gin.Context) {
 // @Description Like a drawing by its ID
 // @ID like-drawing
 // @Param id path string true "Drawing ID"
+// @Param user body uint true "User ID"
 // @Success 200 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/like [post]
 func (h *DrawingController) LikeDrawing(c *gin.Context) {
 	id := c.Param("id")
-	err := h.DrawingService.Like(id)
+	var userID uint
+	if err := c.ShouldBindJSON(&userID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	userIDStr := strconv.FormatUint(uint64(userID), 10)
+	err := h.DrawingService.Like(id, userIDStr)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -127,13 +135,20 @@ func (h *DrawingController) LikeDrawing(c *gin.Context) {
 // @Description Dislike a drawing by its ID
 // @ID dislike-drawing
 // @Param id path string true "Drawing ID"
+// @Param user body uint true "User ID"
 // @Success 200 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/dislike [post]
 func (h *DrawingController) DislikeDrawing(c *gin.Context) {
 	id := c.Param("id")
-	err := h.DrawingService.Dislike(id)
+	var userID uint
+	if err := c.ShouldBindJSON(&userID); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	userIDStr := strconv.FormatUint(uint64(userID), 10)
+	err := h.DrawingService.Dislike(id, userIDStr)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

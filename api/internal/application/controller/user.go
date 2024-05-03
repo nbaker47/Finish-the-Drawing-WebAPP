@@ -109,7 +109,7 @@ func (h *UserController) GetUser(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [patch]
 func (h *UserController) UpdateUser(c *gin.Context) {
-	//userID := c.Param("id")
+	userID := c.Param("id")
 	var updatedUser domainObject.User
 	// Bind the request body to the user struct
 	if err := c.ShouldBindJSON(&updatedUser); err != nil {
@@ -117,7 +117,7 @@ func (h *UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 	// update via service
-	err := h.UserService.Update(&updatedUser)
+	err := h.UserService.Update(userID, &updatedUser)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

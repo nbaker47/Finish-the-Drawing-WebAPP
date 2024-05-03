@@ -1,7 +1,7 @@
 package domainObject
 
 type User struct {
-	ID             uint
+	ID             uint   `gorm:"primaryKey" json:"id"`
 	Username       string `json:"username" binding:"required"`
 	Password       string `json:"password" binding:"required"`
 	Email          string `json:"email" binding:"required"`

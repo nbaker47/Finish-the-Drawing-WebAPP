@@ -177,6 +177,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -216,6 +225,15 @@ const docTemplate = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "description": "User ID",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -511,14 +529,14 @@ const docTemplate = `{
     "definitions": {
         "domainObject.Drawing": {
             "type": "object",
+            "required": [
+                "image"
+            ],
             "properties": {
-                "datePosted": {
-                    "type": "string"
-                },
                 "description": {
                     "type": "string"
                 },
-                "dislikedBy": {
+                "disliked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -533,7 +551,7 @@ const docTemplate = `{
                 "image": {
                     "type": "string"
                 },
-                "likedBy": {
+                "liked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -543,7 +561,7 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user": {
-                    "$ref": "#/definitions/domainObject.User"
+                    "type": "integer"
                 },
                 "word": {
                     "type": "string"
