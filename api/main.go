@@ -20,6 +20,7 @@ import (
 func init() {
 	// migrate the schema
 	database := interfacer.GetGormDBConnection()
+	database.AutoMigrate(&domainObject.Daily{})
 	database.AutoMigrate(&domainObject.User{})
 	database.AutoMigrate(&domainObject.Drawing{})
 }
@@ -31,23 +32,30 @@ func main() {
 	r := gin.Default()
 
 	// repo impl
+	dailyRepository := repositoryImpl.NewDailyRepository()
 	userRepoImpl := repositoryImpl.NewUserRepository()
 	drawingRepoImpl := repositoryImpl.NewDrawingRepository()
 
 	// services
+	dailyService := service.NewDailyService(dailyRepository)
 	userService := service.NewUserService(userRepoImpl)
-	drawingService := service.NewDrawingService(drawingRepoImpl, userRepoImpl)
+	drawingService := service.NewDrawingService(drawingRepoImpl, userRepoImpl, *dailyService)
 
 	// controllers
+	dailyController := controller.NewDailyController(dailyService)
 	userController := controller.NewUserController(userService)
 	drawingController := controller.NewDrawingController(drawingService)
 
 	// routers
+	router.RegisterDailyRoutes(r, dailyController)
 	router.RegisterUserRoutes(r, userController)
 	router.RegisterDrawingRoutes(r, drawingController)
 
 	// Swagger
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
+	// Generate the daily
+	dailyService.Create()
 
 	// Start the server
 	err := r.Run(":8080")

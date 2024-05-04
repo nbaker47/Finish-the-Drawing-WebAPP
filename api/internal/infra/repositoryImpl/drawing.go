@@ -30,7 +30,7 @@ func (r *DrawingRepositoryImpl) Create(value *domainObject.Drawing) error {
 
 // GET ALL
 func (r *DrawingRepositoryImpl) GetAll(result *[]domainObject.Drawing) error {
-	if err := r.DB.Preload("LikedBy").Preload("DislikedBy").Find(result).Error; err != nil {
+	if err := r.DB.Preload("User").Preload("Daily").Preload("LikedBy").Preload("DislikedBy").Find(result).Error; err != nil {
 		return err
 	}
 	return nil
@@ -39,7 +39,17 @@ func (r *DrawingRepositoryImpl) GetAll(result *[]domainObject.Drawing) error {
 // GET BY ID
 func (r *DrawingRepositoryImpl) GetByID(id string) (domainObject.Drawing, error) {
 	var drawing domainObject.Drawing
-	result := r.DB.Preload("LikedBy").Preload("DislikedBy").First(&drawing, id)
+	result := r.DB.Preload("User").Preload("Daily").Preload("LikedBy").Preload("DislikedBy").First(&drawing, id)
+	if result.Error != nil {
+		return domainObject.Drawing{}, result.Error
+	}
+	return drawing, nil
+}
+
+// GET BY FIELD
+func (r *DrawingRepositoryImpl) GetByField(field string, value string) (domainObject.Drawing, error) {
+	var drawing domainObject.Drawing
+	result := r.DB.Preload("LikedBy").Preload("DislikedBy").Where(field+" = ?", value).First(&drawing)
 	if result.Error != nil {
 		return domainObject.Drawing{}, result.Error
 	}

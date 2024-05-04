@@ -9,11 +9,11 @@ import (
 
 // IMPLEMENTATION
 type UserService struct {
-	repo repository.GenericRepository[domainObject.User]
+	repo repository.UserRepository
 }
 
 // INIT
-func NewUserService(repo repository.GenericRepository[domainObject.User]) *UserService {
+func NewUserService(repo repository.UserRepository) *UserService {
 	return &UserService{
 		repo: repo,
 	}
@@ -22,15 +22,18 @@ func NewUserService(repo repository.GenericRepository[domainObject.User]) *UserS
 // METHODS :
 
 // CREATE USER
-func (s *UserService) Create(user *domainObject.User) error {
+func (s *UserService) Create(userReq *domainObject.UserRequest) (domainObject.User, error) {
 	// hash the password
-	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(userReq.Password), 14)
 	if err != nil {
-		return err
+		return domainObject.User{}, err
 	}
-	user.Password = string(bytes)
+	userReq.Password = string(bytes)
+	// bind to the user struct
+	user := domainObject.ConvertToUser(userReq)
 	// Will return an error if fail-case occurs
-	return s.repo.Create(user)
+	s.repo.Create(&user)
+	return user, nil
 }
 
 // UPDATE USER

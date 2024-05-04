@@ -15,11 +15,42 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/daily": {
+            "get": {
+                "description": "Get the seed and word of today",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Daily"
+                ],
+                "summary": "Get the seed and word of today",
+                "operationId": "get-today-daily",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/domainObject.Daily"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/drawing": {
             "get": {
                 "description": "Get all drawings",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Drawing"
                 ],
                 "summary": "Get all drawings",
                 "operationId": "get-all-drawings",
@@ -50,6 +81,9 @@ const docTemplate = `{
                 "produces": [
                     "application/json"
                 ],
+                "tags": [
+                    "Drawing"
+                ],
                 "summary": "Create a new drawing object",
                 "operationId": "create-drawing",
                 "parameters": [
@@ -59,15 +93,15 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domainObject.Drawing"
+                            "$ref": "#/definitions/domainObject.DrawingRequest"
                         }
                     }
                 ],
                 "responses": {
                     "201": {
-                        "description": "ID of the created drawing",
+                        "description": "Created",
                         "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/domainObject.Drawing"
                         }
                     },
                     "400": {
@@ -92,6 +126,9 @@ const docTemplate = `{
                 "description": "Get a drawing by its ID",
                 "produces": [
                     "application/json"
+                ],
+                "tags": [
+                    "Drawing"
                 ],
                 "summary": "Get a drawing by ID",
                 "operationId": "get-drawing-by-id",
@@ -129,6 +166,9 @@ const docTemplate = `{
             },
             "delete": {
                 "description": "Delete a drawing by its ID",
+                "tags": [
+                    "Drawing"
+                ],
                 "summary": "Delete a drawing",
                 "operationId": "delete-drawing",
                 "parameters": [
@@ -168,6 +208,9 @@ const docTemplate = `{
         "/drawing/{id}/dislike": {
             "post": {
                 "description": "Dislike a drawing by its ID",
+                "tags": [
+                    "Drawing"
+                ],
                 "summary": "Dislike a drawing",
                 "operationId": "dislike-drawing",
                 "parameters": [
@@ -216,6 +259,9 @@ const docTemplate = `{
         "/drawing/{id}/like": {
             "post": {
                 "description": "Like a drawing by its ID",
+                "tags": [
+                    "Drawing"
+                ],
                 "summary": "Like a drawing",
                 "operationId": "like-drawing",
                 "parameters": [
@@ -312,7 +358,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/domainObject.User"
+                            "$ref": "#/definitions/domainObject.UserRequest"
                         }
                     }
                 ],
@@ -527,12 +573,36 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "domainObject.Daily": {
+            "type": "object",
+            "required": [
+                "date",
+                "seed"
+            ],
+            "properties": {
+                "date": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "seed": {
+                    "type": "integer"
+                },
+                "word": {
+                    "type": "string"
+                }
+            }
+        },
         "domainObject.Drawing": {
             "type": "object",
             "required": [
                 "image"
             ],
             "properties": {
+                "daily": {
+                    "$ref": "#/definitions/domainObject.Daily"
+                },
                 "description": {
                     "type": "string"
                 },
@@ -561,14 +631,57 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "user": {
+                    "$ref": "#/definitions/domainObject.User"
+                }
+            }
+        },
+        "domainObject.DrawingRequest": {
+            "type": "object",
+            "required": [
+                "daily",
+                "description",
+                "image",
+                "user"
+            ],
+            "properties": {
+                "daily": {
                     "type": "integer"
                 },
-                "word": {
+                "description": {
                     "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "user": {
+                    "type": "integer"
                 }
             }
         },
         "domainObject.User": {
+            "type": "object",
+            "properties": {
+                "background": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "profile_picture": {
+                    "type": "string"
+                },
+                "username": {
+                    "type": "string"
+                }
+            }
+        },
+        "domainObject.UserRequest": {
             "type": "object",
             "required": [
                 "background",
@@ -583,9 +696,6 @@ const docTemplate = `{
                 },
                 "email": {
                     "type": "string"
-                },
-                "id": {
-                    "type": "integer"
                 },
                 "password": {
                     "type": "string"

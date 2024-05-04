@@ -25,26 +25,26 @@ func NewUserController(userService *service.UserService) *UserController {
 // @Tags Users
 // @Accept json
 // @Produce json
-// @Param user body domainObject.User true "User object"
+// @Param user body domainObject.UserRequest true "User object"
 // @Success 201 {object} map[string]interface{}
 // @Failure 400 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [post]
 func (h *UserController) CreateUser(c *gin.Context) {
-	userP := &domainObject.User{}
+	userReq := &domainObject.UserRequest{}
 	// Bind the request body to the user struct
-	if err := c.ShouldBindJSON(userP); err != nil {
+	if err := c.ShouldBindJSON(userReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// Call the service to create the user
-	err := h.UserService.Create(userP)
+	user, err := h.UserService.Create(userReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.ConvertToUserResponse(*userP)
+	userResponse := domainObject.ConvertToUserResponse(user)
 	// Return the response
 	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": userResponse})
 }

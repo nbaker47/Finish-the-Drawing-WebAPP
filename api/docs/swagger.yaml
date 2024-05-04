@@ -1,6 +1,22 @@
 definitions:
+  domainObject.Daily:
+    properties:
+      date:
+        type: string
+      id:
+        type: integer
+      seed:
+        type: integer
+      word:
+        type: string
+    required:
+    - date
+    - seed
+    type: object
   domainObject.Drawing:
     properties:
+      daily:
+        $ref: '#/definitions/domainObject.Daily'
       description:
         type: string
       disliked_by:
@@ -20,11 +36,25 @@ definitions:
       likes:
         type: integer
       user:
-        type: integer
-      word:
-        type: string
+        $ref: '#/definitions/domainObject.User'
     required:
     - image
+    type: object
+  domainObject.DrawingRequest:
+    properties:
+      daily:
+        type: integer
+      description:
+        type: string
+      image:
+        type: string
+      user:
+        type: integer
+    required:
+    - daily
+    - description
+    - image
+    - user
     type: object
   domainObject.User:
     properties:
@@ -34,6 +64,19 @@ definitions:
         type: string
       id:
         type: integer
+      password:
+        type: string
+      profile_picture:
+        type: string
+      username:
+        type: string
+    type: object
+  domainObject.UserRequest:
+    properties:
+      background:
+        type: string
+      email:
+        type: string
       password:
         type: string
       profile_picture:
@@ -51,6 +94,25 @@ info:
   contact: {}
   title: Finish the Drawing API
 paths:
+  /daily:
+    get:
+      description: Get the seed and word of today
+      operationId: get-today-daily
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/domainObject.Daily'
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get the seed and word of today
+      tags:
+      - Daily
   /drawing:
     get:
       description: Get all drawings
@@ -70,6 +132,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Get all drawings
+      tags:
+      - Drawing
     post:
       consumes:
       - application/json
@@ -81,14 +145,14 @@ paths:
         name: drawing
         required: true
         schema:
-          $ref: '#/definitions/domainObject.Drawing'
+          $ref: '#/definitions/domainObject.DrawingRequest'
       produces:
       - application/json
       responses:
         "201":
-          description: ID of the created drawing
+          description: Created
           schema:
-            type: string
+            $ref: '#/definitions/domainObject.Drawing'
         "400":
           description: Bad Request
           schema:
@@ -100,6 +164,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Create a new drawing object
+      tags:
+      - Drawing
   /drawing/{id}:
     delete:
       description: Delete a drawing by its ID
@@ -127,6 +193,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Delete a drawing
+      tags:
+      - Drawing
     get:
       description: Get a drawing by its ID
       operationId: get-drawing-by-id
@@ -154,6 +222,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Get a drawing by ID
+      tags:
+      - Drawing
   /drawing/{id}/dislike:
     post:
       description: Dislike a drawing by its ID
@@ -187,6 +257,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Dislike a drawing
+      tags:
+      - Drawing
   /drawing/{id}/like:
     post:
       description: Like a drawing by its ID
@@ -220,6 +292,8 @@ paths:
             additionalProperties: true
             type: object
       summary: Like a drawing
+      tags:
+      - Drawing
   /users:
     get:
       consumes:
@@ -252,7 +326,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/domainObject.User'
+          $ref: '#/definitions/domainObject.UserRequest'
       produces:
       - application/json
       responses:

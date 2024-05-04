@@ -45,6 +45,15 @@ func (r *UserRepositoryImpl) GetByID(id string) (domainObject.User, error) {
 	return result, nil
 }
 
+// GET BY FIELD
+func (r *UserRepositoryImpl) GetByField(field string, value string) (domainObject.User, error) {
+	var result domainObject.User
+	if err := r.DB.Where(field+" = ?", value).First(&result).Error; err != nil {
+		return result, err
+	}
+	return result, nil
+}
+
 // UPDATE
 func (r *UserRepositoryImpl) Update(id string, value *domainObject.User) error {
 	return r.DB.Model(value).Where("id = ?", id).Updates(value).Error

@@ -8,31 +8,56 @@ import (
 
 // IMPLEMENTATION
 type DrawingService struct {
-	repo     repository.GenericRepository[domainObject.Drawing]
-	userRepo repository.GenericRepository[domainObject.User]
+	repo         repository.DrawingRepository
+	userRepo     repository.UserRepository
+	dailyService DailyService
 }
 
 // INIT
 func NewDrawingService(
-	repo repository.GenericRepository[domainObject.Drawing],
-	userRepo repository.GenericRepository[domainObject.User]) *DrawingService {
+	repo repository.DrawingRepository,
+	userRepo repository.UserRepository,
+	dailyService DailyService) *DrawingService {
 	return &DrawingService{
-		repo:     repo,
-		userRepo: userRepo,
+		repo:         repo,
+		userRepo:     userRepo,
+		dailyService: dailyService,
 	}
 }
 
 // METHODS :
 
 // CREATE DRAWING
-func (s *DrawingService) Create(drawing *domainObject.Drawing) error {
+func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) error {
+	// get the user from the drawing.UserID
+	user, err := s.userRepo.GetByID(strconv.Itoa(int(drawingReq.User)))
+	if err != nil {
+		return err
+	}
+	// get the daily
+	daily, err := s.dailyService.GetToday()
+	if err != nil {
+		return err
+	}
+	// make the drawing object
+	var drawing = domainObject.Drawing{
+		UserID:      user.ID,
+		User:        user,
+		DailyID:     daily.ID,
+		Daily:       daily,
+		Image:       drawingReq.Image,
+		Description: drawingReq.Description,
+		Likes:       0,
+		Dislikes:    0,
+	}
 	// extract the drawing from the drawing.Image
 	// upload drawing to the cloud -> get the image URL
 	// set the drawing.Image to the URL
 	// create the drawing
-	return s.repo.Create(drawing)
+	return s.repo.Create(&drawing)
 }
 
+// GET ALL DRAWINGS
 func (s *DrawingService) GetAll() (*[]domainObject.DrawingResponse, error) {
 	var store []domainObject.Drawing
 	err := s.repo.GetAll(&store)
@@ -42,15 +67,9 @@ func (s *DrawingService) GetAll() (*[]domainObject.DrawingResponse, error) {
 
 	var drawingsResponse []domainObject.DrawingResponse
 	for _, drawing := range store {
-		drawingSafe := domainObject.ConvertDrawingResponse(drawing)
-		user, err := s.userRepo.GetByID(strconv.Itoa(int(drawing.User)))
-		if err != nil {
-			return nil, err
-		}
-		drawingSafe.User = domainObject.ConvertToUserResponse(user)
+		drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
 		drawingsResponse = append(drawingsResponse, drawingSafe)
 	}
-
 	return &drawingsResponse, nil
 }
 
@@ -60,12 +79,7 @@ func (s *DrawingService) GetByID(id string) (domainObject.DrawingResponse, error
 	if err != nil {
 		return domainObject.DrawingResponse{}, err
 	}
-	drawingSafe := domainObject.ConvertDrawingResponse(drawing)
-	user, err := s.userRepo.GetByID(strconv.Itoa(int(drawing.User)))
-	if err != nil {
-		return domainObject.DrawingResponse{}, err
-	}
-	drawingSafe.User = domainObject.ConvertToUserResponse(user)
+	drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
 	return drawingSafe, nil
 }
 

@@ -23,16 +23,17 @@ func NewDrawingController(drawingService *service.DrawingService) *DrawingContro
 // CREATE DRAWING
 // @Summary Create a new drawing object
 // @Description Create a new drawing object with the given data
+// @Tags Drawing
 // @ID create-drawing
 // @Accept  json
 // @Produce  json
-// @Param drawing body domainObject.Drawing true "Drawing object"
-// @Success 201 {string} string "ID of the created drawing"
+// @Param drawing body domainObject.DrawingRequest true "Drawing object"
+// @Success 201 {object} domainObject.Drawing
 // @Failure 400 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [post]
 func (h *DrawingController) CreateDrawing(c *gin.Context) {
-	var drawing domainObject.Drawing
+	var drawing domainObject.DrawingRequest
 	// Bind the request body to the drawing struct
 	if err := c.ShouldBindJSON(&drawing); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -45,12 +46,13 @@ func (h *DrawingController) CreateDrawing(c *gin.Context) {
 		return
 	}
 	// Return the response
-	c.JSON(http.StatusCreated, drawing.ID)
+	c.JSON(http.StatusCreated, drawing)
 }
 
 // GET ALL DRAWINGS
 // @Summary Get all drawings
 // @Description Get all drawings
+// @Tags Drawing
 // @ID get-all-drawings
 // @Produce  json
 // @Success 200 {array} domainObject.Drawing
@@ -68,6 +70,7 @@ func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 // GET DRAWING BY ID
 // @Summary Get a drawing by ID
 // @Description Get a drawing by its ID
+// @Tags Drawing
 // @ID get-drawing-by-id
 // @Produce json
 // @Param id path string true "Drawing ID"
@@ -88,6 +91,7 @@ func (h *DrawingController) GetDrawing(c *gin.Context) {
 // DELETE DRAWING
 // @Summary Delete a drawing
 // @Description Delete a drawing by its ID
+// @Tags Drawing
 // @ID delete-drawing
 // @Param id path string true "Drawing ID"
 // @Success 200 {object} map[string]interface{}
@@ -107,6 +111,7 @@ func (h *DrawingController) DeleteDrawing(c *gin.Context) {
 // Like
 // @Summary Like a drawing
 // @Description Like a drawing by its ID
+// @Tags Drawing
 // @ID like-drawing
 // @Param id path string true "Drawing ID"
 // @Param user body uint true "User ID"
@@ -133,6 +138,7 @@ func (h *DrawingController) LikeDrawing(c *gin.Context) {
 // Dislike
 // @Summary Dislike a drawing
 // @Description Dislike a drawing by its ID
+// @Tags Drawing
 // @ID dislike-drawing
 // @Param id path string true "Drawing ID"
 // @Param user body uint true "User ID"
