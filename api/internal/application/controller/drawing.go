@@ -3,6 +3,7 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -33,20 +34,22 @@ func NewDrawingController(drawingService *service.DrawingService) *DrawingContro
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [post]
 func (h *DrawingController) CreateDrawing(c *gin.Context) {
-	var drawing domainObject.DrawingRequest
-	// Bind the request body to the drawing struct
-	if err := c.ShouldBindJSON(&drawing); err != nil {
+	var drawingReq domainObject.DrawingRequest
+	// Bind the request body to the drawingReq struct
+	if err := c.ShouldBindJSON(&drawingReq); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 	// Call the service to create the drawing
-	err := h.DrawingService.Create(&drawing)
+	drawing, err := h.DrawingService.Create(&drawingReq)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
+	// Bind the drawing to the response struct
+	drawingRes := domainObject.ConvertToDrawingResponse(drawing)
 	// Return the response
-	c.JSON(http.StatusCreated, drawing)
+	c.JSON(http.StatusCreated, drawingRes)
 }
 
 // GET ALL DRAWINGS
@@ -59,12 +62,18 @@ func (h *DrawingController) CreateDrawing(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [get]
 func (h *DrawingController) GetAllDrawings(c *gin.Context) {
-	drawings, err := h.DrawingService.GetAll()
+	drawingsP, err := h.DrawingService.GetAll()
 	if err != nil {
+		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, drawings)
+	var drawingsResponse []domainObject.DrawingResponse
+	for _, drawing := range *drawingsP {
+		drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
+		drawingsResponse = append(drawingsResponse, drawingSafe)
+	}
+	c.JSON(http.StatusOK, drawingsResponse)
 }
 
 // GET DRAWING BY ID
@@ -85,7 +94,9 @@ func (h *DrawingController) GetDrawing(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, drawing)
+	// Bind the drawing to the response struct
+	drawingRes := domainObject.ConvertToDrawingResponse(drawing)
+	c.JSON(http.StatusOK, drawingRes)
 }
 
 // DELETE DRAWING
