@@ -3,11 +3,9 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service/userService"
-	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -33,22 +31,8 @@ func NewUserController(userService *userService.UserService) *UserController {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [post]
 func (h *UserController) CreateUser(c *gin.Context) {
-	userReq := &domainObject.UserRequest{}
-	// Bind the request body to the user struct
-	if err := c.ShouldBindJSON(userReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	// Call the service to create the user
-	user, err := h.UserService.Create(userReq)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// Bind the user to the response struct
-	// userResponse := domainObject.ConvertToUserResponse(user)
-	// Return the response
-	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": user})
+	userReq := domainObject.UserRequest{}
+	Create(c, &userReq, h.UserService.Create)
 }
 
 // GET ALL USERS
@@ -61,17 +45,8 @@ func (h *UserController) CreateUser(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [get]
 func (h *UserController) GetAllUsers(c *gin.Context) {
-	usersP, err := h.UserService.GetAll()
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// // Bind the users to the response struct
-	// var usersResponse []domainObject.UserResponse
-	// for _, user := range *usersP {
-	// 	usersResponse = append(usersResponse, domainObject.ConvertToUserResponse(user))
-	// }
-	c.JSON(http.StatusOK, *usersP)
+	GetAll(c, h.UserService.GetAll)
+
 }
 
 // GET USER BY ID
@@ -86,19 +61,7 @@ func (h *UserController) GetAllUsers(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [get]
 func (h *UserController) GetUser(c *gin.Context) {
-	userID := c.Param("id")
-	user, err := h.UserService.GetByID(userID)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// Bind the user to the response struct
-	// userResponse := domainObject.ConvertToUserResponse(user)
-	c.JSON(http.StatusOK, user)
+	GetByID(c, h.UserService.GetByID)
 }
 
 // DELETE USER
@@ -113,17 +76,7 @@ func (h *UserController) GetUser(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users/{id} [delete]
 func (h *UserController) DeleteUser(c *gin.Context) {
-	userID := c.Param("id")
-	err := h.UserService.Delete(userID)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusNoContent, gin.H{"message": "User deleted successfully"})
+	Delete(c, h.UserService.Delete)
 }
 
 // UPDATE USER
