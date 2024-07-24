@@ -3,10 +3,11 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service/drawingService"
+	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type DrawingController struct {
@@ -79,26 +80,34 @@ func (h *DrawingController) DeleteDrawing(c *gin.Context) {
 	Delete(c, h.DrawingService.Delete)
 }
 
+// Used in below like/dislike methods
+type UserRequest struct {
+	User string `json:"user"`
+}
+
 // Like
 // @Summary Like a drawing
 // @Description Like a drawing by its ID
 // @Tags Drawing
 // @ID like-drawing
 // @Param id path string true "Drawing ID"
-// @Param user body uint true "User ID"
+// @Param user body UserRequest true "User ID"
 // @Success 200 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/like [post]
 func (h *DrawingController) LikeDrawing(c *gin.Context) {
-	id := c.Param("id")
-	var userID uint
-	if err := c.ShouldBindJSON(&userID); err != nil {
+	drawingId := c.Param("id")
+	var user UserRequest
+	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	userIDStr := strconv.FormatUint(uint64(userID), 10)
-	err := h.DrawingService.Like(id, userIDStr)
+	err := h.DrawingService.Like(drawingId, user.User)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -112,20 +121,23 @@ func (h *DrawingController) LikeDrawing(c *gin.Context) {
 // @Tags Drawing
 // @ID dislike-drawing
 // @Param id path string true "Drawing ID"
-// @Param user body uint true "User ID"
+// @Param user body UserRequest true "User ID"
 // @Success 200 {object} map[string]interface{}
 // @Failure 404 {object} map[string]interface{}
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id}/dislike [post]
 func (h *DrawingController) DislikeDrawing(c *gin.Context) {
-	id := c.Param("id")
-	var userID uint
-	if err := c.ShouldBindJSON(&userID); err != nil {
+	drawingId := c.Param("id")
+	var user UserRequest
+	if err := c.ShouldBindJSON(&user); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
-	userIDStr := strconv.FormatUint(uint64(userID), 10)
-	err := h.DrawingService.Dislike(id, userIDStr)
+	err := h.DrawingService.Dislike(drawingId, user.User)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

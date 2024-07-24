@@ -6,11 +6,11 @@ import "github.com/google/uuid"
 type Drawing struct {
 	ID          uint   `gorm:"primaryKey" json:"-"`
 	UUID        string `gorm:"unique;not null" json:"id"`
-	UserID      uint
+	UserID      uint   ` json:"-"`
 	User        User   `gorm:"foreignKey:UserID" json:"user"`
-	DailyID     uint   `gorm:"not null"`
+	DailyID     uint   `gorm:"not null" json:"-"`
 	Daily       Daily  `gorm:"foreignKey:DailyID" json:"daily"`
-	Image       string `gorm:"not null" json:"-"`
+	Image       string `gorm:"not null" json:"image"`
 	Description string `gorm:"not null" json:"description"`
 	Likes       int    `json:"likes"`
 	Dislikes    int    `json:"dislikes"`

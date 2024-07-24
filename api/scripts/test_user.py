@@ -29,6 +29,9 @@ class TestUser:
             password = response.json()['password']
         except KeyError:
             pass
+        if 'email' in response.json() or 'password' in response.json():
+            assert False
+
 
         return response.json()['id']
     
@@ -37,6 +40,7 @@ class TestUser:
         response = requests.get(f'{self.url}/{user_id}')
         assert response.status_code == 200
         assert response.json()['id'] == user_id
+        assert response.json()['username'] != None
 
     def get_user_404(self, user_id: str) -> None:
         response = requests.get(f'{self.url}/{user_id}')

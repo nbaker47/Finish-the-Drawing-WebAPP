@@ -227,7 +227,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "$ref": "#/definitions/controller.UserRequest"
                         }
                     }
                 ],
@@ -278,7 +278,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "$ref": "#/definitions/controller.UserRequest"
                         }
                     }
                 ],
@@ -573,6 +573,14 @@ const docTemplate = `{
         }
     },
     "definitions": {
+        "controller.UserRequest": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
         "domainObject.Daily": {
             "type": "object",
             "properties": {
@@ -596,9 +604,6 @@ const docTemplate = `{
                 "daily": {
                     "$ref": "#/definitions/domainObject.Daily"
                 },
-                "dailyID": {
-                    "type": "integer"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -614,6 +619,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "liked_by": {
                     "type": "array",
                     "items": {
@@ -625,9 +633,6 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/domainObject.User"
-                },
-                "userID": {
-                    "type": "integer"
                 }
             }
         },

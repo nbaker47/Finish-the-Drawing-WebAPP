@@ -217,7 +217,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "$ref": "#/definitions/controller.UserRequest"
                         }
                     }
                 ],
@@ -268,7 +268,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "integer"
+                            "$ref": "#/definitions/controller.UserRequest"
                         }
                     }
                 ],
@@ -563,6 +563,14 @@
         }
     },
     "definitions": {
+        "controller.UserRequest": {
+            "type": "object",
+            "properties": {
+                "user": {
+                    "type": "string"
+                }
+            }
+        },
         "domainObject.Daily": {
             "type": "object",
             "properties": {
@@ -586,9 +594,6 @@
                 "daily": {
                     "$ref": "#/definitions/domainObject.Daily"
                 },
-                "dailyID": {
-                    "type": "integer"
-                },
                 "description": {
                     "type": "string"
                 },
@@ -604,6 +609,9 @@
                 "id": {
                     "type": "string"
                 },
+                "image": {
+                    "type": "string"
+                },
                 "liked_by": {
                     "type": "array",
                     "items": {
@@ -615,9 +623,6 @@
                 },
                 "user": {
                     "$ref": "#/definitions/domainObject.User"
-                },
-                "userID": {
-                    "type": "integer"
                 }
             }
         },
