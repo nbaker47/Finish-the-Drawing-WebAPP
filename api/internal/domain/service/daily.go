@@ -26,7 +26,7 @@ func NewDailyService(repo repository.DailyRepository) *DailyService {
 // METHODS :
 
 // private, get the date today
-func (s *DailyService) getTodaysDate() time.Time {
+func (s *DailyService) GetTodaysDate() time.Time {
 	// find todays date
 	todaysDate := time.Now()
 	year, month, day := todaysDate.Date()
@@ -36,7 +36,7 @@ func (s *DailyService) getTodaysDate() time.Time {
 
 // GET Todays Daily
 func (s *DailyService) GetToday() (domainObject.Daily, error) {
-	todaysDate := s.getTodaysDate()
+	todaysDate := s.GetTodaysDate()
 	// get the daily, whose date is todays date
 	daily, err := s.repo.GetByDate(todaysDate)
 	if err != nil {
@@ -56,7 +56,7 @@ func (s *DailyService) Create() error {
 	// if an error occurred, there isn't a daily yet.
 
 	// set the date
-	todaysDate := s.getTodaysDate()
+	todaysDate := s.GetTodaysDate()
 	// set the seed
 	seed := rand.Intn(1000)
 	// generate a random word
@@ -64,10 +64,10 @@ func (s *DailyService) Create() error {
 	// print
 	fmt.Println(randomWord, seed, todaysDate)
 
-	// bind to the domain object
+	// create the domain object
 	daily := domainObject.CreateDaily(todaysDate, seed, randomWord)
 
-	// create the daily
+	// call repo to effect DB
 	err = s.repo.Create(&daily)
 	if err != nil {
 		return err
