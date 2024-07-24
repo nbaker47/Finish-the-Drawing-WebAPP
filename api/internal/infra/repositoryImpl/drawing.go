@@ -2,7 +2,7 @@ package repositoryImpl
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/infra/interfacer"
+	"api/internal/infra/interface/gormInterface"
 
 	"gorm.io/gorm"
 )
@@ -15,7 +15,7 @@ type DrawingRepositoryImpl struct {
 // INIT
 func NewDrawingRepository() *DrawingRepositoryImpl {
 	return &DrawingRepositoryImpl{
-		DB: interfacer.GetGormDBConnection(),
+		DB: gormInterface.GetGormDBConnection(),
 	}
 }
 
@@ -39,9 +39,10 @@ func (r *DrawingRepositoryImpl) GetAll(result *[]domainObject.Drawing) error {
 // GET BY ID
 func (r *DrawingRepositoryImpl) GetByID(id string) (domainObject.Drawing, error) {
 	var drawing domainObject.Drawing
-	result := r.DB.Preload("User").Preload("Daily").Preload("LikedBy").Preload("DislikedBy").First(&drawing, id)
-	if result.Error != nil {
-		return domainObject.Drawing{}, result.Error
+	preloadedDB := r.DB.Preload("User").Preload("Daily").Preload("LikedBy").Preload("DislikedBy")
+	err := gormInterface.GetByUUID(preloadedDB, id, &drawing)
+	if err != nil {
+		return drawing, err
 	}
 	return drawing, nil
 }
@@ -58,11 +59,11 @@ func (r *DrawingRepositoryImpl) GetByField(field string, value string) (domainOb
 
 // UPDATE
 func (r *DrawingRepositoryImpl) Update(id string, value *domainObject.Drawing) error {
-	return r.DB.Model(value).Where("id = ?", id).Updates(value).Error
+	return gormInterface.UpdateByUUID(r.DB, id, value)
 }
 
 // DELETE
 func (r *DrawingRepositoryImpl) Delete(id string) error {
 	var model domainObject.Drawing
-	return r.DB.Delete(&model, "id = ?", id).Error
+	return gormInterface.DeleteByUUID(r.DB, id, model)
 }

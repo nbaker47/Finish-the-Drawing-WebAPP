@@ -2,7 +2,7 @@ package repositoryImpl
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/infra/interfacer"
+	"api/internal/infra/interface/gormInterface"
 	"time"
 
 	"gorm.io/gorm"
@@ -16,11 +16,11 @@ type DailyRepositoryImpl struct {
 // INIT
 func NewDailyRepository() *DailyRepositoryImpl {
 	return &DailyRepositoryImpl{
-		DB: interfacer.GetGormDBConnection(),
+		DB: gormInterface.GetGormDBConnection(),
 	}
 }
 
-// GET BY FIELD
+// GET BY DATE
 func (r *DailyRepositoryImpl) GetByDate(date time.Time) (domainObject.Daily, error) {
 	var daily domainObject.Daily
 	result := r.DB.Where("Date"+" = ?", date).First(&daily)

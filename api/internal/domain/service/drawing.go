@@ -3,7 +3,6 @@ package service
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
-	"strconv"
 )
 
 // IMPLEMENTATION
@@ -30,7 +29,7 @@ func NewDrawingService(
 // CREATE DRAWING
 func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domainObject.Drawing, error) {
 	// get the user from the drawing.UserID
-	user, err := s.userRepo.GetByID(strconv.Itoa(int(drawingReq.User)))
+	user, err := s.userRepo.GetByID((drawingReq.User))
 	if err != nil {
 		return domainObject.Drawing{}, err
 	}
@@ -40,16 +39,9 @@ func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domain
 		return domainObject.Drawing{}, err
 	}
 	// make the drawing object
-	var drawing = domainObject.Drawing{
-		UserID:      user.ID,
-		User:        user,
-		DailyID:     daily.ID,
-		Daily:       daily,
-		Image:       drawingReq.Image,
-		Description: drawingReq.Description,
-		Likes:       0,
-		Dislikes:    0,
-	}
+	var drawing = domainObject.ConvertToDrawing(drawingReq, user, daily)
+
+	// TODO:
 	// extract the drawing from the drawing.Image
 	// upload drawing to the cloud -> get the image URL
 	// set the drawing.Image to the URL

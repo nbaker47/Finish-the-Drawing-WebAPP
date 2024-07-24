@@ -2,7 +2,7 @@ package repositoryImpl
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/infra/interfacer"
+	"api/internal/infra/interface/gormInterface"
 
 	"gorm.io/gorm"
 )
@@ -15,7 +15,7 @@ type UserRepositoryImpl struct {
 // INIT
 func NewUserRepository() *UserRepositoryImpl {
 	return &UserRepositoryImpl{
-		DB: interfacer.GetGormDBConnection(),
+		DB: gormInterface.GetGormDBConnection(),
 	}
 }
 
@@ -39,7 +39,8 @@ func (r *UserRepositoryImpl) GetAll(result *[]domainObject.User) error {
 // GET BY ID
 func (r *UserRepositoryImpl) GetByID(id string) (domainObject.User, error) {
 	var result domainObject.User
-	if err := r.DB.First(&result, "id = ?", id).Error; err != nil {
+	err := gormInterface.GetByUUID(r.DB, id, &result)
+	if err != nil {
 		return result, err
 	}
 	return result, nil
@@ -56,11 +57,11 @@ func (r *UserRepositoryImpl) GetByField(field string, value string) (domainObjec
 
 // UPDATE
 func (r *UserRepositoryImpl) Update(id string, value *domainObject.User) error {
-	return r.DB.Model(value).Where("id = ?", id).Updates(value).Error
+	return gormInterface.UpdateByUUID(r.DB, id, value)
 }
 
 // DELETE
 func (r *UserRepositoryImpl) Delete(id string) error {
 	var model domainObject.User
-	return r.DB.Delete(&model, "id = ?", id).Error
+	return gormInterface.DeleteByUUID(r.DB, id, model)
 }

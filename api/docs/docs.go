@@ -575,10 +575,6 @@ const docTemplate = `{
     "definitions": {
         "domainObject.Daily": {
             "type": "object",
-            "required": [
-                "date",
-                "seed"
-            ],
             "properties": {
                 "date": {
                     "type": "string"
@@ -589,6 +585,9 @@ const docTemplate = `{
                 "seed": {
                     "type": "integer"
                 },
+                "uuid": {
+                    "type": "string"
+                },
                 "word": {
                     "type": "string"
                 }
@@ -596,17 +595,17 @@ const docTemplate = `{
         },
         "domainObject.Drawing": {
             "type": "object",
-            "required": [
-                "image"
-            ],
             "properties": {
                 "daily": {
                     "$ref": "#/definitions/domainObject.Daily"
                 },
+                "dailyID": {
+                    "type": "integer"
+                },
                 "description": {
                     "type": "string"
                 },
-                "disliked_by": {
+                "dislikedBy": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -621,7 +620,7 @@ const docTemplate = `{
                 "image": {
                     "type": "string"
                 },
-                "liked_by": {
+                "likedBy": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -632,6 +631,12 @@ const docTemplate = `{
                 },
                 "user": {
                     "$ref": "#/definitions/domainObject.User"
+                },
+                "userID": {
+                    "type": "integer"
+                },
+                "uuid": {
+                    "type": "string"
                 }
             }
         },
@@ -640,12 +645,11 @@ const docTemplate = `{
             "required": [
                 "daily",
                 "description",
-                "image",
-                "user"
+                "image"
             ],
             "properties": {
                 "daily": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "description": {
                     "type": "string"
@@ -654,7 +658,7 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "user": {
-                    "type": "integer"
+                    "type": "string"
                 }
             }
         },
@@ -673,10 +677,13 @@ const docTemplate = `{
                 "password": {
                     "type": "string"
                 },
-                "profile_picture": {
+                "profilePicture": {
                     "type": "string"
                 },
                 "username": {
+                    "type": "string"
+                },
+                "uuid": {
                     "type": "string"
                 }
             }

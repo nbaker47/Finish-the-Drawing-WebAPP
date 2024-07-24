@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
+
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -33,5 +35,6 @@ func (h *DailyController) GetToday(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, daily)
+	dailyResponse := domainObject.ConvertToDailyResponse(daily)
+	c.JSON(http.StatusOK, dailyResponse)
 }

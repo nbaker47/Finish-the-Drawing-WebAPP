@@ -5,7 +5,7 @@ import (
 	"api/internal/application/router"
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service"
-	"api/internal/infra/interfacer"
+	"api/internal/infra/interface/gormInterface"
 	"api/internal/infra/repositoryImpl"
 
 	"fmt"
@@ -19,7 +19,7 @@ import (
 
 func init() {
 	// migrate the schema
-	database := interfacer.GetGormDBConnection()
+	database := gormInterface.GetGormDBConnection()
 	database.AutoMigrate(&domainObject.Daily{})
 	database.AutoMigrate(&domainObject.User{})
 	database.AutoMigrate(&domainObject.Drawing{})

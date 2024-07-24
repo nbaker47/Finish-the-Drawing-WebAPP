@@ -1,57 +1,85 @@
 package domainObject
 
+import "github.com/google/uuid"
+
+// Domain Object
 type Drawing struct {
-	ID          uint   `gorm:"primaryKey" json:"id"`
-	UserID      uint   `json:"user_id"`
-	User        User   `gorm:"foreignKey:UserID" json:"user"`
-	DailyID     uint   `json:"daily_id"`
-	Daily       Daily  `gorm:"foreignKey:DailyID" json:"daily"`
-	Image       string `gorm:"not null" json:"image" binding:"required"`
-	Description string `gorm:"not null" json:"description"`
-	Likes       int    `json:"likes"`
-	Dislikes    int    `json:"dislikes"`
-	LikedBy     []User `gorm:"many2many:drawings_likes;" json:"liked_by"`
-	DislikedBy  []User `gorm:"many2many:drawings_dislikes;" json:"disliked_by"`
-}
-
-type DrawingRequest struct {
-	Image       string `json:"image" binding:"required"`
-	User        uint   `json:"user" binding:"required"`
-	Description string `json:"description" binding:"required"`
-	Daily       uint   `json:"daily" binding:"required"`
-}
-
-// DrawingResponse represents a drawing with safe users, without passwords
-type DrawingResponse struct {
-	ID          uint
-	Image       string
-	User        UserResponse
-	Description string
-	Daily       Daily
+	ID          uint   `gorm:"primaryKey"`
+	UUID        string `gorm:"unique;not null"`
+	UserID      uint
+	User        User   `gorm:"foreignKey:UserID"`
+	DailyID     uint   `gorm:"not null"`
+	Daily       Daily  `gorm:"foreignKey:DailyID"`
+	Image       string `gorm:"not null"`
+	Description string `gorm:"not null"`
 	Likes       int
 	Dislikes    int
-	LikedBy     []UserResponse
-	DislikedBy  []UserResponse
+	LikedBy     []User `gorm:"many2many:drawings_likes;"`
+	DislikedBy  []User `gorm:"many2many:drawings_dislikes;"`
 }
 
+// INCOMING
+
+// Incoming request required fields
+type DrawingRequest struct {
+	Image       string `json:"image" binding:"required"`
+	User        string `json:"user"`
+	Description string `json:"description" binding:"required"`
+	Daily       string `json:"daily" binding:"required"`
+}
+
+// Convert incoming request to domain object
+func ConvertToDrawing(drawingReq *DrawingRequest, user User, daily Daily) Drawing {
+	return Drawing{
+		UUID:        uuid.New().String(),
+		UserID:      user.ID,
+		User:        user,
+		DailyID:     daily.ID,
+		Daily:       daily,
+		Image:       drawingReq.Image,
+		Description: drawingReq.Description,
+		Likes:       0,
+		Dislikes:    0,
+	}
+}
+
+// OUTGOING
+
+// Drawing response
+// DrawingResponse represents a drawing with safe users, without passwords
+type DrawingResponse struct {
+	UUID        string         `json:"id"`
+	Image       string         `json:"image"`
+	User        UserResponse   `json:"user"`
+	Description string         `json:"description"`
+	Daily       Daily          `json:"daily"`
+	Likes       int            `json:"likes"`
+	Dislikes    int            `json:"dislikes"`
+	LikedBy     []UserResponse `json:"liked_by"`
+	DislikedBy  []UserResponse `json:"disliked_by"`
+}
+
+// Convert domain object to response
 func ConvertToDrawingResponse(drawing Drawing) DrawingResponse {
-	var safeDrawing DrawingResponse
-	safeDrawing.ID = drawing.ID
-	safeDrawing.Image = drawing.Image
-	safeDrawing.Description = drawing.Description
-	safeDrawing.Daily = drawing.Daily
-	safeDrawing.Likes = drawing.Likes
-	safeDrawing.Dislikes = drawing.Dislikes
+	var drawingResponse DrawingResponse
+
+	drawingResponse.UUID = drawing.UUID
+	// TODO: convert image to b64
+	drawingResponse.Image = drawing.Image
+	drawingResponse.Description = drawing.Description
+	drawingResponse.Daily = drawing.Daily
+	drawingResponse.Likes = drawing.Likes
+	drawingResponse.Dislikes = drawing.Dislikes
 
 	for _, user := range drawing.LikedBy {
-		safeDrawing.LikedBy = append(safeDrawing.LikedBy, ConvertToUserResponse(user))
+		drawingResponse.LikedBy = append(drawingResponse.LikedBy, ConvertToUserResponse(user))
 	}
 
 	for _, user := range drawing.DislikedBy {
-		safeDrawing.DislikedBy = append(safeDrawing.DislikedBy, ConvertToUserResponse(user))
+		drawingResponse.DislikedBy = append(drawingResponse.DislikedBy, ConvertToUserResponse(user))
 	}
 
-	safeDrawing.User = ConvertToUserResponse(drawing.User)
+	drawingResponse.User = ConvertToUserResponse(drawing.User)
 
-	return safeDrawing
+	return drawingResponse
 }
