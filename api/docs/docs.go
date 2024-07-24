@@ -580,13 +580,10 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "id": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "seed": {
                     "type": "integer"
-                },
-                "uuid": {
-                    "type": "string"
                 },
                 "word": {
                     "type": "string"
@@ -605,7 +602,7 @@ const docTemplate = `{
                 "description": {
                     "type": "string"
                 },
-                "dislikedBy": {
+                "disliked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -615,12 +612,9 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "id": {
-                    "type": "integer"
-                },
-                "image": {
                     "type": "string"
                 },
-                "likedBy": {
+                "liked_by": {
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/domainObject.User"
@@ -634,9 +628,6 @@ const docTemplate = `{
                 },
                 "userID": {
                     "type": "integer"
-                },
-                "uuid": {
-                    "type": "string"
                 }
             }
         },
@@ -668,22 +659,13 @@ const docTemplate = `{
                 "background": {
                     "type": "string"
                 },
-                "email": {
-                    "type": "string"
-                },
                 "id": {
-                    "type": "integer"
-                },
-                "password": {
                     "type": "string"
                 },
-                "profilePicture": {
+                "profile_picture": {
                     "type": "string"
                 },
                 "username": {
-                    "type": "string"
-                },
-                "uuid": {
                     "type": "string"
                 }
             }

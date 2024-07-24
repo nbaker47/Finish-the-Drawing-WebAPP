@@ -3,13 +3,10 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service/drawingService"
-	"errors"
-	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"gorm.io/gorm"
 )
 
 type DrawingController struct {
@@ -37,21 +34,7 @@ func NewDrawingController(drawingService *drawingService.DrawingService) *Drawin
 // @Router /drawing [post]
 func (h *DrawingController) CreateDrawing(c *gin.Context) {
 	var drawingReq domainObject.DrawingRequest
-	// Bind the request body to the drawingReq struct
-	if err := c.ShouldBindJSON(&drawingReq); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-	// Call the service to create the drawing
-	drawing, err := h.DrawingService.Create(&drawingReq)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// Bind the drawing to the response struct
-	// drawingRes := domainObject.ConvertToDrawingResponse(drawing)
-	// Return the response
-	c.JSON(http.StatusCreated, drawing)
+	Create(c, &drawingReq, h.DrawingService.Create)
 }
 
 // GET ALL DRAWINGS
@@ -64,18 +47,7 @@ func (h *DrawingController) CreateDrawing(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [get]
 func (h *DrawingController) GetAllDrawings(c *gin.Context) {
-	drawingsP, err := h.DrawingService.GetAll()
-	if err != nil {
-		fmt.Println(err)
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// var drawingsResponse []domainObject.DrawingResponse
-	// for _, drawing := range *drawingsP {
-	// 	drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
-	// 	drawingsResponse = append(drawingsResponse, drawingSafe)
-	// }
-	c.JSON(http.StatusOK, *drawingsP)
+	GetAll(c, h.DrawingService.GetAll)
 }
 
 // GET DRAWING BY ID
@@ -90,19 +62,7 @@ func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id} [get]
 func (h *DrawingController) GetDrawing(c *gin.Context) {
-	id := c.Param("id")
-	drawing, err := h.DrawingService.GetByID(id)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	// Bind the drawing to the response struct
-	// drawingRes := domainObject.ConvertToDrawingResponse(drawing)
-	c.JSON(http.StatusOK, drawing)
+	GetByID(c, h.DrawingService.GetByID)
 }
 
 // DELETE DRAWING
@@ -116,17 +76,7 @@ func (h *DrawingController) GetDrawing(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/{id} [delete]
 func (h *DrawingController) DeleteDrawing(c *gin.Context) {
-	id := c.Param("id")
-	err := h.DrawingService.Delete(id)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	Delete(c, h.DrawingService.Delete)
 }
 
 // Like
