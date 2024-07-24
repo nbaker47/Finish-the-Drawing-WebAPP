@@ -3,6 +3,7 @@ package domainObject
 import (
 	"encoding/json"
 	"log"
+	"strings"
 	"testing"
 
 	"github.com/go-playground/assert/v2"
@@ -12,7 +13,7 @@ func TestConvertToUser(t *testing.T) {
 	userReq := &UserRequest{
 		Username:       "test_username",
 		Password:       "test_password",
-		Email:          "test_email",
+		Email:          "test_email@email.com",
 		Background:     "test_background",
 		ProfilePicture: "test_profile_picture",
 	}
@@ -46,5 +47,12 @@ func TestConvertToUser(t *testing.T) {
 
 	// Update expected JSON string with actual UUID
 	expected := `{"id":"` + expectedUser.UUID + `","username":"test_username","background":"test_background","profile_picture":"test_profile_picture"}`
+
 	assert.Equal(t, expected, string(realJson))
+
+	// Fail if the user's password or email is exposed
+	if strings.Contains(string(realJson), "password") ||
+		strings.Contains(string(realJson), "email") {
+		t.Error("Password and email should not be exposed")
+	}
 }
