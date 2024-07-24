@@ -3,6 +3,6 @@ repos:
     hooks:
       - id: local-integration-tests
         name: Run local integration tests
-        entry: ./api/scripts/integration_test.sh
+        entry: ./api/scripts/check_edited_go_files.sh
         language: script
         pass_filenames: false
