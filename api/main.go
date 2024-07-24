@@ -4,7 +4,9 @@ import (
 	"api/internal/application/controller"
 	"api/internal/application/router"
 	"api/internal/domain/domainObject"
-	"api/internal/domain/service"
+	"api/internal/domain/service/dailyService"
+	"api/internal/domain/service/drawingService"
+	"api/internal/domain/service/userService"
 	"api/internal/infra/interface/gormInterface"
 	"api/internal/infra/repositoryImpl"
 
@@ -37,9 +39,9 @@ func main() {
 	drawingRepoImpl := repositoryImpl.NewDrawingRepository()
 
 	// services
-	dailyService := service.NewDailyService(dailyRepository)
-	userService := service.NewUserService(userRepoImpl)
-	drawingService := service.NewDrawingService(drawingRepoImpl, userRepoImpl, *dailyService)
+	dailyService := dailyService.NewDailyService(dailyRepository)
+	userService := userService.NewUserService(userRepoImpl)
+	drawingService := drawingService.NewDrawingService(drawingRepoImpl, userRepoImpl, dailyService)
 
 	// controllers
 	dailyController := controller.NewDailyController(dailyService)

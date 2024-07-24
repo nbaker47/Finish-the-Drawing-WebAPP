@@ -2,7 +2,7 @@ package controller
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/domain/service"
+	"api/internal/domain/service/drawingService"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -11,11 +11,11 @@ import (
 )
 
 type DrawingController struct {
-	DrawingService service.DrawingService
+	DrawingService drawingService.DrawingService
 }
 
 // INIT
-func NewDrawingController(drawingService *service.DrawingService) *DrawingController {
+func NewDrawingController(drawingService *drawingService.DrawingService) *DrawingController {
 	return &DrawingController{
 		DrawingService: *drawingService,
 	}

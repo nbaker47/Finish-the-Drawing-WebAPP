@@ -19,3 +19,6 @@ clean:
 
 swag:
 	swag init
+
+tidy:
+	go mod tidy

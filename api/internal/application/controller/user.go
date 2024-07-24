@@ -2,18 +2,18 @@ package controller
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/domain/service"
+	"api/internal/domain/service/userService"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
 type UserController struct {
-	UserService service.UserService
+	UserService userService.UserService
 }
 
 // INIT
-func NewUserController(userService *service.UserService) *UserController {
+func NewUserController(userService *userService.UserService) *UserController {
 	return &UserController{
 		UserService: *userService,
 	}

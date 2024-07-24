@@ -1,7 +1,7 @@
 package controller
 
 import (
-	"api/internal/domain/service"
+	"api/internal/domain/service/dailyService"
 
 	"net/http"
 
@@ -9,13 +9,13 @@ import (
 )
 
 type DailyController struct {
-	DailyService service.DailyService
+	DailyService dailyService.DailyService
 }
 
 // INIT
-func NewDailyController(dailyService *service.DailyService) *DailyController {
+func NewDailyController(dailyService dailyService.DailyService) *DailyController {
 	return &DailyController{
-		DailyService: *dailyService,
+		DailyService: dailyService,
 	}
 }
 
