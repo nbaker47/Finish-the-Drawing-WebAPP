@@ -19,6 +19,7 @@ jobs:
 
       - name: Test API
         run: |
+          ls
           cd api
           go mod download
           go test ./..
