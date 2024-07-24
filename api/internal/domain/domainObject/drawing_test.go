@@ -63,6 +63,6 @@ func TestConvertToDrawing(t *testing.T) {
 	t.Log("Actual Drawing JSON: ", string(realJson))
 
 	// Update expected JSON string with actual UUID
-	expected := `{"id":"` + expectedDrawing.UUID + `","UserID":1,"user":{"id":"613e38c5-8e90-4926-93cd-f52661767fef","username":"test_username","background":"test_background","profile_picture":"test_profile_picture"},"DailyID":1,"daily":{"id":"1111111-1111-1111-1111-111111","date":"` + daily.Date.Format("2006-01-02T15:04:05.999999999Z07:00") + `","seed":12345,"word":"test_word"},"description":"description","likes":0,"dislikes":0,"liked_by":null,"disliked_by":null}`
+	expected := `{"id":"` + expectedDrawing.UUID + `","user":{"id":"613e38c5-8e90-4926-93cd-f52661767fef","username":"test_username","background":"test_background","profile_picture":"test_profile_picture"},"daily":{"id":"1111111-1111-1111-1111-111111","date":"` + daily.Date.Format("2006-01-02T15:04:05.999999999Z07:00") + `","seed":12345,"word":"test_word"},"image":"image","description":"description","likes":0,"dislikes":0,"liked_by":null,"disliked_by":null}`
 	assert.Equal(t, expected, string(realJson))
 }
