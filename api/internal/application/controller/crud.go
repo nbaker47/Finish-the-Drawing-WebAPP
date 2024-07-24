@@ -60,5 +60,5 @@ func Delete(c *gin.Context, deleteFunc func(id string) error) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	c.JSON(http.StatusNoContent, gin.H{"status": "success"})
 }

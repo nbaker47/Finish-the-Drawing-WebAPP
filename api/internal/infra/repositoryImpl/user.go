@@ -21,38 +21,27 @@ func NewUserRepository() *UserRepositoryImpl {
 
 // CREATE
 func (r *UserRepositoryImpl) Create(value *domainObject.User) error {
-	// Will return an error if fail-case occurs
-	if err := r.DB.Create(value).Error; err != nil {
-		return err
-	}
-	return nil
+	return gormInterface.Create(r.DB, value)
 }
 
 // GET ALL
 func (r *UserRepositoryImpl) GetAll(result *[]domainObject.User) error {
-	if err := r.DB.Find(result).Error; err != nil {
-		return err
-	}
-	return nil
+	err := gormInterface.GetAll(r.DB, result)
+	return err
 }
 
 // GET BY ID
 func (r *UserRepositoryImpl) GetByID(id string) (domainObject.User, error) {
-	var result domainObject.User
-	err := gormInterface.GetByUUID(r.DB, id, &result)
-	if err != nil {
-		return result, err
-	}
-	return result, nil
+	var user domainObject.User
+	err := gormInterface.GetByUUID(r.DB, id, &user)
+	return user, err
 }
 
 // GET BY FIELD
 func (r *UserRepositoryImpl) GetByField(field string, value string) (domainObject.User, error) {
-	var result domainObject.User
-	if err := r.DB.Where(field+" = ?", value).First(&result).Error; err != nil {
-		return result, err
-	}
-	return result, nil
+	var user domainObject.User
+	err := gormInterface.GetByField(r.DB, field, value, &user)
+	return user, err
 }
 
 // UPDATE

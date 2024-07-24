@@ -19,18 +19,18 @@ class TestUser:
         response = requests.post(self.url, headers=headers, json=data)
 
         assert response.status_code == 201
-        assert response.json()["user"]['username'] == data['username']
-        assert response.json()["user"]['profile_picture'] == data['profile_picture']
-        assert response.json()["user"]['background'] == data['background']
+        assert response.json()['username'] == data['username']
+        assert response.json()['profile_picture'] == data['profile_picture']
+        assert response.json()['background'] == data['background']
 
         # assert no email or password
         try:
-            email = response.json()["user"]['email']
-            password = response.json()["user"]['password']
+            email = response.json()['email']
+            password = response.json()['password']
         except KeyError:
             pass
 
-        return response.json()["user"]['id']
+        return response.json()['id']
     
 
     def get_user(self, user_id: str) -> None:
