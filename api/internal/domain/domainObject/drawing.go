@@ -4,18 +4,18 @@ import "github.com/google/uuid"
 
 // Domain Object
 type Drawing struct {
-	ID          uint   `gorm:"primaryKey"`
-	UUID        string `gorm:"unique;not null"`
+	ID          uint   `gorm:"primaryKey" json:"-"`
+	UUID        string `gorm:"unique;not null" json:"id"`
 	UserID      uint
-	User        User   `gorm:"foreignKey:UserID"`
+	User        User   `gorm:"foreignKey:UserID" json:"user"`
 	DailyID     uint   `gorm:"not null"`
-	Daily       Daily  `gorm:"foreignKey:DailyID"`
-	Image       string `gorm:"not null"`
-	Description string `gorm:"not null"`
-	Likes       int
-	Dislikes    int
-	LikedBy     []User `gorm:"many2many:drawings_likes;"`
-	DislikedBy  []User `gorm:"many2many:drawings_dislikes;"`
+	Daily       Daily  `gorm:"foreignKey:DailyID" json:"daily"`
+	Image       string `gorm:"not null" json:"-"`
+	Description string `gorm:"not null" json:"description"`
+	Likes       int    `json:"likes"`
+	Dislikes    int    `json:"dislikes"`
+	LikedBy     []User `gorm:"many2many:drawings_likes;" json:"liked_by"`
+	DislikedBy  []User `gorm:"many2many:drawings_dislikes;" json:"disliked_by"`
 }
 
 // INCOMING
@@ -41,45 +41,4 @@ func ConvertToDrawing(drawingReq *DrawingRequest, user User, daily Daily) Drawin
 		Likes:       0,
 		Dislikes:    0,
 	}
-}
-
-// OUTGOING
-
-// Drawing response
-// DrawingResponse represents a drawing with safe users, without passwords
-type DrawingResponse struct {
-	UUID        string         `json:"id"`
-	Image       string         `json:"image"`
-	User        UserResponse   `json:"user"`
-	Description string         `json:"description"`
-	Daily       Daily          `json:"daily"`
-	Likes       int            `json:"likes"`
-	Dislikes    int            `json:"dislikes"`
-	LikedBy     []UserResponse `json:"liked_by"`
-	DislikedBy  []UserResponse `json:"disliked_by"`
-}
-
-// Convert domain object to response
-func ConvertToDrawingResponse(drawing Drawing) DrawingResponse {
-	var drawingResponse DrawingResponse
-
-	drawingResponse.UUID = drawing.UUID
-	// TODO: convert image to b64
-	drawingResponse.Image = drawing.Image
-	drawingResponse.Description = drawing.Description
-	drawingResponse.Daily = drawing.Daily
-	drawingResponse.Likes = drawing.Likes
-	drawingResponse.Dislikes = drawing.Dislikes
-
-	for _, user := range drawing.LikedBy {
-		drawingResponse.LikedBy = append(drawingResponse.LikedBy, ConvertToUserResponse(user))
-	}
-
-	for _, user := range drawing.DislikedBy {
-		drawingResponse.DislikedBy = append(drawingResponse.DislikedBy, ConvertToUserResponse(user))
-	}
-
-	drawingResponse.User = ConvertToUserResponse(drawing.User)
-
-	return drawingResponse
 }

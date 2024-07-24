@@ -47,9 +47,9 @@ func (h *DrawingController) CreateDrawing(c *gin.Context) {
 		return
 	}
 	// Bind the drawing to the response struct
-	drawingRes := domainObject.ConvertToDrawingResponse(drawing)
+	// drawingRes := domainObject.ConvertToDrawingResponse(drawing)
 	// Return the response
-	c.JSON(http.StatusCreated, drawingRes)
+	c.JSON(http.StatusCreated, drawing)
 }
 
 // GET ALL DRAWINGS
@@ -68,12 +68,12 @@ func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	var drawingsResponse []domainObject.DrawingResponse
-	for _, drawing := range *drawingsP {
-		drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
-		drawingsResponse = append(drawingsResponse, drawingSafe)
-	}
-	c.JSON(http.StatusOK, drawingsResponse)
+	// var drawingsResponse []domainObject.DrawingResponse
+	// for _, drawing := range *drawingsP {
+	// 	drawingSafe := domainObject.ConvertToDrawingResponse(drawing)
+	// 	drawingsResponse = append(drawingsResponse, drawingSafe)
+	// }
+	c.JSON(http.StatusOK, *drawingsP)
 }
 
 // GET DRAWING BY ID
@@ -95,8 +95,8 @@ func (h *DrawingController) GetDrawing(c *gin.Context) {
 		return
 	}
 	// Bind the drawing to the response struct
-	drawingRes := domainObject.ConvertToDrawingResponse(drawing)
-	c.JSON(http.StatusOK, drawingRes)
+	// drawingRes := domainObject.ConvertToDrawingResponse(drawing)
+	c.JSON(http.StatusOK, drawing)
 }
 
 // DELETE DRAWING

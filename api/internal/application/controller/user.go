@@ -44,9 +44,9 @@ func (h *UserController) CreateUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.ConvertToUserResponse(user)
+	// userResponse := domainObject.ConvertToUserResponse(user)
 	// Return the response
-	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": userResponse})
+	c.JSON(http.StatusCreated, gin.H{"message": "User created successfully", "user": user})
 }
 
 // GET ALL USERS
@@ -64,12 +64,12 @@ func (h *UserController) GetAllUsers(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	// Bind the users to the response struct
-	var usersResponse []domainObject.UserResponse
-	for _, user := range *usersP {
-		usersResponse = append(usersResponse, domainObject.ConvertToUserResponse(user))
-	}
-	c.JSON(http.StatusOK, usersResponse)
+	// // Bind the users to the response struct
+	// var usersResponse []domainObject.UserResponse
+	// for _, user := range *usersP {
+	// 	usersResponse = append(usersResponse, domainObject.ConvertToUserResponse(user))
+	// }
+	c.JSON(http.StatusOK, *usersP)
 }
 
 // GET USER BY ID
@@ -91,8 +91,8 @@ func (h *UserController) GetUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.ConvertToUserResponse(user)
-	c.JSON(http.StatusOK, userResponse)
+	// userResponse := domainObject.ConvertToUserResponse(user)
+	c.JSON(http.StatusOK, user)
 }
 
 // UPDATE USER
@@ -123,8 +123,8 @@ func (h *UserController) UpdateUser(c *gin.Context) {
 		return
 	}
 	// Bind the user to the response struct
-	userResponse := domainObject.ConvertToUserResponse(updatedUser)
-	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": userResponse})
+	// userResponse := domainObject.ConvertToUserResponse(updatedUser)
+	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": updatedUser})
 }
 
 // DELETE USER
@@ -164,9 +164,9 @@ func (h *UserController) GetHallOfFame(c *gin.Context) {
 		return
 	}
 	// Bind the users to the response struct
-	var hallOfFameResponse []domainObject.UserResponse
-	for _, user := range hallOfFame {
-		hallOfFameResponse = append(hallOfFameResponse, domainObject.ConvertToUserResponse(user))
-	}
-	c.JSON(http.StatusOK, hallOfFameResponse)
+	// var hallOfFameResponse []domainObject.UserResponse
+	// for _, user := range hallOfFame {
+	// 	hallOfFameResponse = append(hallOfFameResponse, domainObject.ConvertToUserResponse(user))
+	// }
+	c.JSON(http.StatusOK, hallOfFame)
 }

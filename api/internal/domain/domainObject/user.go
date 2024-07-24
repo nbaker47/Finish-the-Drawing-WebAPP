@@ -4,13 +4,13 @@ import "github.com/google/uuid"
 
 // Domain Object
 type User struct {
-	ID             uint   `gorm:"primaryKey"`
-	UUID           string `gorm:"unique;not null"`
-	Username       string `gorm:"not null"`
-	Password       string `gorm:"not null"`
-	Email          string `gorm:"not null"`
-	Background     string
-	ProfilePicture string
+	ID             uint   `gorm:"primaryKey" json:"-"`
+	UUID           string `gorm:"unique;not null" json:"id"`
+	Username       string `gorm:"not null" json:"username"`
+	Password       string `gorm:"not null" json:"-"`
+	Email          string `gorm:"not null" json:"-"`
+	Background     string `json:"background"`
+	ProfilePicture string `json:"profile_picture"`
 }
 
 // INCOMING
@@ -30,28 +30,6 @@ func ConvertToUser(user *UserRequest) User {
 		UUID:           uuid.New().String(),
 		Username:       user.Username,
 		Password:       user.Password,
-		Email:          user.Email,
-		Background:     user.Background,
-		ProfilePicture: user.ProfilePicture,
-	}
-}
-
-// OUTGOING
-
-// User response
-type UserResponse struct {
-	UUID           string `json:"id"`
-	Username       string `json:"username"`
-	Email          string `json:"email"`
-	Background     string `json:"background"`
-	ProfilePicture string `json:"profile_picture"`
-}
-
-// Convert domain object to response
-func ConvertToUserResponse(user User) UserResponse {
-	return UserResponse{
-		UUID:           user.UUID,
-		Username:       user.Username,
 		Email:          user.Email,
 		Background:     user.Background,
 		ProfilePicture: user.ProfilePicture,
