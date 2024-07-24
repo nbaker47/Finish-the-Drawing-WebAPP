@@ -3,11 +3,13 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service/drawingService"
+	"errors"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type DrawingController struct {
@@ -90,6 +92,10 @@ func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 func (h *DrawingController) GetDrawing(c *gin.Context) {
 	id := c.Param("id")
 	drawing, err := h.DrawingService.GetByID(id)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -112,6 +118,10 @@ func (h *DrawingController) GetDrawing(c *gin.Context) {
 func (h *DrawingController) DeleteDrawing(c *gin.Context) {
 	id := c.Param("id")
 	err := h.DrawingService.Delete(id)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

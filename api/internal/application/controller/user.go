@@ -3,9 +3,11 @@ package controller
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/service/userService"
+	"errors"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"gorm.io/gorm"
 )
 
 type UserController struct {
@@ -86,6 +88,10 @@ func (h *UserController) GetAllUsers(c *gin.Context) {
 func (h *UserController) GetUser(c *gin.Context) {
 	userID := c.Param("id")
 	user, err := h.UserService.GetByID(userID)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
@@ -93,6 +99,31 @@ func (h *UserController) GetUser(c *gin.Context) {
 	// Bind the user to the response struct
 	// userResponse := domainObject.ConvertToUserResponse(user)
 	c.JSON(http.StatusOK, user)
+}
+
+// DELETE USER
+// @Summary Delete user
+// @Description Delete user
+// @Tags Users
+// @Accept json
+// @Produce json
+// @Param id path string true "User ID"
+// @Success 200 {object} map[string]interface{}
+// @Failure 404 {object} map[string]interface{}
+// @Failure 500 {object} map[string]interface{}
+// @Router /users/{id} [delete]
+func (h *UserController) DeleteUser(c *gin.Context) {
+	userID := c.Param("id")
+	err := h.UserService.Delete(userID)
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusNoContent, gin.H{"message": "User deleted successfully"})
 }
 
 // UPDATE USER
@@ -125,27 +156,6 @@ func (h *UserController) UpdateUser(c *gin.Context) {
 	// Bind the user to the response struct
 	// userResponse := domainObject.ConvertToUserResponse(updatedUser)
 	c.JSON(http.StatusOK, gin.H{"message": "User updated successfully", "user": updatedUser})
-}
-
-// DELETE USER
-// @Summary Delete user
-// @Description Delete user
-// @Tags Users
-// @Accept json
-// @Produce json
-// @Param id path string true "User ID"
-// @Success 200 {object} map[string]interface{}
-// @Failure 404 {object} map[string]interface{}
-// @Failure 500 {object} map[string]interface{}
-// @Router /users/{id} [delete]
-func (h *UserController) DeleteUser(c *gin.Context) {
-	userID := c.Param("id")
-	err := h.UserService.Delete(userID)
-	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
-		return
-	}
-	c.JSON(http.StatusOK, gin.H{"message": "User deleted successfully"})
 }
 
 // GET HALL OF FAMERS
