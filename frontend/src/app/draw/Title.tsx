@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import TitlePNG from "./title.png";
+// @ts-ignore
 import MovingText from "react-moving-text";
 
 const AnimationsForChaining = [

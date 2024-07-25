@@ -4,7 +4,7 @@ import React from "react";
 import clsx from "clsx";
 import { FaUndo } from "react-icons/fa";
 import Sharebar from "@/components/Sharebar";
-import PencilMan from "@/components/drawing/PencilMan";
+import PencilMan from "@/components/drawing/pencil/PencilMan";
 
 function CanvasButtons({ className }: { className?: string }) {
   return (
@@ -42,7 +42,7 @@ export default function Canvas({
         "flex", // Change this
         "flex-col", // Add this
         "bg-pokadot",
-        "sm:px-12",
+        // "sm:px-12",
         "border-[1.1px]",
         "border-gray-700",
         "rounded-3xl",

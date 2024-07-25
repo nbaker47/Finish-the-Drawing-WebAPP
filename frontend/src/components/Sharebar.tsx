@@ -28,21 +28,21 @@ export default function Sharebar({ className }: { className?: string }) {
         <FacebookIcon
           borderRadius={20}
           round={false}
-          className="w-8  h-8 sm:w-11 sm:h-11"
+          className="w-8 h-8 sm:w-11 sm:h-11"
         />
       </FacebookShareButton>
       <TelegramShareButton url={url}>
         <TelegramIcon
           borderRadius={20}
           round={false}
-          className="w-8  h-8 sm:w-11 sm:h-11"
+          className="w-8 h-8 sm:w-11 sm:h-11"
         />
       </TelegramShareButton>
       <WhatsappShareButton url={url}>
         <WhatsappIcon
           borderRadius={20}
           round={false}
-          className="w-8  h-8 sm:w-11 sm:h-11"
+          className="w-8 h-8 sm:w-11 sm:h-11"
         />
       </WhatsappShareButton>
     </div>
