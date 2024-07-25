@@ -5,4 +5,9 @@ const nextConfig = {
   output: "standalone",
 };
 
+// if no env vars set, set them
+if (!process.env.NEXT_PUBLIC_API_URL) {
+  process.env.NEXT_PUBLIC_API_URL = "http://localhost:8080";
+}
+
 export default nextConfig;

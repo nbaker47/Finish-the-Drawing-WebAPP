@@ -4,3 +4,6 @@ bin/
 *.db*
 *.sqlite3*
 *.sqlite3
+
+.next/
+node_modules/

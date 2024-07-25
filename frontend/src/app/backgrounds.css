@@ -1,0 +1,148 @@
+.bg-lined {
+  background-color: #ffffff;
+  background-size: 24px 24px;
+  background-image: repeating-linear-gradient(
+    0deg,
+    #858058,
+    #8f8a62 1.2000000000000002px,
+    #ffffff 1.2000000000000002px,
+    #ffffff
+  );
+  width: 100%;
+}
+
+.bg-blue-zigzag {
+  background-color: #f7f7ff;
+  background-image: linear-gradient(135deg, #a5cbff 25%, transparent 25%),
+    linear-gradient(225deg, #a5cbff 25%, transparent 25%),
+    linear-gradient(45deg, #a5cbff 25%, transparent 25%),
+    linear-gradient(315deg, #a5cbff 25%, #f7f7ff 25%);
+  background-position: 33px 0, 33px 0, 0 0, 0 0;
+  background-size: 66px 66px;
+  background-repeat: repeat;
+}
+
+/* */
+
+.bg-zig-zag-3d {
+  background-color: #e5e5f7;
+  opacity: 1;
+  background: linear-gradient(135deg, #2ca44f55 25%, transparent 25%) -10px 0/
+      20px 20px,
+    linear-gradient(225deg, #2ca44f 25%, transparent 25%) -10px 0/ 20px 20px,
+    linear-gradient(315deg, #2ca44f55 25%, transparent 25%) 0px 0/ 20px 20px,
+    linear-gradient(45deg, #2ca44f 25%, #e5e5f7 25%) 0px 0/ 20px 20px;
+}
+
+.bg-zig-zag {
+  background-color: #e5e5f7;
+  opacity: 1;
+  background-image: linear-gradient(135deg, #f78f45 25%, transparent 25%),
+    linear-gradient(225deg, #f78f45 25%, transparent 25%),
+    linear-gradient(45deg, #f78f45 25%, transparent 25%),
+    linear-gradient(315deg, #f78f45 25%, #e5e5f7 25%);
+  background-position: 10px 0, 10px 0, 0 0, 0 0;
+  background-size: 20px 20px;
+  background-repeat: repeat;
+}
+
+.bg-isometric {
+  background-color: #e5e5f7;
+  opacity: 1;
+  background-image: linear-gradient(
+      30deg,
+      #d32ab7 12%,
+      transparent 12.5%,
+      transparent 87%,
+      #d32ab7 87.5%,
+      #d32ab7
+    ),
+    linear-gradient(
+      150deg,
+      #d32ab7 12%,
+      transparent 12.5%,
+      transparent 87%,
+      #d32ab7 87.5%,
+      #d32ab7
+    ),
+    linear-gradient(
+      30deg,
+      #d32ab7 12%,
+      transparent 12.5%,
+      transparent 87%,
+      #d32ab7 87.5%,
+      #d32ab7
+    ),
+    linear-gradient(
+      150deg,
+      #d32ab7 12%,
+      transparent 12.5%,
+      transparent 87%,
+      #d32ab7 87.5%,
+      #d32ab7
+    ),
+    linear-gradient(
+      60deg,
+      #d32ab777 25%,
+      transparent 25.5%,
+      transparent 75%,
+      #d32ab777 75%,
+      #d32ab777
+    ),
+    linear-gradient(
+      60deg,
+      #d32ab777 25%,
+      transparent 25.5%,
+      transparent 75%,
+      #d32ab777 75%,
+      #d32ab777
+    );
+  background-size: 20px 35px;
+  background-position: 0 0, 0 0, 10px 18px, 10px 18px, 0 0, 10px 18px;
+}
+
+.bg-v-lines {
+  background-color: #e5e5f7;
+  opacity: 1;
+  background-image: linear-gradient(
+    to right,
+    #4560f7,
+    #67340f 5px,
+    #e5e5f7 5px,
+    #e5e5f7
+  );
+  background-size: 10px 100%;
+}
+
+.bg-pokadot {
+  background-color: #ffffff;
+  background-image: radial-gradient(#444cf7 0.55px, #ffffff 0.55px);
+  background-size: 11px 11px;
+}
+
+.bg-blue-dashed {
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+  border: #93dbff 3px dashed;
+}
+
+.bg-thin-white {
+  background-color: #ffffff;
+  box-shadow: 1px 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.bg-diagonal {
+  background-color: #f7f7ff;
+  background: repeating-linear-gradient(
+    45deg,
+    #91beff,
+    #91beff 5px,
+    #f7f7ff 5px,
+    #f7f7ff 25px
+  );
+}
+
+.bg-dotted-back {
+  background-color: #ffffff;
+  background-image: radial-gradient(#444cf7 0.55px, #ffffff 0.55px);
+  background-size: 11px 11px;
+}
