@@ -21,7 +21,9 @@ export default function Title({
         className="mx-auto mb-2"
       />
       <div className="ani-bounce-in">
-        <span className={`text-3xl ${wordClassName}`}>"{word}"</span>
+        <span className={`text-5xl sm:text-6xl ${wordClassName}`}>
+          "{word}"
+        </span>
       </div>
     </div>
   );

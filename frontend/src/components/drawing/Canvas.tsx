@@ -8,25 +8,21 @@ import PencilMan from "@/components/drawing/PencilMan";
 
 function CanvasButtons({ className }: { className?: string }) {
   return (
-    <div className={` ${className} grid grid-cols-2 text-center mt-3`}>
-      <div>
-        <button
-          id="back-button"
-          className="text-lg "
-          //   onClick={undoLastStroke}
-        >
-          <FaUndo />
-        </button>
-      </div>
-      <div>
-        <button
-          id="submit-button"
-          className="text-lg "
-          //   onClick={submitDrawing}
-        >
-          Submit
-        </button>
-      </div>
+    <div className={`${className} flex justify-between mt-3`}>
+      <button
+        id="back-button"
+        className="text-lg w-full flex justify-center items-center xs:text-3xl"
+        //   onClick={undoLastStroke}
+      >
+        <FaUndo />
+      </button>
+      <button
+        id="submit-button"
+        className="text-lg w-full xs:text-3xl"
+        //   onClick={submitDrawing}
+      >
+        Submit
+      </button>
     </div>
   );
 }
@@ -34,9 +30,11 @@ function CanvasButtons({ className }: { className?: string }) {
 export default function Canvas({
   className,
   pencilMan,
+  shareBar,
 }: {
   className?: string;
   pencilMan?: boolean;
+  shareBar?: boolean;
 }) {
   return (
     <div
@@ -44,16 +42,15 @@ export default function Canvas({
         "flex", // Change this
         "flex-col", // Add this
         "bg-pokadot",
+        "sm:px-12",
         "border-[1.1px]",
         "border-gray-700",
         "rounded-3xl",
         "px-2",
-        // "sm:px-8",
         "pt-3",
         "pb-2",
         "w-full",
         "h-full",
-        "sm:w-7/12",
         className
       )}
       style={{ boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)" }}
@@ -64,7 +61,7 @@ export default function Canvas({
           <PencilMan className="z-50 absolute" />
         </div>
       )}
-      <Sharebar className="mb-3" />
+      {shareBar && <Sharebar className="mb-3" />}
       <div
         className={clsx(
           "flex",
@@ -101,7 +98,9 @@ export default function Canvas({
             className="fade-in w-full h-full"
           ></canvas>
         </div>
-        <CanvasButtons className="" />
+        <div className="w-full">
+          <CanvasButtons className="your-optional-classes" />
+        </div>
       </div>
     </div>
   );

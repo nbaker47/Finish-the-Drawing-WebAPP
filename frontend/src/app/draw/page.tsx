@@ -36,8 +36,9 @@ export default async function Page() {
             "border-2",
             "border-gray-700",
             "rounded-3xl",
-            "py-2",
+            "py-3",
             "px-1",
+            "sm:px-12",
             "flex", // Add this
             "flex-col", // Add this
             "items-center", // Add this
@@ -48,8 +49,12 @@ export default async function Page() {
             maxHeight: "calc(100vh - 5rem)",
           }}
         >
-          <Title word={await fetchWord()} className="mt-2" wordClassName="" />
-          <Canvas pencilMan={false} />
+          <Title
+            word={await fetchWord()}
+            className="mt-2 mb-2"
+            wordClassName=""
+          />
+          <Canvas pencilMan={false} shareBar={true} />
         </div>
       </main>
     </>
