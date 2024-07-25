@@ -1,6 +1,20 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
 import TitlePNG from "./title.png";
+import MovingText from "react-moving-text";
+
+const AnimationsForChaining = [
+  "swing",
+  "bounce",
+  "swing",
+  "bounce",
+  "swing",
+  "bounce",
+  "swing",
+  "bounce",
+];
 
 export default function Title({
   word,
@@ -11,6 +25,14 @@ export default function Title({
   wordClassName?: string;
   className?: string;
 }) {
+  const [animationIndex, setAnimationIndex] = useState(0);
+  const [animationType, setAnimationType] = useState(AnimationsForChaining[0]);
+
+  const handleChainAnimation = () => {
+    setAnimationIndex(animationIndex + 1);
+    setAnimationType(AnimationsForChaining[animationIndex + 1]);
+  };
+
   return (
     <div className={`text-center custom-title ${className}`}>
       <Image
@@ -22,7 +44,18 @@ export default function Title({
       />
       <div className="ani-bounce-in">
         <span className={`text-5xl sm:text-6xl ${wordClassName}`}>
-          "{word}"
+          <MovingText
+            onAnimationEnd={handleChainAnimation}
+            type={animationType}
+            duration="1000ms"
+            delay="20s"
+            direction="normal"
+            timing="ease"
+            iteration="2"
+            fillMode="none"
+          >
+            "{word}"
+          </MovingText>
         </span>
       </div>
     </div>

@@ -54,7 +54,7 @@ export default async function Page() {
             className="mt-2 mb-2"
             wordClassName=""
           />
-          <Canvas pencilMan={false} shareBar={true} />
+          <Canvas pencilMan={true} shareBar={true} />
         </div>
       </main>
     </>

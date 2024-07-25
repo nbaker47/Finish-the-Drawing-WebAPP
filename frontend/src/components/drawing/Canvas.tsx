@@ -51,13 +51,14 @@ export default function Canvas({
         "pb-2",
         "w-full",
         "h-full",
-        className
+        className,
+        `${pencilMan && "mt-5 sm:mt-0"}`
       )}
       style={{ boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)" }}
       id="main-drawing-interface"
     >
       {pencilMan && (
-        <div style={{ left: "-15px", top: "-40px" }} className="relative mb-3">
+        <div style={{ left: "-12px", top: "-32px" }} className="relative mb-3">
           <PencilMan className="z-50 absolute" />
         </div>
       )}

@@ -23,7 +23,8 @@ export default function PencilMan({ className }: { className?: string }) {
               "text-xs",
               "text-black",
               "bubble-animation",
-              "max-w-fit"
+              "w-fit",
+              "max-w-48"
             )}
           >
             <span className="">Be Creative!</span>
