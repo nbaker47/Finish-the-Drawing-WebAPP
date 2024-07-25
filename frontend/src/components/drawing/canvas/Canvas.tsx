@@ -1,19 +1,22 @@
 "use client";
-import React, { forwardRef, useEffect, useRef } from "react";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
 import Sharebar from "@/components/Sharebar";
 import PencilMan from "@/components/drawing/pencil/PencilMan";
+import { drawRandomLines } from "@/components/drawing/canvas/drawing";
 
 interface CanvasProps {
   className?: string;
   pencilMan?: boolean;
   shareBar?: boolean;
+  randomLines?: { x: number; y: number }[][];
 }
 
 const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
-  ({ className, pencilMan, shareBar }, ref) => {
+  ({ className, pencilMan, shareBar, randomLines }, ref) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const [clickCount, setClickCount] = useState(0); // New state variable
 
     useEffect(() => {
       const resizeCanvas = () => {
@@ -26,8 +29,11 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
           canvas.width = width;
           canvas.height = height;
 
-          // Redraw your canvas content here if needed
-          // For example: drawRandomLines(randomLines, { current: canvas }, context);
+          // // Redraw your canvas content here if needed
+          const context = canvas.getContext("2d");
+          if (context && randomLines) {
+            drawRandomLines(randomLines, { current: canvas }, context);
+          }
         }
       };
 
@@ -53,21 +59,14 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
           "pb-2",
           "w-full",
           "h-fit",
-          className,
-          `${pencilMan && "mt-5 sm:mt-0"}`
+          className
+          // `${pencilMan && "mt-5 sm:mt-0"}`
         )}
         style={{ boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)" }}
         id="main-drawing-interface"
       >
-        {pencilMan && (
-          <div
-            style={{ left: "-12px", top: "-32px" }}
-            className="relative mb-3"
-          >
-            <PencilMan className="z-50 absolute" />
-          </div>
-        )}
         {shareBar && <Sharebar className="mb-3" />}
+
         <div
           className={clsx(
             "flex",
@@ -77,21 +76,33 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
             "aspect-[1/1]",
             "w-full",
             "h-full",
+            // "w-[90%]",
+            // "h-[90%]",
             "mx-auto",
             "screen-height-grow"
           )}
         >
+          {pencilMan && (
+            <PencilMan
+              className="mb-3 screen-height-grow w-full"
+              clickCount={clickCount}
+            />
+          )}
           <div
             ref={containerRef}
             className={clsx(
               "bg-white",
-              "border-dashed",
-              "border-2",
-              "border-gray-700",
+              "ftd-border",
               "rounded-3xl",
               "w-full",
               "h-full"
             )}
+            onClick={() => {
+              setClickCount((count) => {
+                const newCount = count + 1;
+                return newCount;
+              });
+            }}
           >
             <canvas
               id="drawing-canvas"

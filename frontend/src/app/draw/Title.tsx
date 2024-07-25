@@ -44,12 +44,15 @@ export default function Title({
         className="mx-auto mb-2"
       />
       <div className="ani-bounce-in">
-        <span className={`text-5xl sm:text-6xl ${wordClassName}`}>
+        <span
+          className={`text-5xl sm:text-6xl text-stroke font-bold ${wordClassName}`}
+          style={{ color: "#FBFB04" }}
+        >
           <MovingText
             onAnimationEnd={handleChainAnimation}
             type={animationType}
             duration="1000ms"
-            delay="20s"
+            delay="10s"
             direction="normal"
             timing="ease"
             iteration="2"

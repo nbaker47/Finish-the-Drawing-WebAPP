@@ -19,6 +19,16 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }: { addUtilities: any }) {
+      const newUtilities = {
+        ".text-stroke": {
+          "-webkit-text-stroke-width": "2px",
+          "-webkit-text-stroke-color": "#000000",
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };
 export default config;

@@ -49,7 +49,7 @@ export function drawRandomLines(
   context: CanvasRenderingContext2D
 ): void {
   if (canvas.current) {
-    console.log("drawRandomLines: canvas.current", canvas.current);
+    // console.log("drawRandomLines: canvas.current", canvas.current);
 
     context.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
