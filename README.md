@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="frontend/public//icon-512.png" width="200"/>
+<img src="frontend/public/icons/icon-512.png" width="200"/>
 
   <h1>Finish the Drawing!</h1>
 
