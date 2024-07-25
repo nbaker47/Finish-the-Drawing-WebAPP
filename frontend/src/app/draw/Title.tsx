@@ -4,9 +4,11 @@ import TitlePNG from "./title.png";
 
 export default function Title({
   word,
+  wordClassName,
   className,
 }: {
   word: string;
+  wordClassName?: string;
   className?: string;
 }) {
   return (
@@ -19,7 +21,7 @@ export default function Title({
         className="mx-auto mb-2"
       />
       <div className="ani-bounce-in">
-        <span className="text-5xl">"{word}"</span>
+        <span className={`text-3xl ${wordClassName}`}>"{word}"</span>
       </div>
     </div>
   );

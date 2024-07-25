@@ -12,24 +12,27 @@ export default function Footer() {
           "flex",
           "justify-center",
           "bg-pokadot",
-          //   "sticky",
-          //   "bottom-0",
-          "sticky top-[100vh]",
+          "sticky",
+          "bottom-1",
+          //   "top-[95vh]",
           "z-50",
-          "border-t-2",
           "border-gray-700",
-          "rounded-t-xl"
+          "rounded-3xl",
+          "border-2",
+          "w-fit",
+          "mx-auto",
+          "px-5"
         )}
       >
-        <div className="row justify-content-center flex p-2">
+        <div className="row justify-content-center flex p-2 gap-3">
           {/* HOME */}
-          <div className={clsx("icon-round-border", "mr-2")}>
+          <div className={clsx("icon-round-border", "mr-2", "bg-white")}>
             <Link href="/draw">
               <Image src="/pencil-tip.png" alt="Home" width={40} height={40} />
             </Link>
           </div>
           {/* VIEW */}
-          <div className={clsx("icon-round-border")}>
+          <div className={clsx("icon-round-border", "bg-white")}>
             <Link href="/view-today">
               <Image src="/visible.png" alt="View" width={40} height={40} />
             </Link>

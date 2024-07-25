@@ -22,7 +22,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className} bg-lined min-h-screen`}>
+      <body
+        className={`${font.className} bg-lined min-h-screen flex flex-col h-screen justify-between`}
+      >
         {children}
         <Footer />
       </body>
