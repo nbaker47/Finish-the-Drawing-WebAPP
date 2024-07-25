@@ -86,12 +86,10 @@ export default function Footer() {
             {/* Copyright marker */}
             <div className="text-xs ml-0 xs:ml-36 sm:text-2xl  flex-row items-center justify-center hidden sm:flex">
               <div className="flex flex-row items-center justify-center">
-                <Image
+                <img
                   src={"/beaumont_studios_logo_transparent.png"}
                   alt="user"
-                  width={40}
-                  height={40}
-                  className="w-full h-full rounded-lg object-cover"
+                  className="w-[40px] h-[40px] rounded-lg object-cover"
                 />
                 <div className="w-min justify-center align-middle ">
                   <p className="font-exo text-black text-xs">
