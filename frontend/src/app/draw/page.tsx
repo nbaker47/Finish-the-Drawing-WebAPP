@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Title from "@/app/draw/Title";
 import clsx from "clsx";
 import CanvasContainer from "./CanvasContainer";
@@ -7,21 +9,31 @@ import { daily } from "@/types/daily";
 async function fetchDaily() {
   try {
     let url = process.env.NEXT_PUBLIC_API_URL + "/daily";
-    let response = await fetch(url);
+    console.log("Fetching daily data from:", url);
+    let response = await fetch(url, { cache: "no-store" });
     var data = await response.json();
     return data;
   } catch (error) {
     console.error("Error fetching daily data:", error);
     // Provide fallback data
-    data = { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
-    return data;
+    return { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
   }
 }
 
-export default async function Page() {
-  const data: daily = await fetchDaily();
-  const word = data.word;
-  const seed = data.seed;
+export default function Page() {
+  const [data, setData] = useState<daily | null>(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const dailyData = await fetchDaily();
+      setData(dailyData);
+    };
+    fetchData();
+  }, []);
+
+  if (!data) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -61,8 +73,8 @@ export default async function Page() {
             maxHeight: "calc(100vh - 5rem)",
           }}
         >
-          <Title word={word} className="mt-2 mb-2" wordClassName="" />
-          <CanvasContainer seed={seed} />
+          <Title word={data.word} className="mt-2 mb-2" wordClassName="" />
+          <CanvasContainer seed={data.seed} />
         </div>
       </main>
     </>

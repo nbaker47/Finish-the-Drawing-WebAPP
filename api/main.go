@@ -14,6 +14,7 @@ import (
 
 	_ "api/docs"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
@@ -32,6 +33,9 @@ func main() {
 
 	// Gin
 	r := gin.Default()
+
+	// Use cors middleware
+	r.Use(cors.Default())
 
 	// repo impl
 	dailyRepository := repositoryImpl.NewDailyRepository()
