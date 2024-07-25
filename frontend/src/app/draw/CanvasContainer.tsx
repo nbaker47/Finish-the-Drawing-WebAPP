@@ -1,11 +1,8 @@
 "use client";
-
 import React, { useRef, useEffect } from "react";
 import Canvas from "@/components/drawing/canvas/Canvas";
-import {
-  pushRandomLines,
-  drawRandomLines,
-} from "@/components/drawing/canvas/randomLines";
+import { pushRandomLines } from "@/components/drawing/canvas/randomLines";
+import { initializeCanvas } from "@/components/drawing/canvas/drawing"; // Import the initializeCanvas function
 
 export default function CanvasContainer({ seed }: { seed: number }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -22,14 +19,15 @@ export default function CanvasContainer({ seed }: { seed: number }) {
           console.log(randomLines);
           pushRandomLines(i, randomLines, canvasRef, context, seed);
         }
-        drawRandomLines(randomLines, canvasRef, context);
+
+        // Initialize the canvas with the drawing functions
+        initializeCanvas(canvasRef, randomLines, context);
       } else {
         console.log("Failed to get canvas context");
       }
     } else {
       console.log("canvasRef.current is null");
     }
-    // Draw the random lines
   }, []); // Empty array means this effect runs once after the component is mounted
 
   return (

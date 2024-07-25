@@ -1,6 +1,5 @@
 "use client";
-
-import React, { forwardRef } from "react";
+import React, { forwardRef, useEffect, useRef } from "react";
 import clsx from "clsx";
 import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
 import Sharebar from "@/components/Sharebar";
@@ -14,13 +13,38 @@ interface CanvasProps {
 
 const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
   ({ className, pencilMan, shareBar }, ref) => {
+    const containerRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+      const resizeCanvas = () => {
+        if (ref && "current" in ref && ref.current && containerRef.current) {
+          const container = containerRef.current;
+          const canvas = ref.current;
+          const { width, height } = container.getBoundingClientRect();
+
+          // Set canvas dimensions to match container size
+          canvas.width = width;
+          canvas.height = height;
+
+          // Redraw your canvas content here if needed
+          // For example: drawRandomLines(randomLines, { current: canvas }, context);
+        }
+      };
+
+      resizeCanvas();
+      window.addEventListener("resize", resizeCanvas);
+
+      return () => {
+        window.removeEventListener("resize", resizeCanvas);
+      };
+    }, [ref]);
+
     return (
       <div
         className={clsx(
-          "flex", // Change this
-          "flex-col", // Add this
+          "flex",
+          "flex-col",
           "bg-pokadot",
-          // "sm:px-12",
           "border-[1.1px]",
           "border-gray-700",
           "rounded-3xl",
@@ -50,7 +74,6 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
             "flex-col",
             "items-center",
             "justify-center",
-            //   "relative",
             "aspect-[1/1]",
             "w-full",
             "h-full",
@@ -59,25 +82,20 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
           )}
         >
           <div
+            ref={containerRef}
             className={clsx(
               "bg-white",
               "border-dashed",
               "border-2",
               "border-gray-700",
               "rounded-3xl",
-              // "relative",
-              // "aspect-[1/1]",
               "w-full",
               "h-full"
-              // "mx-auto",
-              // "big-screen"
             )}
           >
-            {/* Below div maintains aspect ratio of canvas */}
-            {/* <div style={{ paddingTop: "100%" }} /> */}
             <canvas
               id="drawing-canvas"
-              className="fade-in w-full h-full"
+              className="static fade-in cursor-crosshair w-full h-full"
               ref={ref}
             ></canvas>
           </div>

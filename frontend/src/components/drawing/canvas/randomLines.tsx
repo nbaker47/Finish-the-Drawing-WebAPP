@@ -85,34 +85,6 @@ export function pushRandomLines(
   randomLines.push(linePoints); // Store the points of the line in the array
 }
 
-// Draw all randomly generated lines
-export function drawRandomLines(
-  randomLines: { x: number; y: number }[][],
-  canvas: React.RefObject<HTMLCanvasElement>,
-  context: CanvasRenderingContext2D
-): void {
-  if (canvas.current) {
-    console.log("drawRandomLines: canvas.current", canvas.current);
-
-    context.clearRect(0, 0, canvas.current.width, canvas.current.height);
-
-    context.lineWidth = 5;
-    context.lineCap = "round";
-    context.strokeStyle = "#8F95FF"; // Set the line color to blue
-
-    randomLines.forEach((linePoints) => {
-      context.beginPath();
-      context.moveTo(linePoints[0].x, linePoints[0].y);
-      for (var i = 1; i < linePoints.length; i++) {
-        context.lineTo(linePoints[i].x, linePoints[i].y);
-      }
-      context.stroke();
-    });
-  }
-
-  context.strokeStyle = "black"; // Set the line color back to black
-}
-
 // // Drawing random lines
 // window.addEventListener("load", function () {
 //   // Call the function to add x random lines when the page loads
