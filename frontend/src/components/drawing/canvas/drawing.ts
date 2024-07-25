@@ -42,34 +42,6 @@ export function initializeCanvas(
 // Helper functions
 ////////////////////////////////
 
-// Draw all randomly generated lines
-export function drawRandomLines(
-  randomLines: { x: number; y: number }[][],
-  canvas: React.RefObject<HTMLCanvasElement>,
-  context: CanvasRenderingContext2D
-): void {
-  if (canvas.current) {
-    // console.log("drawRandomLines: canvas.current", canvas.current);
-
-    context.clearRect(0, 0, canvas.current.width, canvas.current.height);
-
-    context.lineWidth = 5;
-    context.lineCap = "round";
-    context.strokeStyle = "#8F95FF"; // Set the line color to blue
-
-    randomLines.forEach((linePoints) => {
-      context.beginPath();
-      context.moveTo(linePoints[0].x, linePoints[0].y);
-      for (var i = 1; i < linePoints.length; i++) {
-        context.lineTo(linePoints[i].x, linePoints[i].y);
-      }
-      context.stroke();
-    });
-  }
-
-  context.strokeStyle = "black"; // Set the line color back to black
-}
-
 // Get the scale factor for transforming screen space to canvas space
 function elementScale(): number {
   if (!canvas) return 1;
@@ -161,9 +133,62 @@ function getLineIntersection(
   return null;
 }
 
+// // Undo the last line segment drawn by the user
+export function undoLastStroke(
+  canvas: HTMLCanvasElement,
+  context: CanvasRenderingContext2D,
+  randomLines: { x: number; y: number }[][]
+) {
+  // Remove the last line segment from the userDrawings array
+  userDrawings.pop();
+
+  // Clear the canvas
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  // redraw random lines:
+  drawRandomLines(randomLines, { current: canvas }, context);
+
+  // Redraw all the user's line segments
+  userDrawings.forEach(function (line) {
+    context.beginPath();
+    context.moveTo(line.points[0].x, line.points[0].y);
+    for (let i = 1; i < line.points.length; i++) {
+      context.lineTo(line.points[i].x, line.points[i].y);
+    }
+    context.stroke();
+  });
+}
+
 ////////////////////////////////
 // Drawing functions
 ////////////////////////////////
+
+// Draw all randomly generated lines
+export function drawRandomLines(
+  randomLines: { x: number; y: number }[][],
+  canvas: React.RefObject<HTMLCanvasElement>,
+  context: CanvasRenderingContext2D
+): void {
+  if (canvas.current) {
+    // console.log("drawRandomLines: canvas.current", canvas.current);
+
+    context.clearRect(0, 0, canvas.current.width, canvas.current.height);
+
+    context.lineWidth = 5;
+    context.lineCap = "round";
+    context.strokeStyle = "#8F95FF"; // Set the line color to blue
+
+    randomLines.forEach((linePoints) => {
+      context.beginPath();
+      context.moveTo(linePoints[0].x, linePoints[0].y);
+      for (var i = 1; i < linePoints.length; i++) {
+        context.lineTo(linePoints[i].x, linePoints[i].y);
+      }
+      context.stroke();
+    });
+  }
+
+  context.strokeStyle = "black"; // Set the line color back to black
+}
 
 function draw(
   event: MouseEvent | TouchEvent,

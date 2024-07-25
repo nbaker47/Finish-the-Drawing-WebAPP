@@ -45,7 +45,7 @@ export default function Title({
       />
       <div className="ani-bounce-in">
         <span
-          className={`text-5xl sm:text-6xl text-stroke font-bold font-exo ${wordClassName}`}
+          className={`text-5xl sm:text-6xl text-stroke font-bold ${wordClassName}`}
           style={{ color: "#FBFB04" }}
         >
           <MovingText
