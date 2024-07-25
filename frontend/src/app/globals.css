@@ -37,6 +37,6 @@ body {
 } */
 
 .screen-height-grow {
-  max-height: calc(100vh - 20rem);
-  max-width: calc(100vh - 20rem);
+  max-height: calc(100vh - 22rem);
+  max-width: calc(100vh - 22rem);
 }

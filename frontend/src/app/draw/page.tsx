@@ -1,16 +1,20 @@
 import React from "react";
-import Canvas from "@/components/drawing/Canvas";
 import Title from "@/app/draw/Title";
 import clsx from "clsx";
+import CanvasContainer from "./CanvasContainer";
 
-async function fetchWord() {
+async function fetchDaily() {
   let url = process.env.NEXT_PUBLIC_API_URL + "/daily";
   let response = await fetch(url);
   let data = await response.json();
-  return data.word;
+  return data;
 }
 
 export default async function Page() {
+  const data = await fetchDaily();
+  const word = data.word;
+  const seed = data.seed;
+
   return (
     <>
       <main
@@ -49,12 +53,8 @@ export default async function Page() {
             maxHeight: "calc(100vh - 5rem)",
           }}
         >
-          <Title
-            word={await fetchWord()}
-            className="mt-2 mb-2"
-            wordClassName=""
-          />
-          <Canvas pencilMan={true} shareBar={true} />
+          <Title word={word} className="mt-2 mb-2" wordClassName="" />
+          <CanvasContainer seed={seed} />
         </div>
       </main>
     </>
