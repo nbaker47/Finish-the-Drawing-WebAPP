@@ -2,16 +2,24 @@ import React from "react";
 import Title from "@/app/draw/Title";
 import clsx from "clsx";
 import CanvasContainer from "./CanvasContainer";
+import { daily } from "@/types/daily";
 
 async function fetchDaily() {
-  let url = process.env.NEXT_PUBLIC_API_URL + "/daily";
-  let response = await fetch(url);
-  let data = await response.json();
-  return data;
+  try {
+    let url = process.env.NEXT_PUBLIC_API_URL + "/daily";
+    let response = await fetch(url);
+    var data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching daily data:", error);
+    // Provide fallback data
+    data = { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
+    return data;
+  }
 }
 
 export default async function Page() {
-  const data = await fetchDaily();
+  const data: daily = await fetchDaily();
   const word = data.word;
   const seed = data.seed;
 
