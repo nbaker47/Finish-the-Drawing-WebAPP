@@ -119,4 +119,5 @@ const Canvas = forwardRef<HTMLCanvasElement, CanvasProps>(
   }
 );
 
+Canvas.displayName = "Canvas"; // Add a display name
 export default Canvas;

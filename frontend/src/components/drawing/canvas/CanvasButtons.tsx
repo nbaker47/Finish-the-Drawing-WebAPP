@@ -27,14 +27,14 @@ export default function CanvasButtons({ className }: { className?: string }) {
     <div className={`${className} flex justify-between mt-3`}>
       <button
         id="back-button"
-        className="text-lg w-full flex justify-center items-center xs:text-2xl"
+        className="text-lg w-full flex justify-center items-center xs:text-2xl text-black"
         //   onClick={undoLastStroke}
       >
         <FaUndo />
       </button>
       <button
         id="submit-button"
-        className="text-lg w-full xs:text-2xl"
+        className="text-lg w-full xs:text-2xl text-black"
         //   onClick={submitDrawing}
       >
         Submit

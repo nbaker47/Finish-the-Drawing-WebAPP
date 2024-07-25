@@ -92,6 +92,7 @@ export default function PencilMan({
           "w-fit",
           "rounded-md",
           "p-2",
+          "font-exo",
           bubbleAnimation && "ani-bubble"
         )}
       >

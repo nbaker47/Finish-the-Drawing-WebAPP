@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 body {
-  font-family: "Bubblegum Sans", cursive;
+  font-family: "Exo", sans-serif;
   color: black;
 }
 
@@ -17,9 +17,12 @@ body {
     border-color: #4a5568; /* This is the color for gray-700 in Tailwind */
     border-radius: 0.75rem; /* This is the radius for rounded-2xl in Tailwind */
   }
-  /* .pencil-icon {
-    @apply w-6 h-6 sm:w-11 sm:h-11;
-  } */
+  .font-bubblegum {
+    font-family: "Bubblegum Sans", cursive;
+  }
+  .font-exo {
+    font-family: "Exo", sans-serif;
+  }
 }
 
 /* @media (max-width: 250px) {

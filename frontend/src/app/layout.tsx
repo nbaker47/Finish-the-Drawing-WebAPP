@@ -4,6 +4,7 @@ import "./globals.css";
 import "./backgrounds.css";
 import "./animations.css";
 import Footer from "@/components/nav/footer";
+import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const font = Bubblegum_Sans({
   weight: "400",
@@ -22,11 +23,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${font.className} bg-lined min-h-screen flex flex-col h-screen justify-between`}
-      >
-        {children}
-        <Footer />
+      <body className={`${font.className}`}>
+        <AnimatedBackground>
+          <div className="min-h-screen flex flex-col h-screen justify-between">
+            {children}
+            <Footer />
+          </div>
+        </AnimatedBackground>
       </body>
     </html>
   );
