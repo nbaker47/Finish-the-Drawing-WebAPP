@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import {
   TwitterShareButton,
   FacebookShareButton,
@@ -13,7 +13,16 @@ import {
 } from "react-share";
 
 export default function Sharebar({ className }: { className?: string }) {
-  const url = window.location.href;
+  const [url, setUrl] = React.useState("");
+
+  useEffect(() => {
+    console.log("Sharebar mounted");
+    const url = window.location.href;
+    setUrl(url);
+    return () => {
+      console.log("Sharebar unmounted");
+    };
+  }, []);
 
   return (
     <div className={`flex flex-row gap-2 justify-center ${className}`}>
