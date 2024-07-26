@@ -175,7 +175,7 @@ export function drawRandomLines(
 
     context.clearRect(0, 0, canvas.current.width, canvas.current.height);
 
-    context.lineWidth = 5;
+    context.lineWidth = 3;
     context.lineCap = "round";
     context.strokeStyle = "#8F95FF"; // Set the line color to blue
 
@@ -216,7 +216,7 @@ function draw(
     return;
   }
 
-  context.lineWidth = 5;
+  context.lineWidth = 3;
   context.lineCap = "round";
 
   currentLine.points.push({ x: x_temp, y: y_temp });
