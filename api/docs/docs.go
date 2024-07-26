@@ -121,6 +121,37 @@ const docTemplate = `{
                 }
             }
         },
+        "/drawing/today": {
+            "get": {
+                "description": "Get all drawings drawn today",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Drawing"
+                ],
+                "summary": "Get all drawings drawn today",
+                "operationId": "get-todays-drawings",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/domainObject.Drawing"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": true
+                        }
+                    }
+                }
+            }
+        },
         "/drawing/{id}": {
             "get": {
                 "description": "Get a drawing by its ID",

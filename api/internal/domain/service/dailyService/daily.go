@@ -13,6 +13,7 @@ type DailyService interface {
 	GetRandomWord() string
 	GetToday() (domainObject.Daily, error)
 	Create() error
+	GetTodaysDate() time.Time
 }
 
 // IMPLEMENTATION

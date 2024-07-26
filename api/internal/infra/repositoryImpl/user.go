@@ -38,10 +38,9 @@ func (r *UserRepositoryImpl) GetByID(id string) (domainObject.User, error) {
 }
 
 // GET BY FIELD
-func (r *UserRepositoryImpl) GetByField(field string, value string) (domainObject.User, error) {
-	var user domainObject.User
-	err := gormInterface.GetByField(r.DB, field, value, &user)
-	return user, err
+func (r *UserRepositoryImpl) GetByField(field string, value string, store *[]domainObject.User) error {
+	err := gormInterface.GetByField(r.DB, field, value, store)
+	return err
 }
 
 // UPDATE

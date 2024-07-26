@@ -26,8 +26,10 @@ func NewUserService(repo repository.UserRepository) *UserService {
 
 func (s *UserService) CreateGuest() (domainObject.User, error) {
 	// Check if guest user already exists
-	if user, err := s.repo.GetByField("username", "Guest Artist"); err == nil {
-		return user, nil
+	store := &[]domainObject.User{}
+	if err := s.repo.GetByField("username", "Guest Artist", store); err == nil {
+		deref := *store
+		return deref[0], nil
 	}
 	user := domainObject.User{
 		Username:       "Guest Artist",

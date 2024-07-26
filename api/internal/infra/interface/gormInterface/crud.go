@@ -20,7 +20,7 @@ func GetByUUID(DB *gorm.DB, id string, model interface{}) error {
 }
 
 // GET BY FIELD
-func GetByField(DB *gorm.DB, field string, value string, model interface{}) error {
+func GetByField[T any](DB *gorm.DB, field string, value string, model *[]T) error {
 	return DB.Where(field+" = ?", value).First(&model).Error
 }
 

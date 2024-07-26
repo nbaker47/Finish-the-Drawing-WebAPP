@@ -289,6 +289,27 @@ paths:
       summary: Like a drawing
       tags:
       - Drawing
+  /drawing/today:
+    get:
+      description: Get all drawings drawn today
+      operationId: get-todays-drawings
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/domainObject.Drawing'
+            type: array
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get all drawings drawn today
+      tags:
+      - Drawing
   /users:
     get:
       consumes:

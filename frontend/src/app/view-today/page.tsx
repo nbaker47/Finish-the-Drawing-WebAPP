@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import { drawingResponse } from "@/types/drawing";
+import React, { useEffect, useState } from "react";
 
 async function fetchTodaysDrawings() {
   try {
@@ -17,11 +18,11 @@ async function fetchTodaysDrawings() {
 }
 
 export default function Page() {
-  const [daily, setData] = useState<daily | null>(null);
+  const [daily, setData] = useState<drawingResponse | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const dailyData = await fetchDaily();
+      const dailyData = await fetchTodaysDrawings();
       setData(dailyData);
     };
     fetchData();

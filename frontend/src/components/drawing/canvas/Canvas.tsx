@@ -12,9 +12,13 @@ import clsx from "clsx";
 import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
 import Sharebar from "@/components/Sharebar";
 import PencilMan from "@/components/drawing/pencil/PencilMan";
-import { drawRandomLines } from "@/components/drawing/canvas/drawing";
+import {
+  drawRandomLines,
+  initializeCanvas,
+} from "@/components/drawing/canvas/drawing";
 import words from "@/components/drawing/pencil/words";
 import { CanvasContext } from "@/app/draw/CanvasContext";
+import { pushRandomLines } from "./randomLines";
 
 interface CanvasProps {
   className?: string;
@@ -27,15 +31,13 @@ export default function Canvas({
   pencilMan,
   shareBar,
 }: CanvasProps) {
-  // Retrieve context from CanvasContext
-  const { randomLines, canvasRef } = useContext(CanvasContext);
-
-  // State for canvas drawing
+  const { daily, canvasRef } = useContext(CanvasContext);
   const containerRef = useRef<HTMLDivElement>(null);
-  const [clickCount, setClickCount] = useState(0); // New state variable
+  const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
+  const [clickCount, setClickCount] = useState(0);
 
   useEffect(() => {
-    const resizeCanvas = () => {
+    const initializeAndResizeCanvas = () => {
       if (
         containerRef.current &&
         canvasRef &&
@@ -43,31 +45,40 @@ export default function Canvas({
       ) {
         const container = containerRef.current;
         const canvas = canvasRef.current;
+        if (!canvas) return;
+
         const { width, height } = container.getBoundingClientRect();
-
-        if (!canvas) {
-          return;
-        }
-
-        // Set canvas dimensions to match container size
         canvas.width = width;
         canvas.height = height;
 
-        // Redraw your canvas content here if needed
         const context = canvas.getContext("2d");
-        if (context && randomLines) {
-          drawRandomLines(randomLines, { current: canvas }, context);
+        if (context) {
+          // Generate random lines if not already generated
+          if (randomLinesRef.current.length === 0) {
+            for (var i = 0; i < 7; i++) {
+              pushRandomLines(
+                i,
+                randomLinesRef.current,
+                canvasRef,
+                context,
+                daily.seed
+              );
+            }
+          }
+          // add event listeners
+          initializeCanvas(canvasRef, randomLinesRef.current, context);
+          // Draw the lines
+          drawRandomLines(randomLinesRef.current, canvasRef, context);
         }
       }
     };
 
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
+    initializeAndResizeCanvas();
+    window.addEventListener("resize", initializeAndResizeCanvas);
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
+      window.removeEventListener("resize", initializeAndResizeCanvas);
     };
-  }, [canvasRef, randomLines]); // Ensure `randomLines` is also a dependency
+  }, [canvasRef, daily.seed]);
 
   // State for pencil text
   const [randomWord, setRandomWord] = useState(words[0]);

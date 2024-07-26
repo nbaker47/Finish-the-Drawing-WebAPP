@@ -21,16 +21,9 @@ export default function CanvasContainer({ daily }: { daily: daily }) {
           //   console.log(randomLines);
           pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
         }
-
-        // Initialize the canvas with the drawing functions
-        initializeCanvas(canvasRef, randomLines, context);
-      } else {
-        console.log("Failed to get canvas context");
       }
-    } else {
-      console.log("canvasRef.current is null");
     }
-  }, []); // Empty array means this effect runs once after the component is mounted
+  }, [canvasRef]);
 
   return (
     <>

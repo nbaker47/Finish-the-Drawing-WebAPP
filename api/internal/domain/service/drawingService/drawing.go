@@ -35,11 +35,13 @@ func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domain
 
 	// check if the user is a guest
 	if drawingReq.User == "NULL_USER" {
-		guest, err := s.userRepo.GetByField("username", "Guest Artist")
+		store := &[]domainObject.User{}
+		err := s.userRepo.GetByField("username", "Guest Artist", store)
 		if err != nil {
 			return domainObject.Drawing{}, err
 		}
-		drawingReq.User = guest.UUID
+		deref := *store
+		drawingReq.User = deref[0].UUID
 	}
 
 	// get the user
@@ -72,7 +74,8 @@ func (s *DrawingService) GetAll(store *[]domainObject.Drawing) error {
 
 // GET TODAY'S DRAWINGS
 func (s *DrawingService) GetTodays(store *[]domainObject.Drawing) error {
-	err := s.repo.GetAll(store)
+	date := s.dailyService.GetTodaysDate()
+	err := s.repo.GetToday(date, store)
 	if err != nil {
 		return err
 	}

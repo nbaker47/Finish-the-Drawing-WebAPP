@@ -5,6 +5,7 @@ import "./backgrounds.css";
 import "./animations.css";
 import Footer from "@/components/nav/footer/Footer";
 import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
+import clsx from "clsx";
 
 const font = Bubblegum_Sans({
   weight: "400",
@@ -26,7 +27,20 @@ export default function RootLayout({
       <body className={`${font.className}`}>
         <AnimatedBackground>
           <div className="min-h-screen flex flex-col h-screen justify-between">
-            {children}
+            <main
+              className={clsx(
+                "flex",
+                "items-center",
+                "justify-center",
+                "w-screen",
+                "flex-grow",
+                "pt-1"
+              )}
+              // style={{ maxHeight: "calc(100vh - 1rem)" }}
+            >
+              {children}
+            </main>
+
             <Footer />
           </div>
         </AnimatedBackground>

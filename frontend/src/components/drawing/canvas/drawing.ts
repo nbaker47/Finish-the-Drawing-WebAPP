@@ -19,6 +19,8 @@ export function initializeCanvas(
   randomLines: { x: number; y: number }[][],
   contextRef: CanvasRenderingContext2D
 ) {
+  console.log("initializeCanvas: canvasRef", canvasRef);
+
   canvas = canvasRef.current;
   if (canvas) {
     context = canvas.getContext("2d");

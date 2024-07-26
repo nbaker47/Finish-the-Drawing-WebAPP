@@ -62,13 +62,13 @@ func (h *DrawingController) GetAllDrawings(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing/today [get]
 func (h *DrawingController) GetTodaysDrawings(c *gin.Context) {
-	var drawings *[]domainObject.Drawing
-	err := h.DrawingService.GetTodays(drawings)
+	store := &[]domainObject.Drawing{}
+	err := h.DrawingService.GetTodays(store)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"status": "success"})
+	c.JSON(http.StatusOK, store)
 }
 
 // GET DRAWING BY ID

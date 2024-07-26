@@ -2,6 +2,7 @@ package repository
 
 import (
 	"api/internal/domain/domainObject"
+	"time"
 
 	"github.com/stretchr/testify/mock"
 )
@@ -28,9 +29,9 @@ func (m *MockDrawingRepository) GetAll(result *[]domainObject.Drawing) error {
 }
 
 // GetByField implements repository.DrawingRepository.
-func (m *MockDrawingRepository) GetByField(field string, value string) (domainObject.Drawing, error) {
+func (m *MockDrawingRepository) GetByField(field string, value string, store *[]domainObject.Drawing) error {
 	args := m.Called(field, value)
-	return args.Get(0).(domainObject.Drawing), args.Error(1)
+	return args.Error(1)
 }
 
 // GetByID implements repository.DrawingRepository.
@@ -42,5 +43,10 @@ func (m *MockDrawingRepository) GetByID(id string) (domainObject.Drawing, error)
 // Update implements repository.DrawingRepository.
 func (m *MockDrawingRepository) Update(id string, value *domainObject.Drawing) error {
 	args := m.Called(id, value)
+	return args.Error(0)
+}
+
+func (m *MockDrawingRepository) GetToday(date time.Time, store *[]domainObject.Drawing) error {
+	args := m.Called(date, store)
 	return args.Error(0)
 }

@@ -29,9 +29,9 @@ func (m *MockUserRepository) GetAll(result *[]domainObject.User) error {
 }
 
 // GetByField implements repository.UserRepository.
-func (m *MockUserRepository) GetByField(field string, value string) (domainObject.User, error) {
+func (m *MockUserRepository) GetByField(field string, value string, store *[]domainObject.User) error {
 	args := m.Called(field, value)
-	return args.Get(0).(domainObject.User), args.Error(1)
+	return args.Error(1)
 }
 
 // Update implements repository.UserRepository.
