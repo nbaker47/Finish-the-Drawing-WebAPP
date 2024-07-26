@@ -45,7 +45,7 @@ func main() {
 	// services
 	dailyService := dailyService.NewDailyService(dailyRepository)
 	userService := userService.NewUserService(userRepoImpl)
-	drawingService := drawingService.NewDrawingService(drawingRepoImpl, userRepoImpl, dailyService)
+	drawingService := drawingService.NewDrawingService(drawingRepoImpl, userRepoImpl, dailyService, userService)
 
 	// controllers
 	dailyController := controller.NewDailyController(dailyService)

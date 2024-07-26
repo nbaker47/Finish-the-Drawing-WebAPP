@@ -13,9 +13,9 @@ type UserController struct {
 }
 
 // INIT
-func NewUserController(userService *userService.UserService) *UserController {
+func NewUserController(userService userService.UserService) *UserController {
 	return &UserController{
-		UserService: *userService,
+		UserService: userService,
 	}
 }
 

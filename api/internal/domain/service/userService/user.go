@@ -4,18 +4,30 @@ import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
 	"api/internal/domain/service/crudService"
+	"fmt"
 
 	"golang.org/x/crypto/bcrypt"
 )
 
+type UserService interface {
+	GetGuestUUID() string
+	CreateGuest() (domainObject.User, error)
+	Create(userReq *domainObject.UserRequest) (domainObject.User, error)
+	Update(userID string, user *domainObject.User) error
+	GetAll(store *[]domainObject.User) error
+	GetByID(id string) (domainObject.User, error)
+	Delete(id string) error
+	GetHallOfFame() ([]domainObject.User, error)
+}
+
 // IMPLEMENTATION
-type UserService struct {
+type UserServiceImpl struct {
 	repo repository.UserRepository
 }
 
 // INIT
-func NewUserService(repo repository.UserRepository) *UserService {
-	return &UserService{
+func NewUserService(repo repository.UserRepository) *UserServiceImpl {
+	return &UserServiceImpl{
 		repo: repo,
 	}
 }
@@ -24,7 +36,16 @@ func NewUserService(repo repository.UserRepository) *UserService {
 
 // CREATE GUEST
 
-func (s *UserService) CreateGuest() (domainObject.User, error) {
+func (s *UserServiceImpl) GetGuestUUID() string {
+	store := &[]domainObject.User{}
+	s.repo.GetByField("username", "Guest Artist", store)
+	deref := *store
+	guestArtistUUId := deref[0].UUID
+	fmt.Println("GUEST UUID: ", guestArtistUUId)
+	return guestArtistUUId
+}
+
+func (s *UserServiceImpl) CreateGuest() (domainObject.User, error) {
 	// Check if guest user already exists
 	store := &[]domainObject.User{}
 	if err := s.repo.GetByField("username", "Guest Artist", store); err == nil {
@@ -35,13 +56,14 @@ func (s *UserService) CreateGuest() (domainObject.User, error) {
 		Username:       "Guest Artist",
 		Background:     "bg-pokadot",
 		ProfilePicture: "PLACEHOLDER",
+		UUID:           "NULL_USER",
 	}
 	s.repo.Create(&user)
 	return user, nil
 }
 
 // CREATE USER
-func (s *UserService) Create(userReq *domainObject.UserRequest) (domainObject.User, error) {
+func (s *UserServiceImpl) Create(userReq *domainObject.UserRequest) (domainObject.User, error) {
 	// hash the password
 	bytes, err := bcrypt.GenerateFromPassword([]byte(userReq.Password), 14)
 	if err != nil {
@@ -56,7 +78,7 @@ func (s *UserService) Create(userReq *domainObject.UserRequest) (domainObject.Us
 }
 
 // UPDATE USER
-func (s *UserService) Update(userID string, user *domainObject.User) error {
+func (s *UserServiceImpl) Update(userID string, user *domainObject.User) error {
 	// hash the password
 	bytes, err := bcrypt.GenerateFromPassword([]byte(user.Password), 14)
 	if err != nil {
@@ -67,22 +89,22 @@ func (s *UserService) Update(userID string, user *domainObject.User) error {
 }
 
 // GET ALL USERS
-func (s *UserService) GetAll(store *[]domainObject.User) error {
+func (s *UserServiceImpl) GetAll(store *[]domainObject.User) error {
 	return crudService.GetAll(store, s.repo)
 }
 
 // GET USER BY ID
-func (s *UserService) GetByID(id string) (domainObject.User, error) {
+func (s *UserServiceImpl) GetByID(id string) (domainObject.User, error) {
 	return crudService.GetByID(id, s.repo)
 }
 
 // DELETE USER
-func (s *UserService) Delete(id string) error {
+func (s *UserServiceImpl) Delete(id string) error {
 	return crudService.Delete(id, s.repo)
 }
 
 // GET HALL OF FAME
-func (s *UserService) GetHallOfFame() ([]domainObject.User, error) {
+func (s *UserServiceImpl) GetHallOfFame() ([]domainObject.User, error) {
 	var allUsers []domainObject.User
 	if err := s.repo.GetAll(&allUsers); err != nil {
 		return nil, err

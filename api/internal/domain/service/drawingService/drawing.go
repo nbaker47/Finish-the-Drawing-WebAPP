@@ -5,6 +5,8 @@ import (
 	"api/internal/domain/repository"
 	"api/internal/domain/service/crudService"
 	"api/internal/domain/service/dailyService"
+	"api/internal/domain/service/userService"
+	"fmt"
 )
 
 // IMPLEMENTATION
@@ -12,17 +14,21 @@ type DrawingService struct {
 	repo         repository.DrawingRepository
 	userRepo     repository.UserRepository
 	dailyService dailyService.DailyService
+	userService  userService.UserService
 }
 
 // INIT
 func NewDrawingService(
 	repo repository.DrawingRepository,
 	userRepo repository.UserRepository,
-	dailyService dailyService.DailyService) *DrawingService {
+	dailyService dailyService.DailyService,
+	userService userService.UserService,
+) *DrawingService {
 	return &DrawingService{
 		repo:         repo,
 		userRepo:     userRepo,
 		dailyService: dailyService,
+		userService:  userService,
 	}
 }
 
@@ -35,13 +41,7 @@ func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domain
 
 	// check if the user is a guest
 	if drawingReq.User == "NULL_USER" {
-		store := &[]domainObject.User{}
-		err := s.userRepo.GetByField("username", "Guest Artist", store)
-		if err != nil {
-			return domainObject.Drawing{}, err
-		}
-		deref := *store
-		drawingReq.User = deref[0].UUID
+		drawingReq.User = s.userService.GetGuestUUID()
 	}
 
 	// get the user
@@ -99,11 +99,20 @@ func (s *DrawingService) Like(id string, userID string) error {
 		return err
 	}
 	drawing.Likes++
+
+	// check if the user is a guest
+	if userID == "NULL_USER" {
+		userID = s.userService.GetGuestUUID()
+	}
+
 	userObj, err := s.userRepo.GetByID(userID)
 	if err != nil {
 		return err
 	}
 	drawing.LikedBy = append(drawing.LikedBy, userObj)
+
+	fmt.Println(drawing.Likes)
+
 	err = s.repo.Update(id, &drawing)
 	if err != nil {
 		return err
@@ -117,8 +126,13 @@ func (s *DrawingService) Dislike(id string, userID string) error {
 	if err != nil {
 		return err
 	}
-
 	drawing.Dislikes++
+
+	// check if the user is a guest
+	if userID == "NULL_USER" {
+		userID = s.userService.GetGuestUUID()
+	}
+
 	userObj, err := s.userRepo.GetByID(userID)
 	if err != nil {
 		return err

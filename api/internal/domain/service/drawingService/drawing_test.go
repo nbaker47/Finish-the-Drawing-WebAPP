@@ -7,6 +7,7 @@ import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
 	"api/internal/domain/service/dailyService"
+	"api/internal/domain/service/userService"
 
 	// "api/internal/infra/repositoryImpl"
 
@@ -18,8 +19,9 @@ func TestCreateDrawing(t *testing.T) {
 	drawingRepo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(drawingRepo, userRepo, dailyService)
+	service := NewDrawingService(drawingRepo, userRepo, dailyService, userService)
 
 	drawingReq := &domainObject.DrawingRequest{
 		User:        "55555555-7777-9999-8468-6c541d21734c",
@@ -73,8 +75,9 @@ func TestGetAllDrawings(t *testing.T) {
 	repo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(repo, userRepo, dailyService)
+	service := NewDrawingService(repo, userRepo, dailyService, userService)
 
 	// Mock the dependencies' behavior
 	repo.On("GetAll", mock.AnythingOfType("*[]domainObject.Drawing")).Return(nil)
@@ -93,8 +96,9 @@ func TestGetDrawingByID(t *testing.T) {
 	repo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(repo, userRepo, dailyService)
+	service := NewDrawingService(repo, userRepo, dailyService, userService)
 
 	id := "drawing1"
 
@@ -114,8 +118,9 @@ func TestDeleteDrawing(t *testing.T) {
 	repo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(repo, userRepo, dailyService)
+	service := NewDrawingService(repo, userRepo, dailyService, userService)
 
 	id := "drawing1"
 
@@ -135,8 +140,9 @@ func TestLikeDrawing(t *testing.T) {
 	repo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(repo, userRepo, dailyService)
+	service := NewDrawingService(repo, userRepo, dailyService, userService)
 
 	id := "drawing1"
 	userID := "user1"
@@ -159,8 +165,9 @@ func TestDislikeDrawing(t *testing.T) {
 	repo := &repository.MockDrawingRepository{}
 	userRepo := &repository.MockUserRepository{}
 	dailyService := &dailyService.MockDailyService{}
+	userService := &userService.MockUserService{}
 
-	service := NewDrawingService(repo, userRepo, dailyService)
+	service := NewDrawingService(repo, userRepo, dailyService, userService)
 
 	id := "drawing1"
 	userID := "user1"

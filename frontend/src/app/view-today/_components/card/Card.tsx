@@ -1,10 +1,39 @@
+"use client";
+
 import { drawingResponse } from "@/types/drawing";
-import React from "react";
+import React, { use, useEffect } from "react";
 import { FaTrophy } from "react-icons/fa";
 import "./card.css";
 import { FaRegHeart } from "react-icons/fa";
 import { BiDislike } from "react-icons/bi";
 import clsx from "clsx";
+import { FaHeart } from "react-icons/fa";
+
+function like(id: string, like: boolean) {
+  const url =
+    process.env.NEXT_PUBLIC_API_URL +
+    "/drawing/" +
+    id +
+    (like ? "/like" : "/dislike");
+
+  const payload = { user: "NULL_USER" };
+  console.log({ url, payload });
+
+  fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  }).then((response) => {
+    console.log(response);
+    if (response.status === 200) {
+      console.log("Successfully liked/disliked");
+    } else {
+      console.error("Failed to like/dislike");
+    }
+  });
+}
 
 const Card = ({
   submission,
@@ -13,6 +42,40 @@ const Card = ({
   submission: drawingResponse;
   index: number;
 }) => {
+  const handleLike = () => {
+    if (liked || disliked) {
+      return;
+    }
+    like(submission.id, true);
+    setLikes(likes + 1);
+    setLiked(true);
+
+    // Save to localStorage
+    localStorage.setItem(`liked-${submission.id}`, "true");
+  };
+
+  const handleDislike = () => {
+    if (liked || disliked) {
+      return;
+    }
+    like(submission.id, false);
+    setDislikes(dislikes + 1);
+    setDisliked(true);
+
+    // Save to localStorage
+    localStorage.setItem(`disliked-${submission.id}`, "true");
+  };
+
+  const [likes, setLikes] = React.useState(submission.likes);
+  const [dislikes, setDislikes] = React.useState(submission.dislikes);
+
+  const [liked, setLiked] = React.useState(
+    localStorage.getItem(`liked-${submission.id}`) === "true"
+  );
+  const [disliked, setDisliked] = React.useState(
+    localStorage.getItem(`disliked-${submission.id}`) === "true"
+  );
+
   console.log(`index: ${index}`);
   return (
     <div
@@ -55,12 +118,26 @@ const Card = ({
             style={{ right: "-30px" }}
           >
             <div className="flex items-center mr-4">
-              <FaRegHeart className="text-xl font-bold" />
-              <span className="ml-2 text-3">{submission.likes}</span>
+              {liked ? (
+                <FaHeart
+                  className={`text-xl font-bold cursor-pointer text-red-500 ani-bubble`}
+                  onClick={handleLike}
+                />
+              ) : (
+                <FaRegHeart
+                  className={`text-xl font-bold cursor-pointer`}
+                  onClick={handleLike}
+                />
+              )}
+
+              <span className="ml-2 text-3">{likes}</span>
             </div>
-            <div className="flex items-center">
-              <BiDislike className="text-xl font-bold" />
-              <span className="ml-2 text-lg">{submission.dislikes}</span>
+            <div className="flex items-center cursor-pointer">
+              <BiDislike
+                className="text-xl font-bold"
+                onClick={handleDislike}
+              />
+              <span className="ml-2 text-lg">{dislikes}</span>
             </div>
           </div>
         </div>
