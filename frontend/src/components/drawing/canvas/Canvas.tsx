@@ -51,9 +51,9 @@ export default function Canvas({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const { width, height } = container.getBoundingClientRect();
-        canvas.width = width;
-        canvas.height = height;
+        // const { width, height } = container.getBoundingClientRect();
+        // canvas.width = width;
+        // canvas.height = height;
 
         const context = canvas.getContext("2d");
         if (context) {
@@ -152,8 +152,6 @@ export default function Canvas({
           }}
         >
           <canvas
-            id="drawing-canvas"
-            // style={{ width: "200px", height: "200px" }}
             className="static fade-in cursor-crosshair w-full h-full"
             ref={canvasRef as RefObject<HTMLCanvasElement>}
           ></canvas>
