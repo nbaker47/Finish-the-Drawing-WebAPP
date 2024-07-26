@@ -26,3 +26,15 @@
 .third-card {
   outline: #cd7f32 8px solid;
 }
+
+.first-card-panel {
+  outline: gold 3px solid;
+}
+
+.second-card-panel {
+  outline: silver 3px solid;
+}
+
+.third-card-panel {
+  outline: #cd7f32 3px solid;
+}

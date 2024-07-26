@@ -99,7 +99,7 @@ export default function Footer() {
               {/* vertical line */}
               <div className="h-10 w-[1px] bg-black mx-2 hidden sm:flex"></div>
               <div className="flex flex-row items-center justify-center hidden sm:flex ">
-                <p className="text-gray-800 font-extralight ml-2">
+                <p className="text-neutral-800 font-extralight ml-2">
                   Finish the Drawing &copy;
                 </p>
               </div>
