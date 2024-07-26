@@ -6,7 +6,7 @@ import Title from "./_components/title/Title";
 import Sharebar from "@/components/Sharebar";
 import Card from "./_components/card/Card";
 
-async function fetchTodaysDrawings() {
+async function fetchTodaysDrawings(): drawingResponse[] {
   try {
     let url = process.env.NEXT_PUBLIC_API_URL + "/drawing/today";
     console.log("Fetching daily data from:", url);
@@ -15,8 +15,6 @@ async function fetchTodaysDrawings() {
     return data;
   } catch (error) {
     console.error("Error fetching daily data:", error);
-    // Provide fallback data
-    return { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
   }
 }
 
