@@ -6,7 +6,7 @@ import Title from "./_components/title/Title";
 import Sharebar from "@/components/Sharebar";
 import Card from "./_components/card/Card";
 
-async function fetchTodaysDrawings(): drawingResponse[] {
+async function fetchTodaysDrawings() {
   try {
     let url = process.env.NEXT_PUBLIC_API_URL + "/drawing/today";
     console.log("Fetching daily data from:", url);

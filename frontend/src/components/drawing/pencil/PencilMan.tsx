@@ -78,7 +78,7 @@ export default function PencilMan({
           "text-xs",
           "sm:text-[0.9rem]",
           "text-black",
-          "w-fit",
+          "w-[400px]",
           "rounded-md",
           "p-2",
           "font-exo",
