@@ -17,6 +17,7 @@
     "react-moving-text": "^0.0.7",
     "react-notifications": "^1.7.4",
     "react-share": "^5.1.0",
+    "react-textfit": "^1.1.1",
     "sharp": "^0.33.4"
   },
   "devDependencies": {

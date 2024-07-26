@@ -20,6 +20,7 @@ import {
 import words from "@/components/drawing/pencil/words";
 import { CanvasContext } from "@/app/draw/CanvasContext";
 import { pushRandomLines } from "./randomLines";
+import { time } from "console";
 
 interface CanvasProps {
   className?: string;

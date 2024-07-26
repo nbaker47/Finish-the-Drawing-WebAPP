@@ -48,6 +48,9 @@ export default function PencilMan({
         "rounded-md",
         "shadow-inner",
         "bg-lined-faint",
+        "items-center",
+        "justify-center", // Add this line
+        "text-center", // Add this line\
         className
       )}
     >
@@ -75,10 +78,11 @@ export default function PencilMan({
           "text-center", // Add this line\
           "mx-auto",
           "w-4/5",
-          "text-xs",
-          "sm:text-[0.9rem]",
+          "text-[0.6rem]",
+          "sm:text-[0.8rem]",
           "text-black",
           "w-[400px]",
+          "h-[50px]",
           "rounded-md",
           "p-2",
           "font-exo",
