@@ -6,3 +6,9 @@ repos:
         entry: ./api/scripts/check_edited_go_files.sh
         language: script
         pass_filenames: false
+
+      - id: yarn-lint
+        name: run yarn lint
+        entry: ./frontend/scripts/check_edited_tsx_files.sh
+        language: script
+        pass_filenames: false
