@@ -13,7 +13,7 @@ import {
 } from "react-share";
 
 export default function Sharebar({ className }: { className?: string }) {
-  const [url, setUrl] = React.useState("5");
+  const [url, setUrl] = React.useState("");
 
   useEffect(() => {
     console.log("Sharebar mounted");
