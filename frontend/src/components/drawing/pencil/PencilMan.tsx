@@ -24,7 +24,7 @@ export default function PencilMan({
   const [bubbleAnimation, setBubbleAnimation] = useState(false); // New state variable
 
   useEffect(() => {
-    if (clickCount > 0 && clickCount % 3 === 0) {
+    if ((clickCount > 0 && clickCount % 3 === 0) || clickCount === 1) {
       let randint = Math.floor(Math.random() * (words.length - 1)) + 1;
       setRandomWord(words[randint]);
       setBubbleAnimation(true); // Start animation
@@ -76,7 +76,7 @@ export default function PencilMan({
           "mx-auto",
           "w-4/5",
           "text-xs",
-          "sm:text-lg",
+          "sm:text-[0.9rem]",
           "text-black",
           "w-fit",
           "rounded-md",

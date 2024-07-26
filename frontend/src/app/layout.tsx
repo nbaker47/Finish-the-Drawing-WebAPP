@@ -24,23 +24,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${font.className}`}>
+      <body className={`${font.className} min-h-screen flex flex-col`}>
         <AnimatedBackground>
-          <div className="min-h-screen flex flex-col h-screen justify-between">
+          <div className="flex-grow flex flex-col">
             <main
               className={clsx(
                 "flex",
-                "items-center",
                 "justify-center",
-                "w-screen",
+                "w-full",
                 "flex-grow",
                 "pt-1"
               )}
-              // style={{ maxHeight: "calc(100vh - 1rem)" }}
             >
               {children}
             </main>
-
             <Footer />
           </div>
         </AnimatedBackground>

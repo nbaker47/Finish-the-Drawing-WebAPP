@@ -1,10 +1,12 @@
 @import url("https://fonts.googleapis.com/css?family=Exo:400,700");
 
 .animated-background {
-  position: relative;
   width: 100%;
-  height: 100vh;
-  overflow: hidden;
+  min-height: 100vh; /* Use min-height instead of height */
+  position: fixed; /* Fix the background to the viewport */
+  top: 0;
+  left: 0;
+  z-index: -1; /* Place it behind other content */
 }
 
 .area {

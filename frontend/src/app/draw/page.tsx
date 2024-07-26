@@ -37,33 +37,32 @@ export default function Page() {
 
   return (
     <>
-      <div
-        className={clsx(
-          //
-          "w-full",
-          //
-          "xs:w-11/12",
-          "max-w-screen-md",
-          //
-          "bg-blue-zigzag",
-          "border-2",
-          "border-gray-700",
-          "rounded-3xl",
-          "py-3",
-          "px-1",
-          "sm:px-12",
-          "flex", // Add this
-          "flex-col", // Add this
-          "items-center", // Add this
-          "justify-center" // Add this
-        )}
-        style={{
-          boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)",
-          maxHeight: "calc(100vh - 5rem)",
-        }}
-      >
-        <Title word={daily.word} className="mt-2 mb-2" wordClassName="" />
-        <CanvasContainer daily={daily} />
+      <div className="items-center">
+        <div
+          className={clsx(
+            //
+            "w-full",
+            //
+            "xs:w-11/12",
+            //
+            "bg-blue-zigzag",
+            "border-2",
+            "border-gray-700",
+            "rounded-3xl",
+            "py-3",
+            "px-1",
+            "sm:px-12",
+            "mx-auto",
+            "mt-1"
+          )}
+          style={{
+            boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)",
+            maxHeight: "calc(100vh - 5rem)",
+          }}
+        >
+          <Title word={daily.word} className="mt-2 mb-2" wordClassName="" />
+          <CanvasContainer daily={daily} />
+        </div>
       </div>
     </>
   );

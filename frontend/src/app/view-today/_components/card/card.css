@@ -1,0 +1,28 @@
+.podium {
+  background: rgb(247, 248, 145);
+  background: radial-gradient(
+    circle,
+    rgba(247, 248, 145, 1) 0%,
+    rgba(232, 250, 106, 1) 15%,
+    rgba(239, 58, 25, 1) 80%,
+    rgba(255, 0, 0, 1) 100%
+  );
+  padding: 3px;
+  text-shadow: 1.5px 1.5px 0 #000, -1.5px -1.5px 0 #000, 1.5px -1.5px 0 #000,
+    -1.5px 1.5px 0 #000, 1.5px 1.5px 0 #000;
+  border-radius: 10px;
+  box-shadow: 3px 3px 3px 2px rgba(0, 0, 0, 0.23);
+  z-index: 3;
+}
+
+.first-card {
+  outline: gold 8px solid;
+}
+
+.second-card {
+  outline: silver 8px solid;
+}
+
+.third-card {
+  outline: #cd7f32 8px solid;
+}

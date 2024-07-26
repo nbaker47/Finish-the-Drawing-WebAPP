@@ -23,10 +23,9 @@ export default function Footer() {
           "border-gray-700",
           "rounded-3xl",
           "border-2",
-          "w-full",
-          "max-w-screen-md",
           "mx-auto",
-          "p-4"
+          "p-4",
+          "px-9"
           // "xs:w-3/12"
         )}
       >
@@ -58,7 +57,7 @@ export default function Footer() {
                 </Link>
               </div>
               {/* Hall of Fame */}
-              <div className={clsx("icon-round-border", "bg-white")}>
+              {/* <div className={clsx("icon-round-border", "bg-white")}>
                 <Link href="/hall-of-fame">
                   <Image
                     src={Trophy}
@@ -68,7 +67,7 @@ export default function Footer() {
                     className="w-12 h-12 md:w-14 md:h-14"
                   />
                 </Link>
-              </div>
+              </div> */}
               {/* User */}
               {/* <div className={clsx("icon-round-border", "bg-white")}>
               <Link href="/user">
@@ -84,24 +83,24 @@ export default function Footer() {
             </div>
 
             {/* Copyright marker */}
-            <div className="text-xs ml-0 xs:ml-36 sm:text-2xl  flex-row items-center justify-center hidden sm:flex">
+            <div className="text-xs ml-10 sm:text-2xl  flex-row items-center justify-center flex">
               <div className="flex flex-row items-center justify-center">
                 <img
                   src={"/beaumont_studios_logo_transparent.png"}
                   alt="user"
                   className="w-[40px] h-[40px] rounded-lg object-cover"
                 />
-                <div className="w-min justify-center align-middle ">
+                <div className="w-min justify-center align-middle ml-1 mr-2">
                   <p className="font-exo text-black text-xs">
                     Beaumont Studios
                   </p>
                 </div>
               </div>
               {/* vertical line */}
-              <div className="h-10 w-[1px] bg-black mx-2"></div>
-              <div className="flex flex-row items-center justify-center ">
-                <p className="text-gray-800 font-extralight">
-                  &copy; 2024 Finish the Drawing.
+              <div className="h-10 w-[1px] bg-black mx-2 hidden sm:flex"></div>
+              <div className="flex flex-row items-center justify-center hidden sm:flex ">
+                <p className="text-gray-800 font-extralight ml-2">
+                  Finish the Drawing &copy;
                 </p>
               </div>
             </div>

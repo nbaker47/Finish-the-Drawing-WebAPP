@@ -2,10 +2,13 @@
 
 import { drawingResponse } from "@/types/drawing";
 import React, { useEffect, useState } from "react";
+import Title from "./_components/title/Title";
+import Sharebar from "@/components/Sharebar";
+import Card from "./_components/card/Card";
 
 async function fetchTodaysDrawings() {
   try {
-    let url = process.env.NEXT_PUBLIC_API_URL + "/drawings/today";
+    let url = process.env.NEXT_PUBLIC_API_URL + "/drawing/today";
     console.log("Fetching daily data from:", url);
     let response = await fetch(url, { cache: "no-store" });
     var data = await response.json();
@@ -18,17 +21,33 @@ async function fetchTodaysDrawings() {
 }
 
 export default function Page() {
-  const [daily, setData] = useState<drawingResponse | null>(null);
+  const [drawings, setdrawings] = useState<drawingResponse[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      const dailyData = await fetchTodaysDrawings();
-      setData(dailyData);
+      const drawingData = await fetchTodaysDrawings();
+      setdrawings(drawingData);
     };
     fetchData();
   }, []);
 
-  if (!daily) {
+  if (!drawings) {
     return <div>Loading...</div>;
   }
+
+  console.log(drawings);
+
+  return (
+    <>
+      <div className="flex flex-col items-center mt-3 mb-10">
+        <Title />
+        <Sharebar className="mb-6 sm:mb-8" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:max-w-[80%]">
+          {drawings.map((drawing, i) => (
+            <Card key={i} submission={drawing} index={i} />
+          ))}
+        </div>
+      </div>
+    </>
+  );
 }

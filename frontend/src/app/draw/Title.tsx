@@ -35,7 +35,7 @@ export default function Title({
   };
 
   return (
-    <div className={`text-center custom-title ${className}`}>
+    <div className={`text-center ${className}`}>
       <Image
         src={TitlePNG}
         alt="logo"
