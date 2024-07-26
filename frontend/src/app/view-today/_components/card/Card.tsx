@@ -22,9 +22,21 @@ const Card = ({
     >
       {(index as number) < 3 && (
         <div className="podium flex items-center justify-center text-3xl">
-          {index == 0 && <FaTrophy style={{ color: "#ffc800" }} />}
-          {index == 1 && <FaTrophy style={{ color: "silver" }} />}
-          {index == 2 && <FaTrophy style={{ color: "#cd7f32" }} />}
+          {index == 0 && (
+            <FaTrophy
+              style={{ color: "#ffc800", stroke: "black", strokeWidth: "16px" }}
+            />
+          )}
+          {index == 1 && (
+            <FaTrophy
+              style={{ color: "silver", stroke: "black", strokeWidth: "16px" }}
+            />
+          )}
+          {index == 2 && (
+            <FaTrophy
+              style={{ color: "#cd7f32", stroke: "black", strokeWidth: "16px" }}
+            />
+          )}
         </div>
       )}
       <div className="flex flex-col justify-between flex-grow">
