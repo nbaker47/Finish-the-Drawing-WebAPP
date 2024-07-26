@@ -87,17 +87,17 @@ const Card = ({
         <div className="podium flex items-center justify-center text-3xl">
           {index == 0 && (
             <FaTrophy
-              style={{ color: "#ffc800", stroke: "black", strokeWidth: "16px" }}
+              style={{ color: "#ffc800", stroke: "black", strokeWidth: "25px" }}
             />
           )}
           {index == 1 && (
             <FaTrophy
-              style={{ color: "silver", stroke: "black", strokeWidth: "16px" }}
+              style={{ color: "silver", stroke: "black", strokeWidth: "25px" }}
             />
           )}
           {index == 2 && (
             <FaTrophy
-              style={{ color: "#cd7f32", stroke: "black", strokeWidth: "16px" }}
+              style={{ color: "#cd7f32", stroke: "black", strokeWidth: "25px" }}
             />
           )}
         </div>
@@ -134,7 +134,9 @@ const Card = ({
             </div>
             <div className="flex items-center cursor-pointer">
               <BiDislike
-                className="text-xl font-bold"
+                className={`text-xl font-bold ${
+                  disliked ? "text-red-500 ani-bubble" : ""
+                }`}
                 onClick={handleDislike}
               />
               <span className="ml-2 text-lg">{dislikes}</span>

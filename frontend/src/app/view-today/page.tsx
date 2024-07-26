@@ -37,13 +37,24 @@ export default function Page() {
 
   console.log(drawings);
 
+  // Sort by likes
+  const sortedDrawings = drawings.sort((a, b) => b.likes - a.likes);
+
   return (
     <>
       <div className="flex flex-col items-center mt-3 mb-10">
         <Title />
         <Sharebar className="mb-6 sm:mb-8" />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-10 sm:max-w-[80%] ani-bounce-in ">
-          {drawings.map((drawing, i) => (
+        <div
+          className={`grid gap-10 sm:max-w-[80%] ani-bounce-in ${
+            sortedDrawings.length >= 3
+              ? "lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-2"
+              : sortedDrawings.length >= 2
+              ? "md:grid-cols-2 sm:grid-cols-2"
+              : "grid-cols-1"
+          }`}
+        >
+          {sortedDrawings.map((drawing, i) => (
             <Card key={i} submission={drawing} index={i} />
           ))}
         </div>
