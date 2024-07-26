@@ -43,6 +43,8 @@ export default function Canvas({
         canvasRef &&
         typeof canvasRef !== "function"
       ) {
+        console.log("Initializing canvas");
+
         const container = containerRef.current;
         const canvas = canvasRef.current;
         if (!canvas) return;
@@ -143,6 +145,7 @@ export default function Canvas({
         >
           <canvas
             id="drawing-canvas"
+            // style={{ width: "200px", height: "200px" }}
             className="static fade-in cursor-crosshair w-full h-full"
             ref={canvasRef as RefObject<HTMLCanvasElement>}
           ></canvas>

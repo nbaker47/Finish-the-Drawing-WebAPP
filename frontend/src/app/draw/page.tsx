@@ -37,7 +37,7 @@ export default function Page() {
 
   return (
     <>
-      <div className="items-center">
+      <div className="items-center flex">
         <div
           className={clsx(
             //
