@@ -3,7 +3,7 @@ import { Bubblegum_Sans } from "next/font/google";
 import "./globals.css";
 import "./backgrounds.css";
 import "./animations.css";
-import Footer from "@/components/nav/footer";
+import Footer from "@/components/nav/footer/Footer";
 import AnimatedBackground from "@/components/backgrounds/AnimatedBackground";
 
 const font = Bubblegum_Sans({
