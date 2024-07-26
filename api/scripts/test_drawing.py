@@ -32,6 +32,23 @@ class TestDrawing:
 
         return response.json()['id']
     
+    def test_create_404(self, user_id: str, daily_id: str) -> str:
+        headers = {
+            'accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            "user": user_id,
+            "daily": daily_id,
+            "image": "test_image",
+            "description": "test_description"
+        }
+        response = requests.post(self.url, headers=headers, json=data)
+        print("TEST CREATE 404 RESPONSE", response)
+
+        assert response.status_code == 404
+
+    
     def get_drawing(self, drawing_id: str) -> None:
         response = requests.get(f'{self.url}/{drawing_id}')
         assert response.status_code == 200
@@ -91,6 +108,8 @@ if __name__ == '__main__':
     # test.unlike_drawing(id)
     test.delete_drawing(id)
     testUser.delete_user(user_id)
+    # test 404 due to user_id not found
+    test.test_create_404('123456789', daily_id)
     
 
 

@@ -3,8 +3,10 @@ import React, { useRef, useEffect } from "react";
 import Canvas from "@/components/drawing/canvas/Canvas";
 import { pushRandomLines } from "@/components/drawing/canvas/randomLines";
 import { initializeCanvas } from "@/components/drawing/canvas/drawing"; // Import the initializeCanvas function
+import { daily } from "@/types/daily";
+import { CanvasContext, CanvasContextProvider } from "./CanvasContext";
 
-export default function CanvasContainer({ seed }: { seed: number }) {
+export default function CanvasContainer({ daily }: { daily: daily }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   let randomLines: { x: number; y: number }[][] = [];
 
@@ -17,7 +19,7 @@ export default function CanvasContainer({ seed }: { seed: number }) {
         for (var i = 0; i < 7; i++) {
           //   console.log(i);
           //   console.log(randomLines);
-          pushRandomLines(i, randomLines, canvasRef, context, seed);
+          pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
         }
 
         // Initialize the canvas with the drawing functions
@@ -32,12 +34,17 @@ export default function CanvasContainer({ seed }: { seed: number }) {
 
   return (
     <>
-      <Canvas
-        pencilMan={true}
-        shareBar={true}
-        ref={canvasRef}
-        randomLines={randomLines}
-      />
+      <CanvasContext.Provider
+        value={{
+          canvasRef,
+          randomLines,
+          daily,
+          submitUrl: `${process.env.NEXT_PUBLIC_API_URL}/drawing`,
+          redirectUrl: "/view-today",
+        }}
+      >
+        <Canvas pencilMan={true} shareBar={true} />
+      </CanvasContext.Provider>
     </>
   );
 }

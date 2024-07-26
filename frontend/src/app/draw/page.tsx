@@ -21,7 +21,7 @@ async function fetchDaily() {
 }
 
 export default function Page() {
-  const [data, setData] = useState<daily | null>(null);
+  const [daily, setData] = useState<daily | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -31,7 +31,7 @@ export default function Page() {
     fetchData();
   }, []);
 
-  if (!data) {
+  if (!daily) {
     return <div>Loading...</div>;
   }
 
@@ -73,8 +73,8 @@ export default function Page() {
             maxHeight: "calc(100vh - 5rem)",
           }}
         >
-          <Title word={data.word} className="mt-2 mb-2" wordClassName="" />
-          <CanvasContainer seed={data.seed} />
+          <Title word={daily.word} className="mt-2 mb-2" wordClassName="" />
+          <CanvasContainer daily={daily} />
         </div>
       </main>
     </>

@@ -63,6 +63,9 @@ func main() {
 	// Generate the daily
 	dailyService.Create()
 
+	// Generate the guest user
+	userService.CreateGuest()
+
 	// Start the server
 	err := r.Run(":8080")
 	if err != nil {

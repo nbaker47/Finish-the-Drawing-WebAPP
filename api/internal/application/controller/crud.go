@@ -8,6 +8,14 @@ import (
 	"gorm.io/gorm"
 )
 
+func handleError(c *gin.Context, err error) {
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
+	} else {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	}
+}
+
 func Create[A any, B any](
 	c *gin.Context,
 	req A,
@@ -19,7 +27,7 @@ func Create[A any, B any](
 	}
 	result, err := createFunc(req)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 	c.JSON(http.StatusCreated, result)
@@ -29,7 +37,7 @@ func GetAll[A any](c *gin.Context, getAllFunc func() (A, error)) {
 
 	results, err := getAllFunc()
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, results)
@@ -38,12 +46,8 @@ func GetAll[A any](c *gin.Context, getAllFunc func() (A, error)) {
 func GetByID[T any](c *gin.Context, getByIDFunc func(id string) (T, error)) {
 	id := c.Param("id")
 	result, err := getByIDFunc(id)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 	c.JSON(http.StatusOK, result)
@@ -52,12 +56,8 @@ func GetByID[T any](c *gin.Context, getByIDFunc func(id string) (T, error)) {
 func Delete(c *gin.Context, deleteFunc func(id string) error) {
 	id := c.Param("id")
 	err := deleteFunc(id)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		c.JSON(http.StatusNotFound, gin.H{"error": "Record not found"})
-		return
-	}
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		handleError(c, err)
 		return
 	}
 	c.JSON(http.StatusNoContent, gin.H{"status": "success"})

@@ -21,6 +21,22 @@ func NewUserService(repo repository.UserRepository) *UserService {
 
 // METHODS :
 
+// CREATE GUEST
+
+func (s *UserService) CreateGuest() (domainObject.User, error) {
+	// Check if guest user already exists
+	if user, err := s.repo.GetByField("username", "Guest Artist"); err == nil {
+		return user, nil
+	}
+	user := domainObject.User{
+		Username:       "Guest Artist",
+		Background:     "bg-pokadot",
+		ProfilePicture: "PLACEHOLDER",
+	}
+	s.repo.Create(&user)
+	return user, nil
+}
+
 // CREATE USER
 func (s *UserService) Create(userReq *domainObject.UserRequest) (domainObject.User, error) {
 	// hash the password

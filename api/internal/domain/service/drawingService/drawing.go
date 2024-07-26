@@ -31,11 +31,22 @@ func NewDrawingService(
 
 // CREATE DRAWING
 func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domainObject.Drawing, error) {
-	// get the user from the drawing.UserID
+
+	// check if the user is a guest
+	if drawingReq.User == "NULL_USER" {
+		guest, err := s.userRepo.GetByField("username", "Guest Artist")
+		if err != nil {
+			return domainObject.Drawing{}, err
+		}
+		drawingReq.User = guest.UUID
+	}
+
+	// get the user
 	user, err := s.userRepo.GetByID((drawingReq.User))
 	if err != nil {
 		return domainObject.Drawing{}, err
 	}
+
 	// get the daily
 	daily, err := s.dailyService.GetToday()
 	if err != nil {

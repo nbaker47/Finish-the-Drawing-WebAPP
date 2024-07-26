@@ -5,7 +5,7 @@ import clsx from "clsx";
 import View from "./view.png";
 import Draw from "./draw.png";
 import Trophy from "./trophy.png";
-import User from "./user.svg";
+// import User from "./user.svg";
 
 export default function Footer() {
   return (
