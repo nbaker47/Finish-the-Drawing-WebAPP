@@ -3,6 +3,7 @@ package userService
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
+	"api/internal/domain/service/crudService"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -64,23 +65,18 @@ func (s *UserService) Update(userID string, user *domainObject.User) error {
 }
 
 // GET ALL USERS
-func (s *UserService) GetAll() (*[]domainObject.User, error) {
-	var store []domainObject.User
-	err := s.repo.GetAll(&store)
-	if err != nil {
-		return nil, err
-	}
-	return &store, nil
+func (s *UserService) GetAll(store *[]domainObject.User) error {
+	return crudService.GetAll(store, s.repo)
 }
 
 // GET USER BY ID
 func (s *UserService) GetByID(id string) (domainObject.User, error) {
-	return s.repo.GetByID(id)
+	return crudService.GetByID(id, s.repo)
 }
 
 // DELETE USER
 func (s *UserService) Delete(id string) error {
-	return s.repo.Delete(id)
+	return crudService.Delete(id, s.repo)
 }
 
 // GET HALL OF FAME

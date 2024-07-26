@@ -33,14 +33,13 @@ func Create[A any, B any](
 	c.JSON(http.StatusCreated, result)
 }
 
-func GetAll[A any](c *gin.Context, getAllFunc func() (A, error)) {
-
-	results, err := getAllFunc()
+func GetAll[A any](c *gin.Context, getAllFunc func(*[]A) error, store *[]A) {
+	err := getAllFunc(store)
 	if err != nil {
 		handleError(c, err)
 		return
 	}
-	c.JSON(http.StatusOK, results)
+	c.JSON(http.StatusOK, *store)
 }
 
 func GetByID[T any](c *gin.Context, getByIDFunc func(id string) (T, error)) {

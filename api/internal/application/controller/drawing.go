@@ -48,7 +48,27 @@ func (h *DrawingController) CreateDrawing(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /drawing [get]
 func (h *DrawingController) GetAllDrawings(c *gin.Context) {
-	GetAll(c, h.DrawingService.GetAll)
+	store := &[]domainObject.Drawing{}
+	GetAll(c, h.DrawingService.GetAll, store)
+}
+
+// GET TODAYS DRAWINGS
+// @Summary Get all drawings drawn today
+// @Description Get all drawings drawn today
+// @Tags Drawing
+// @ID get-todays-drawings
+// @Produce  json
+// @Success 200 {array} domainObject.Drawing
+// @Failure 500 {object} map[string]interface{}
+// @Router /drawing/today [get]
+func (h *DrawingController) GetTodaysDrawings(c *gin.Context) {
+	var drawings *[]domainObject.Drawing
+	err := h.DrawingService.GetTodays(drawings)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "success"})
 }
 
 // GET DRAWING BY ID

@@ -1,6 +1,8 @@
 package gormInterface
 
-import "gorm.io/gorm"
+import (
+	"gorm.io/gorm"
+)
 
 // UPDATE
 func UpdateByUUID(DB *gorm.DB, id string, model interface{}) error {

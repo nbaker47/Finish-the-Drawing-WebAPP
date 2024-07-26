@@ -3,6 +3,7 @@ package drawingService
 import (
 	"api/internal/domain/domainObject"
 	"api/internal/domain/repository"
+	"api/internal/domain/service/crudService"
 	"api/internal/domain/service/dailyService"
 )
 
@@ -65,27 +66,27 @@ func (s *DrawingService) Create(drawingReq *domainObject.DrawingRequest) (domain
 }
 
 // GET ALL DRAWINGS
-func (s *DrawingService) GetAll() (*[]domainObject.Drawing, error) {
-	store := &[]domainObject.Drawing{}
+func (s *DrawingService) GetAll(store *[]domainObject.Drawing) error {
+	return crudService.GetAll(store, s.repo)
+}
+
+// GET TODAY'S DRAWINGS
+func (s *DrawingService) GetTodays(store *[]domainObject.Drawing) error {
 	err := s.repo.GetAll(store)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	return store, nil
+	return nil
 }
 
 // GET DRAWING
 func (s *DrawingService) GetByID(id string) (domainObject.Drawing, error) {
-	drawing, err := s.repo.GetByID(id)
-	if err != nil {
-		return domainObject.Drawing{}, err
-	}
-	return drawing, nil
+	return crudService.GetByID(id, s.repo)
 }
 
 // DELETE DRAWING
 func (s *DrawingService) Delete(id string) error {
-	return s.repo.Delete(id)
+	return crudService.Delete(id, s.repo)
 }
 
 // LIKE

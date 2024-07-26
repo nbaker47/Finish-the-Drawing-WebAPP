@@ -80,7 +80,8 @@ func TestGetAllDrawings(t *testing.T) {
 	repo.On("GetAll", mock.AnythingOfType("*[]domainObject.Drawing")).Return(nil)
 
 	// Call the GetAll method
-	_, err := service.GetAll()
+	var store *[]domainObject.Drawing
+	err := service.GetAll(store)
 	if err != nil {
 		t.Errorf("GetAll failed: %v", err)
 	}

@@ -45,8 +45,8 @@ func (h *UserController) CreateUser(c *gin.Context) {
 // @Failure 500 {object} map[string]interface{}
 // @Router /users [get]
 func (h *UserController) GetAllUsers(c *gin.Context) {
-	GetAll(c, h.UserService.GetAll)
-
+	store := &[]domainObject.User{}
+	GetAll(c, h.UserService.GetAll, store)
 }
 
 // GET USER BY ID

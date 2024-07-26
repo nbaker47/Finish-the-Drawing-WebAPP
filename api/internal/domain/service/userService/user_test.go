@@ -48,7 +48,8 @@ func TestUserService_GetAll(t *testing.T) {
 
 	repo.On("GetAll", mock.AnythingOfType("*[]domainObject.User")).Return(nil)
 
-	users, err := service.GetAll()
+	var users *[]domainObject.User
+	err := service.GetAll(users)
 	assert.NoError(t, err)
 	assert.NotNil(t, users)
 }
