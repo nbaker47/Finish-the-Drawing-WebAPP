@@ -7,6 +7,7 @@ import React, {
   useState,
   RefObject,
   useContext,
+  use,
 } from "react";
 import clsx from "clsx";
 import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
@@ -81,6 +82,12 @@ export default function Canvas({
       window.removeEventListener("resize", initializeAndResizeCanvas);
     };
   }, [canvasRef, daily.seed]);
+
+  // TODO: HACK, when the window is resized, refresh the window
+  const refresh = () => {
+    window.location.reload();
+  };
+  window.addEventListener("resize", refresh);
 
   // State for pencil text
   const [randomWord, setRandomWord] = useState(words[0]);
