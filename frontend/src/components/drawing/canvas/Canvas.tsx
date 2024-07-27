@@ -86,10 +86,10 @@ export default function Canvas({
   }, [canvasRef, daily.seed]);
 
   // TODO: HACK, when the window is resized, refresh the window
-  const refresh = () => {
-    window.location.reload();
-  };
-  window.addEventListener("resize", refresh);
+  // const refresh = () => {
+  //   window.location.reload();
+  // };
+  // window.addEventListener("resize", refresh);
 
   // State for pencil text
   const [randomWord, setRandomWord] = useState(words[0]);
