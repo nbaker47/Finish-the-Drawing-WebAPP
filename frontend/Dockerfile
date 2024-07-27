@@ -7,6 +7,8 @@ RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
 
+RUN yarn i sharp
+
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
 RUN \
@@ -28,7 +30,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=deps /root/.npm /root/.npm
+COPY --from=deps /root/.cache/yarn /root/.cache/yarn
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
