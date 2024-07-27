@@ -51,9 +51,9 @@ export default function Canvas({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        // const { width, height } = container.getBoundingClientRect();
-        // canvas.width = width;
-        // canvas.height = height;
+        const { width, height } = container.getBoundingClientRect();
+        canvas.width = width;
+        canvas.height = height - 40;
 
         const context = canvas.getContext("2d");
         if (context) {
@@ -79,6 +79,7 @@ export default function Canvas({
 
     initializeAndResizeCanvas();
     window.addEventListener("resize", initializeAndResizeCanvas);
+
     return () => {
       window.removeEventListener("resize", initializeAndResizeCanvas);
     };
@@ -106,6 +107,8 @@ export default function Canvas({
         "pt-3",
         "pb-2",
         "w-full",
+        "max-w-[90%]",
+        "mx-auto",
         "h-fit",
         className
       )}
@@ -128,12 +131,14 @@ export default function Canvas({
         )}
       >
         {pencilMan && (
-          <PencilMan
-            className="mb-3 screen-height-grow w-full"
-            clickCount={clickCount}
-            randomWord={randomWord}
-            setRandomWord={setRandomWord}
-          />
+          <div className="max-w-[90%]">
+            <PencilMan
+              className="mb-3 screen-height-grow w-full"
+              clickCount={clickCount}
+              randomWord={randomWord}
+              setRandomWord={setRandomWord}
+            />
+          </div>
         )}
         <div
           ref={containerRef}

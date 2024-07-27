@@ -41,7 +41,7 @@ export default function Title({
         alt="logo"
         width={500}
         height={500}
-        className="mx-auto mb-2"
+        className="mx-auto mb-2 max-w-[80%]"
       />
       <div className="ani-bounce-in">
         <span

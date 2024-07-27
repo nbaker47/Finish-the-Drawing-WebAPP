@@ -24,9 +24,11 @@ export default function Footer() {
           "rounded-3xl",
           "border-2",
           "mx-auto",
-          "p-4",
-          "px-9"
-          // "xs:w-3/12"
+          "py-4",
+          "px-4",
+          // "xs:w-11/12"
+          "xs:px-[50px]"
+          // "md:w-[40%]"
         )}
       >
         <div className="flex items-center justify-between">
@@ -83,7 +85,7 @@ export default function Footer() {
             </div>
 
             {/* Copyright marker */}
-            <div className="text-xs ml-10 sm:text-2xl  flex-row items-center justify-center flex">
+            <div className="text-xs ml-5 sm:text-2xl  flex-row items-center justify-center flex">
               <div className="flex flex-row items-center justify-center">
                 <img
                   src={"/beaumont_studios_logo_transparent.png"}
