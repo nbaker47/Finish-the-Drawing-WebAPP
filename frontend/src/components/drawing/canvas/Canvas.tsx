@@ -38,6 +38,8 @@ export default function Canvas({
   const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
   const [clickCount, setClickCount] = useState(0);
 
+  console.log("Canvas.tsx: canvasRef", canvasRef);
+
   useEffect(() => {
     const initializeAndResizeCanvas = () => {
       if (
