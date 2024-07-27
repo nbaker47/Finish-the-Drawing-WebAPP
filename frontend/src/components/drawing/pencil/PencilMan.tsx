@@ -24,6 +24,8 @@ export default function PencilMan({
   const [bubbleAnimation, setBubbleAnimation] = useState(false); // New state variable
 
   useEffect(() => {
+    console.log("PencilMan.tsx: clickCount", clickCount);
+
     if ((clickCount > 0 && clickCount % 3 === 0) || clickCount === 1) {
       let randint = Math.floor(Math.random() * (words.length - 1)) + 1;
       setRandomWord(words[randint]);

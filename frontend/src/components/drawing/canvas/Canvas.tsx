@@ -170,6 +170,7 @@ export default function Canvas({
           )}
           onClick={() => {
             setClickCount((count) => count + 1);
+            console.log("Canvas.tsx: clickCount", clickCount);
           }}
         >
           <div className="flex-grow w-[100%] min-h-[200px]">
