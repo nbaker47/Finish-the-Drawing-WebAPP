@@ -132,10 +132,10 @@ export default function Canvas({
           "justify-center",
           // "aspect-[1/1]",
           "w-[100%]",
-          "h-[80%]",
-          "max-w-[90vw]",
+          "h-[100%]",
+          "max-w-[99vw]",
           // "max-w-[90%]",
-          // "min-h-[250px]",
+          "min-h-[55vh]",
           // "min-w-[150px]",
           "mx-auto"
           // "screen-height-grow"

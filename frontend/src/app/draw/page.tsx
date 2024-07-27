@@ -41,7 +41,7 @@ export default function Page() {
         className={clsx(
           //
           // "sm:w-min",
-          "h-min",
+          // "h-min",
           "mt-0",
           // //
           // "xs:w-11/12",

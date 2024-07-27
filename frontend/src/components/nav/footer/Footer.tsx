@@ -26,8 +26,10 @@ export default function Footer() {
           "mx-auto",
           "py-4",
           "px-4",
-          // "xs:w-11/12"
-          "xs:px-[50px]"
+          "w-full",
+          // "h-[10vh]",
+          "sm:w-fit",
+          "sm:px-12"
           // "md:w-[40%]"
         )}
       >
@@ -85,7 +87,7 @@ export default function Footer() {
             </div>
 
             {/* Copyright marker */}
-            <div className="text-xs ml-5 sm:text-2xl  flex-row items-center justify-center flex">
+            <div className="text-xs ml-3 sm:ml-14 sm:text-2xl  flex-row items-center justify-center flex">
               <div className="flex flex-row items-center justify-center">
                 <img
                   src={"/beaumont_studios_logo_transparent.png"}
