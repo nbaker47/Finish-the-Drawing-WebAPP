@@ -26,7 +26,7 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
 ENV NEXT_SHARP_PATH=/app/node_modules/sharp
-ENV NEXT_PUBLIC_API_URL=http://35.206.231.249:3000
+ENV NEXT_PUBLIC_API_URL=http://35.206.231.249:8080
 
 # Next.js collects completely anonymous telemetry data about general usage.
 # Learn more here: https://nextjs.org/telemetry
