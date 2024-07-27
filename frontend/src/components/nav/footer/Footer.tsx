@@ -26,7 +26,7 @@ export default function Footer() {
           "mx-auto",
           "py-4",
           "px-4",
-          "w-full",
+          "w-[97%]",
           // "h-[10vh]",
           "sm:w-fit",
           "sm:px-12",
