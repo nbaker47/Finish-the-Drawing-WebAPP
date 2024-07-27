@@ -21,24 +21,69 @@ import words from "@/components/drawing/pencil/words";
 import { CanvasContext } from "@/app/draw/CanvasContext";
 import { pushRandomLines } from "./randomLines";
 import { time } from "console";
+import { daily } from "@/types/daily";
 
 interface CanvasProps {
   className?: string;
   pencilMan?: boolean;
   shareBar?: boolean;
+  // canvasRef: RefObject<HTMLCanvasElement>;
+  // randomLines?: { x: number; y: number }[][];
+  daily: daily;
+  submitUrl: string;
+  redirectUrl: string;
 }
 
 export default function Canvas({
   className,
   pencilMan,
   shareBar,
+  // canvasRef,
+  // randomLines,
+  daily,
+  submitUrl,
+  redirectUrl,
 }: CanvasProps) {
-  const { daily, canvasRef } = useContext(CanvasContext);
+  // const { daily, canvasRef } = useContext(CanvasContext);
+  const [canvasLoaded, setCanvasLoaded] = useState(false);
+  const [containerLoaded, setContainerLoaded] = useState(false);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
   const [clickCount, setClickCount] = useState(0);
 
-  console.log("Canvas.tsx: canvasRef", canvasRef);
+  let randomLines: { x: number; y: number }[][] = [];
+
+  useEffect(() => {
+    setCanvasLoaded(true);
+  }, [canvasRef]);
+
+  useEffect(() => {
+    setContainerLoaded(true);
+  }, [containerRef]);
+
+  useEffect(() => {
+    // Generate random lines
+    if (canvasRef.current) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        // Add a null check for context
+        for (var i = 0; i < 7; i++) {
+          //   console.log(i);
+          //   console.log(randomLines);
+          pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
+        }
+      }
+    }
+  }, [canvasRef]);
+
+  useEffect(() => {
+    console.log("Canvas.tsx: canvasRef", canvasRef);
+  }, [canvasRef]);
+
+  useEffect(() => {
+    console.log("Canvas.tsx: clickCount", clickCount);
+  }, [clickCount]);
 
   useEffect(() => {
     const initializeAndResizeCanvas = () => {
@@ -181,9 +226,16 @@ export default function Canvas({
           </div>
         </div>
         <div className="w-full">
-          {(canvasRef && "current" in canvasRef && canvasRef.current && (
-            <CanvasButtons description={randomWord} />
-          )) ?? <CanvasButtons />}
+          {(canvasLoaded && (
+            <CanvasButtons
+              description={randomWord}
+              canvasRef={canvasRef}
+              randomLines={randomLinesRef.current}
+              daily={daily}
+              submitUrl={submitUrl}
+              redirectUrl={redirectUrl}
+            />
+          )) ?? <p>Loading...</p>}
         </div>
       </div>
     </div>

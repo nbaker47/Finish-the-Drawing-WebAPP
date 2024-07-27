@@ -10,14 +10,24 @@ import { CanvasContext } from "@/app/draw/CanvasContext";
 interface CanvasButtonsProps {
   className?: string;
   description?: string;
+  canvasRef: React.RefObject<HTMLCanvasElement>;
+  randomLines: { x: number; y: number }[][];
+  daily: daily;
+  submitUrl: string;
+  redirectUrl: string;
 }
 
 export default function CanvasButtons({
   className,
   description,
+  canvasRef,
+  randomLines,
+  daily,
+  submitUrl,
+  redirectUrl,
 }: CanvasButtonsProps) {
-  const { canvasRef, randomLines, daily, submitUrl, redirectUrl } =
-    useContext(CanvasContext);
+  // const { canvasRef, randomLines, daily, submitUrl, redirectUrl } =
+  //   useContext(CanvasContext);
 
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");

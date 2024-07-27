@@ -24,6 +24,10 @@ export default function PencilMan({
   const [bubbleAnimation, setBubbleAnimation] = useState(false); // New state variable
 
   useEffect(() => {
+    console.log("PencilMan.tsx: clickCount: ", clickCount);
+  }, [clickCount]);
+
+  useEffect(() => {
     console.log("PencilMan.tsx: clickCount", clickCount);
 
     if ((clickCount > 0 && clickCount % 3 === 0) || clickCount === 1) {
