@@ -28,13 +28,7 @@ export default function RootLayout({
         <AnimatedBackground>
           <div className="flex-grow flex flex-col">
             <main
-              className={clsx(
-                "flex",
-                "justify-center",
-                "w-full",
-                "flex-grow",
-                "pt-1"
-              )}
+              className={clsx("flex", "justify-center", "w-full", "flex-grow")}
             >
               {children}
             </main>

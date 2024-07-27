@@ -35,7 +35,11 @@ func main() {
 	r := gin.Default()
 
 	// Use cors middleware
-	r.Use(cors.Default())
+	config := cors.DefaultConfig()
+	config.AllowAllOrigins = true
+	config.AllowMethods = []string{"GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type"}
+	r.Use(cors.New(config))
 
 	// repo impl
 	dailyRepository := repositoryImpl.NewDailyRepository()

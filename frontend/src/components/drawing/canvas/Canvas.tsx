@@ -53,7 +53,7 @@ export default function Canvas({
 
         const { width, height } = container.getBoundingClientRect();
         canvas.width = width;
-        canvas.height = height - 40;
+        canvas.height = height;
 
         const context = canvas.getContext("2d");
         if (context) {
@@ -97,8 +97,8 @@ export default function Canvas({
   return (
     <div
       className={clsx(
-        "flex",
-        "flex-col",
+        // "flex",
+        // "flex-col",
         "bg-pokadot",
         "border-[1.1px]",
         "border-gray-700",
@@ -106,14 +106,21 @@ export default function Canvas({
         "px-2",
         "pt-3",
         "pb-2",
-        "w-full",
-        "max-w-[90%]",
+        // "w-full",
+        // "h-full",
+
+        // "h-[77%]",
+        // "w-full",
+        // "h-full",
+        // "h-min-c",
+        // "flex-grow",
+        // "max-w-[90%]",
+        // "min-h-[400px]",
         "mx-auto",
-        "h-fit",
+        // "h-fit",
         className
       )}
       style={{ boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)" }}
-      id="main-drawing-interface"
     >
       {shareBar && <Sharebar className="mb-3" />}
 
@@ -123,17 +130,21 @@ export default function Canvas({
           "flex-col",
           "items-center",
           "justify-center",
-          "aspect-[1/1]",
-          "w-full",
-          "h-full",
-          "mx-auto",
-          "screen-height-grow"
+          // "aspect-[1/1]",
+          "w-[100%]",
+          "h-[80%]",
+          "max-w-[90vw]",
+          // "max-w-[90%]",
+          // "min-h-[250px]",
+          // "min-w-[150px]",
+          "mx-auto"
+          // "screen-height-grow"
         )}
       >
         {pencilMan && (
-          <div className="max-w-[90%]">
+          <div className="max-w-[95%]">
             <PencilMan
-              className="mb-3 screen-height-grow w-full"
+              className="mb-3 w-full"
               clickCount={clickCount}
               randomWord={randomWord}
               setRandomWord={setRandomWord}
@@ -146,20 +157,25 @@ export default function Canvas({
             "bg-white",
             // "ftd-border",
             "rounded-3xl",
-            "w-full",
-            "h-full",
+            "flex-grow",
             "border-dashed",
             "border-gray-700",
-            "border-2"
+            "border-2",
+            // "w-full",
+            "w-[95%]"
+
+            // "md:w-[60%]"
           )}
           onClick={() => {
             setClickCount((count) => count + 1);
           }}
         >
-          <canvas
-            className="static fade-in cursor-crosshair w-full h-full ani-fade-in"
-            ref={canvasRef as RefObject<HTMLCanvasElement>}
-          ></canvas>
+          <div className="flex-grow w-[100%] min-h-[200px]">
+            <canvas
+              className="static fade-in cursor-crosshair w-full h-full  ani-fade-in"
+              ref={canvasRef as RefObject<HTMLCanvasElement>}
+            ></canvas>
+          </div>
         </div>
         <div className="w-full">
           {(canvasRef && "current" in canvasRef && canvasRef.current && (
