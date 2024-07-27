@@ -6,7 +6,7 @@ FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-ENV NEXT_SHARP_PATH /app/node_modules/sharp
+ENV NEXT_SHARP_PATH=/tmp/app/node_modules/sharp
 
 # Install dependencies based on the preferred package manager
 COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
@@ -16,7 +16,8 @@ RUN \
   elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
   else echo "Lockfile not found." && exit 1; \
   fi
-  ENV NEXT_SHARP_PATH /app/node_modules/sharp
+
+ENV NEXT_SHARP_PATH=/tmp/app/node_modules/sharp
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -24,7 +25,7 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+ENV NEXT_SHARP_PATH=/tmp/app/node_modules/sharp
 ENV NEXT_PUBLIC_API_URL=http://35.206.231.249:8080
 
 # Next.js collects completely anonymous telemetry data about general usage.
@@ -44,7 +45,7 @@ FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
-ENV NEXT_SHARP_PATH=/app/node_modules/sharp
+ENV NEXT_SHARP_PATH=/tmp/app/node_modules/sharp
 
 # Uncomment the following line in case you want to disable telemetry during runtime.
 # ENV NEXT_TELEMETRY_DISABLED 1
