@@ -30,7 +30,7 @@ COPY . .
 # Uncomment the following line in case you want to disable telemetry during the build.
 # ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY --from=deps /root/.cache/yarn /root/.cache/yarn
+COPY --from=deps /app/.cache/yarn /app/.cache/yarn
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
