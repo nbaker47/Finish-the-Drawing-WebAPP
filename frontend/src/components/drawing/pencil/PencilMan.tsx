@@ -89,7 +89,7 @@ export default function PencilMan({
           "text-[0.6rem]",
           "sm:text-[0.8rem]",
           "text-black",
-          "w-[400px]",
+          // "w-[400px]",
           "h-[50px]",
           "rounded-md",
           "p-2",
