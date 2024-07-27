@@ -102,8 +102,8 @@ const Card = ({
           )}
         </div>
       )}
-      <div className="flex flex-col justify-between flex-grow">
-        <div className="flex flex-col items-center justify-center">
+      <div className="flex flex-col justify-between flex-grow mt-4">
+        <div className="flex flex-col items-center justify-center border-dashed border-2 border-slate-600 rounded-lg">
           <img
             src={submission.image}
             alt="Submission Image"
@@ -152,9 +152,10 @@ const Card = ({
             "mx-auto",
             "font-exo",
             "rounded-xl",
-            "ftd-border-dashed",
+            "ftd-border",
             "p-2",
-            "h-[120px]"
+            "h-[120px]",
+            "w-full"
             // "text-[80%]"
           )}
           style={{ backgroundColor: "rgba(78, 197, 255, 0.59)" }}
