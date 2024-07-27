@@ -29,6 +29,7 @@ interface CanvasProps {
   shareBar?: boolean;
   // canvasRef: RefObject<HTMLCanvasElement>;
   // randomLines?: { x: number; y: number }[][];
+  lines: boolean;
   daily: daily;
   submitUrl: string;
   redirectUrl: string;
@@ -40,6 +41,7 @@ export default function Canvas({
   shareBar,
   // canvasRef,
   // randomLines,
+  lines,
   daily,
   submitUrl,
   redirectUrl,
@@ -52,30 +54,21 @@ export default function Canvas({
   const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
   const [clickCount, setClickCount] = useState(0);
 
-  let randomLines: { x: number; y: number }[][] = [];
-
   useEffect(() => {
     setCanvasLoaded(true);
   }, [canvasRef]);
 
   useEffect(() => {
     setContainerLoaded(true);
+    containerRef.current?.addEventListener("click", () => {
+      setClickCount((prevCount) => prevCount + 1);
+      console.log("Canvas.tsx: clickCount", clickCount);
+    });
+    containerRef.current?.addEventListener("touchstart", () => {
+      setClickCount((prevCount) => prevCount + 1);
+      console.log("Canvas.tsx: clickCount", clickCount);
+    });
   }, [containerRef]);
-
-  useEffect(() => {
-    // Generate random lines
-    if (canvasRef.current) {
-      const context = canvasRef.current.getContext("2d");
-      if (context) {
-        // Add a null check for context
-        for (var i = 0; i < 7; i++) {
-          //   console.log(i);
-          //   console.log(randomLines);
-          pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
-        }
-      }
-    }
-  }, [canvasRef]);
 
   useEffect(() => {
     console.log("Canvas.tsx: canvasRef", canvasRef);
@@ -118,8 +111,17 @@ export default function Canvas({
           }
           // add event listeners
           initializeCanvas(canvasRef, randomLinesRef.current, context);
+
           // Draw the lines
-          drawRandomLines(randomLinesRef.current, canvasRef, context);
+          if (lines) {
+            let randomLines: { x: number; y: number }[][] = [];
+            for (var i = 0; i < 7; i++) {
+              //   console.log(i);
+              //   console.log(randomLines);
+              pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
+            }
+            drawRandomLines(randomLinesRef.current, canvasRef, context);
+          }
         }
       }
     };
@@ -195,6 +197,7 @@ export default function Canvas({
               clickCount={clickCount}
               randomWord={randomWord}
               setRandomWord={setRandomWord}
+              canvasLoaded={canvasLoaded}
             />
           </div>
         )}
@@ -213,15 +216,18 @@ export default function Canvas({
 
             // "md:w-[60%]"
           )}
-          onClick={() => {
-            setClickCount((count) => count + 1);
-            console.log("Canvas.tsx: clickCount", clickCount);
-          }}
+          // onClick={() => {
+          //   setClickCount((count) => count + 1);
+          //   console.log("Canvas.tsx: clickCount", clickCount);
+          // }}
         >
           <div className="flex-grow w-[100%] min-h-[200px]">
             <canvas
               className="static fade-in cursor-crosshair w-full h-full  ani-fade-in"
               ref={canvasRef as RefObject<HTMLCanvasElement>}
+              onClick={() => {
+                setClickCount((prevCount) => prevCount + 1);
+              }}
             ></canvas>
           </div>
         </div>

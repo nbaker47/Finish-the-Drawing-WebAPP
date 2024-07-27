@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Title from "@/app/draw/Title";
 import clsx from "clsx";
-import CanvasContainer from "./CanvasContainer";
 import { daily } from "@/types/daily";
+import Canvas from "@/components/drawing/canvas/Canvas";
 
 async function fetchDaily() {
   try {
@@ -66,7 +66,16 @@ export default function Page() {
         }}
       >
         <Title word={daily.word} className="mt-2 mb-2" wordClassName="" />
-        <CanvasContainer daily={daily} />
+        <Canvas
+          pencilMan={true}
+          shareBar={true}
+          // canvasRef={canvasRef}
+          // randomLines={randomLines}
+          lines={true}
+          daily={daily}
+          submitUrl={`${process.env.NEXT_PUBLIC_API_URL}/drawing`}
+          redirectUrl="/view-today"
+        />
       </div>
     </div>
   );

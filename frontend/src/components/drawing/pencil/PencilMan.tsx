@@ -12,12 +12,14 @@ export default function PencilMan({
   clickCount,
   randomWord,
   setRandomWord,
+  canvasLoaded,
 }: {
   className?: string;
   speech?: string;
   clickCount: number;
   randomWord: string;
   setRandomWord: (word: string) => void;
+  canvasLoaded: boolean;
 }) {
   const images = [PencilNeutral, PencilHappy]; // Array of images
   const [imageIndex, setImageIndex] = useState(0); // New state variable
@@ -95,7 +97,9 @@ export default function PencilMan({
           bubbleAnimation && "ani-bubble"
         )}
       >
-        <span className="">{speech ? speech : randomWord}</span>
+        {canvasLoaded && (
+          <span className="">{speech ? speech : randomWord}</span>
+        )}
       </div>
     </div>
   );
