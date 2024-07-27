@@ -25,6 +25,8 @@ export default function CanvasButtons({
   const handleUndo = () => {
     if (canvas && context && randomLines) {
       undoLastStroke(canvas, context, randomLines);
+    } else {
+      alert("error");
     }
   };
 
