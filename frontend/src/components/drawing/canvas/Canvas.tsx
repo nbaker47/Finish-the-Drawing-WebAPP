@@ -191,7 +191,7 @@ export default function Canvas({
         )}
       >
         {pencilMan && (
-          <div className="max-w-[95%]">
+          <div className="w-11/12">
             <PencilMan
               className="mb-3 w-full"
               clickCount={clickCount}

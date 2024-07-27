@@ -51,6 +51,7 @@ export default function PencilMan({
       className={clsx(
         "flex",
         "flex-row",
+        // "flex-grow",
         "gap-0",
         "ftd-border",
         "rounded-md",
@@ -61,6 +62,7 @@ export default function PencilMan({
         "text-center", // Add this line\
         className
       )}
+      style={{ width: "100% !important" }}
     >
       <div
         className={clsx(
@@ -89,7 +91,7 @@ export default function PencilMan({
           "text-[0.6rem]",
           "sm:text-[0.8rem]",
           "text-black",
-          "w-[100%]",
+          "w-[350px]",
           "h-[50px]",
           "rounded-md",
           "p-2",

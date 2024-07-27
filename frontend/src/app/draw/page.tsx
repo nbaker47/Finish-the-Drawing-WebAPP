@@ -44,7 +44,7 @@ export default function Page() {
           // "h-min",
           "mt-0",
           // //
-          // "xs:w-11/12",
+          // "w-11/12",
           //
           "bg-blue-zigzag",
           "border-2",
