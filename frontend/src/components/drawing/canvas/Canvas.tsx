@@ -165,6 +165,7 @@ export default function Canvas({
         // "flex-grow",
         // "max-w-[90%]",
         // "min-h-[400px]",
+        "md:w-[45vw]",
         "mx-auto",
         // "h-fit",
         className

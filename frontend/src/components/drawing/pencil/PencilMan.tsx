@@ -93,6 +93,7 @@ export default function PencilMan({
           "text-black",
           "w-[350px]",
           "h-[50px]",
+          "md:w-[600px]",
           "rounded-md",
           "p-2",
           "font-exo",
