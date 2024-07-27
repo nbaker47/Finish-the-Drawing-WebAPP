@@ -157,7 +157,7 @@ export default function Canvas({
           }}
         >
           <canvas
-            className="static fade-in cursor-crosshair w-full h-full"
+            className="static fade-in cursor-crosshair w-full h-full ani-fade-in"
             ref={canvasRef as RefObject<HTMLCanvasElement>}
           ></canvas>
         </div>

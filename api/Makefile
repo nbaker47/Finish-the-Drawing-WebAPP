@@ -1,7 +1,7 @@
 .PHONY: test build clean
 
 build:
-	go build -o bin/ftd_api cmd/main.go
+	go build -o bin/main .
 
 run:
 	go run main.go
