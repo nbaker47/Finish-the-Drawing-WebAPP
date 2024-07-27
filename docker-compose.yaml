@@ -1,13 +1,14 @@
 services:
   api:
-    build: ./api
+    # build: ./api
+    image: ghcr.io/nbaker47/ftd/api:latest
     ports:
       - "8080:8080"
     # volumes:
     #   - ./api:/app
 
   frontend:
-    build: ./frontend
+    image: ghcr.io/nbaker47/ftd/frontend:latest
     ports:
       - "3000:3000"
     # volumes:
