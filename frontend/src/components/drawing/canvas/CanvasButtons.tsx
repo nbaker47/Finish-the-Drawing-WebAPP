@@ -26,7 +26,7 @@ export default function CanvasButtons({
     if (canvas && context && randomLines) {
       undoLastStroke(canvas, context, randomLines);
     } else {
-      alert("error");
+      alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
     }
   };
 
