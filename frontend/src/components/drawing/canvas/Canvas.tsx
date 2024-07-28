@@ -85,9 +85,9 @@ export default function Canvas({
 
         const context = canvas.getContext("2d");
 
-        let { width, height } = container.getBoundingClientRect();
-        canvas.width = width;
-        canvas.height = height - 40;
+        // let { width, height } = container.getBoundingClientRect();
+        // canvas.width = width;
+        // canvas.height = height - 40;
 
         if (context) {
           // Generate random lines if not already generated
