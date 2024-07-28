@@ -183,7 +183,7 @@ export default function Canvas({
       className={clsx(
         "flex",
         "flex-col",
-        "flex-grow",
+        // "flex-grow",
         "items-center",
         "justify-center",
         "bg-pokadot",
@@ -198,6 +198,7 @@ export default function Canvas({
         "sm:w-[90%]",
         // "items-center",
         // "justify-center",
+        "h-fit",
         "mx-auto",
         className
       )}
@@ -209,13 +210,14 @@ export default function Canvas({
           clsx(
             "flex",
             "flex-col",
-            "flex-grow",
+            // "flex-grow",
             "items-center",
             "justify-center",
             "w-[100%]",
-            "h-[100%]",
+            // "h-[100%]",
             "max-w-[98vw]",
             "sm:max-w-[90%]"
+            // "max-h-[10vh]"
           )
           // // "aspect-[1/1]",
           // "w-[100%]",
@@ -251,7 +253,8 @@ export default function Canvas({
             "border-gray-700",
             "border-2",
             "w-[100%]",
-            "max-h-[40vh]"
+            "max-h-[40vh]",
+            "min-h-[40vh]"
             // "max-w-[60vh]"
           )}
         >

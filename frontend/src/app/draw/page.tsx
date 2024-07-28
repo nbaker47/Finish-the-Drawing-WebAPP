@@ -54,16 +54,16 @@ export default function Page() {
           "pb-5",
           "px-1",
           "sm:px-12",
-          "md:pb-3",
+          "md:pb-10",
           "mx-auto",
-          "h-[85vh]",
+          "h-[fit]",
           "w-[100vw]",
           "sm:w-[90vw]",
-          "sm:h-[85vh]",
+          // "sm:h-[85vh]",
           "flex",
           "flex-col",
           "w-full",
-          "lg:w-[50vw]"
+          "xl:w-[50vw]"
           // "items-center"
           // "mt-1"
         )}
