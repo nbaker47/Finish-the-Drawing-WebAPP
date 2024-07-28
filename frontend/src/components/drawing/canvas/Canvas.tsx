@@ -98,14 +98,10 @@ export default function Canvas({
             }
           }
           // add event listeners
-          let { width, height } = container.getBoundingClientRect();
-          canvas.width = width;
-          canvas.height = height - 40;
-          initializeCanvas(canvasRef, randomLinesRef.current, context);
-          // width = container.getBoundingClientRect().width;
-          // height = container.getBoundingClientRect().height;
+          // let { width, height } = container.getBoundingClientRect();
           // canvas.width = width;
           // canvas.height = height - 40;
+          initializeCanvas(canvasRef, randomLinesRef.current, context);
 
           // Draw the lines
           if (lines) {
