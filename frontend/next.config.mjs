@@ -3,6 +3,15 @@
 const nextConfig = {
   // ... rest of the configuration.
   output: "standalone",
+  async redirects() {
+    return [
+      {
+        source: "/",
+        destination: "/draw/",
+        permanent: false,
+      },
+    ];
+  },
 };
 
 // if no env vars set, set them
