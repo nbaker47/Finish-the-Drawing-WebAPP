@@ -158,7 +158,9 @@ export default function Canvas({
         "px-2",
         "pt-3",
         "pb-2",
-        "sm:max-w-[90%]",
+        "w-[100%]",
+        "xs:w-[85%]",
+        "sm:w-[90%]",
         // "items-center",
         // "justify-center",
         "mx-auto",
@@ -175,6 +177,7 @@ export default function Canvas({
             "flex-grow",
             "items-center",
             "justify-center",
+            "w-[100%]",
             "max-w-[98vw]",
             "sm:max-w-[90%]"
           )
@@ -210,7 +213,7 @@ export default function Canvas({
             "border-dashed",
             "border-gray-700",
             "border-2",
-            "w-[95%]"
+            "w-[100%]"
           )}
         >
           <div className="flex flex-grow">

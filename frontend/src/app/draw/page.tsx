@@ -57,6 +57,8 @@ export default function Page() {
           "md:pb-3",
           "mx-auto",
           "h-[85vh]",
+          "w-[100vw]",
+          "sm:w-[90vw]",
           "sm:h-[85vh]",
           "flex",
           "flex-col",
