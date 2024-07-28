@@ -37,7 +37,7 @@ export default function Footer() {
           "sm:px-12",
           // "md:w-[40%]",
           // "w-[50vw]",
-          "lg:w-[50vw]"
+          "xl:w-[50vw]"
         )}
       >
         <div className="flex items-center justify-between">
