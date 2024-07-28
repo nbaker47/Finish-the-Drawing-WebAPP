@@ -79,7 +79,7 @@ const Card = ({
   console.log(`index: ${index}`);
   return (
     <div
-      className={` flex flex-col p-4 shadow-md bg-white rounded-3xl text-black border-2 border-gray-900 max-w-[300px] md:max-w-[500px] ${
+      className={`mx-auto max-w-[90%] xs:max-w-[300px] flex flex-col p-4 shadow-md bg-white rounded-3xl text-black border-2 border-gray-900  md:max-w-[500px] ${
         index === 0 ? "first-card" : ""
       } ${index === 1 ? "second-card" : ""} ${index === 2 ? "third-card" : ""}`}
     >
