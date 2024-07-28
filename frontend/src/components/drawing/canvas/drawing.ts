@@ -27,6 +27,16 @@ export function initializeCanvas(
 
     drawRandomLines(randomLines, canvasRef, contextRef);
 
+    userDrawings.forEach(function (line) {
+      if (!context) return;
+      context.beginPath();
+      context.moveTo(line.points[0].x, line.points[0].y);
+      for (let i = 1; i < line.points.length; i++) {
+        context.lineTo(line.points[i].x, line.points[i].y);
+      }
+      context.stroke();
+    });
+
     // Event listeners for drawing
     canvas.addEventListener("mousedown", startDrawing);
     canvas.addEventListener("mousemove", (e) => draw(e, randomLines));
@@ -174,6 +184,15 @@ export function drawRandomLines(
     // console.log("drawRandomLines: canvas.current", canvas.current);
 
     context.clearRect(0, 0, canvas.current.width, canvas.current.height);
+    userDrawings.forEach(function (line) {
+      if (!context) return;
+      context.beginPath();
+      context.moveTo(line.points[0].x, line.points[0].y);
+      for (let i = 1; i < line.points.length; i++) {
+        context.lineTo(line.points[i].x, line.points[i].y);
+      }
+      context.stroke();
+    });
 
     context.lineWidth = 3;
     context.lineCap = "round";

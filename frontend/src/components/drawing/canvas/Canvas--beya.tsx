@@ -51,10 +51,24 @@ export default function Canvas({
   const [containerLoaded, setContainerLoaded] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
+  // const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
   const [clickCount, setClickCount] = useState(0);
-  const [containerWidth, setContainerWidth] = useState(0);
-  const [containerHeight, setContainerHeight] = useState(0);
+  const [randomWord, setRandomWord] = useState(words[0]);
+  const [canvasWidth, setCanvasWidth] = useState(0);
+  const [canvasHeight, setCanvasHeight] = useState(0);
+  const [randomLines, setRandomLines] = useState<{ x: number; y: number }[][]>(
+    []
+  );
+  const [userLines, setUserLines] = useState<{ x: number; y: number }[][]>([]);
+  const [initialized, setInitialized] = useState(false);
+
+  useEffect(() => {
+    console.log("!!!!!!! Canvas.tsx: canvasHeight", canvasHeight);
+  }, [canvasHeight]);
+
+  useEffect(() => {
+    console.log("!!!!!!! Canvas.tsx: canvasWidth", canvasWidth);
+  }, [canvasWidth]);
 
   useEffect(() => {
     setCanvasLoaded(true);
@@ -72,98 +86,107 @@ export default function Canvas({
     });
   }, [containerRef]);
 
-  useEffect(() => {
-    if (containerRef.current) {
-      setContainerHeight(containerRef.current?.clientHeight - 40 ?? 0);
-      setContainerWidth(containerRef.current?.clientWidth ?? 0);
-    }
-  }, [containerRef]);
+  // 612.483×217.467
+  // 616×265
 
-  useEffect(() => {
-    const initializeAndResizeCanvas = () => {
-      if (
-        containerRef.current &&
-        canvasRef &&
-        typeof canvasRef !== "function"
-      ) {
-        console.log("Initializing canvas");
-
-        const container = containerRef.current;
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const context = canvas.getContext("2d");
-
-        let { width, height } = container.getBoundingClientRect();
-
-        // canvas.width = containerWidth;
-        // canvas.height = containerHeight;
-
-        // canvas.width = width;
-        // canvas.height = height - 40;
-
-        if (context) {
-          // Generate random lines if not already generated
-          if (randomLinesRef.current.length === 0) {
-            for (var i = 0; i < 7; i++) {
-              pushRandomLines(
-                i,
-                randomLinesRef.current,
-                canvasRef,
-                context,
-                daily.seed
-              );
-            }
-          }
-          // add event listeners
-          // let { width, height } = container.getBoundingClientRect();
-          // canvas.width = width;
-          // canvas.height = height - 40;
-          initializeCanvas(canvasRef, randomLinesRef.current, context);
-
-          // Draw the lines
-          if (lines) {
-            let randomLines: { x: number; y: number }[][] = [];
-            for (var i = 0; i < 7; i++) {
-              //   console.log(i);
-              //   console.log(randomLines);
-              pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
-            }
-            drawRandomLines(randomLinesRef.current, canvasRef, context);
-          }
+  const initializeCanvasWrapper = () => {
+    if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
+      console.log("Initializing canvas");
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const context = canvas.getContext("2d");
+      // set height to state
+      // setCanvasHeight(canvasHeight);
+      // setCanvasWidth(canvasWidth);
+      console.log("initializeCanvasWrapper: canvas height", canvasHeight);
+      if (context) {
+        // Generate random lines if not already generated
+        // if (randomLines.length < 1) {
+        // wipe the random lines
+        setRandomLines([]);
+        for (var i = 0; i < 7; i++) {
+          console.log("initializeCanvasWrapper: i", i);
+          pushRandomLines(
+            i,
+            randomLines,
+            canvasRef,
+            context,
+            daily.seed
+            // setRandomLines
+          );
+          console.log(
+            "initializeCanvasWrapper: randomLines length",
+            randomLines.length
+          );
+          // }
         }
+        console.log("initializeCanvasWrapper: randomLines", randomLines);
+
+        initializeCanvas(
+          canvasRef,
+          randomLines,
+          context
+          // userLines,
+          // setUserLines
+        );
+        // Draw the lines
+        // drawRandomLines(randomLines, canvasRef, context);
       }
-    };
+    }
+  };
+  const initializeAndResizeCanvas = () => {
+    const container = containerRef.current;
+    if (container) {
+      const resizeObserver = new ResizeObserver((entries) => {
+        for (let entry of entries) {
+          const { width, height } = entry.contentRect;
+          setCanvasWidth(Math.floor(width - 50));
+          setCanvasHeight(Math.floor(height - 50));
+        }
+        // initializeCanvasWrapper();
+      });
 
+      resizeObserver.observe(container);
+
+      console.log("initializeAndResizeCanvas: canvas height", canvasHeight);
+
+      return () => resizeObserver.disconnect();
+    }
+  };
+
+  //313.719
+  //319.672
+
+  useEffect(() => {
     initializeAndResizeCanvas();
-    window.addEventListener("resize", initializeAndResizeCanvas);
-
-    return () => {
-      window.removeEventListener("resize", initializeAndResizeCanvas);
-    };
-  }, [canvasRef, daily.seed, containerRef, containerWidth, containerHeight]);
+    // initializeCanvasWrapper();
+    console.log("Canvas.tsx: canvasHeight", canvasHeight);
+    // sleep 1 sec
+    // setTimeout(() => {
+    //   setInitialized(true);
+    // }, 1000);
+  }, []);
 
   // useEffect(() => {
-  //   if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
-  //     console.log("Initializing canvas");
+  //   initializeAndResizeCanvas();
+  //   // initializeCanvasWrapper();
+  //   console.log("Canvas.tsx: initialized", initialized);
+  // }, [initialized]);
 
-  //     const container = containerRef.current;
-  //     const canvas = canvasRef.current;
-  //     if (!canvas) return;
-  //     const { width, height } = container.getBoundingClientRect();
-  //     canvas.width = width;
-  //     canvas.height = height - 40;
-  //   }
-  // }, [containerRef]);
+  //
+  useEffect(() => {
+    initializeCanvasWrapper();
+    console.log("Canvas.tsx: canvasHeight", canvasHeight);
+  }, [canvasHeight, canvasWidth]);
 
-  // TODO: HACK, when the window is resized, refresh the window
-  // const refresh = () => {
-  //   window.location.reload();
-  // };
-  // window.addEventListener("resize", refresh);
+  // useEffect(() => {
+  //   initializeAndResizeCanvas();
+  //   window.addEventListener("resize", initializeAndResizeCanvas);
 
-  // State for pencil text
-  const [randomWord, setRandomWord] = useState(words[0]);
+  //   return () => {
+  //     window.removeEventListener("resize", initializeAndResizeCanvas);
+  //   };
+  // }, [canvasRef, daily.seed, containerRef]);
 
   return (
     <div
@@ -232,25 +255,23 @@ export default function Canvas({
             "rounded-3xl",
             "flex",
             "flex-grow",
-            // "aspect-square",
             "border-dashed",
             "border-gray-700",
             "border-2",
             "w-[100%]"
+            // "h-[100]%"
           )}
         >
           <div className="flex flex-grow">
-            {containerHeight !== 0 && containerWidth !== 0 && (
-              <canvas
-                className="static fade-in cursor-crosshair ani-fade-in w-[100%] h-[100%]"
-                ref={canvasRef as RefObject<HTMLCanvasElement>}
-                onClick={() => {
-                  setClickCount((prevCount) => prevCount + 1);
-                }}
-                width={containerWidth}
-                height={containerHeight}
-              ></canvas>
-            )}
+            <canvas
+              className="static fade-in cursor-crosshair ani-fade-in"
+              ref={canvasRef as RefObject<HTMLCanvasElement>}
+              onClick={() => {
+                setClickCount((prevCount) => prevCount + 1);
+              }}
+              height={canvasHeight}
+              width={canvasWidth}
+            ></canvas>
           </div>
         </div>
         <div className="w-full">
@@ -258,7 +279,7 @@ export default function Canvas({
             <CanvasButtons
               description={randomWord}
               canvasRef={canvasRef}
-              randomLines={randomLinesRef.current}
+              randomLines={randomLines}
               daily={daily}
               submitUrl={submitUrl}
               redirectUrl={redirectUrl}

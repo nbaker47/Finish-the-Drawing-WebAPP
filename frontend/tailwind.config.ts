@@ -16,6 +16,7 @@ const config: Config = {
       screens: {
         xxs: "250px",
         xs: "400px",
+        550: "550px",
       },
     },
   },
