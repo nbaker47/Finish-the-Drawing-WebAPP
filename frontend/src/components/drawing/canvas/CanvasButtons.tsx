@@ -1,7 +1,7 @@
 "use client";
 
 import { FaUndo } from "react-icons/fa";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { undoLastStroke } from "./drawing";
 import { submitDrawing } from "./submitDrawing";
 import { daily } from "@/types/daily";
@@ -28,6 +28,7 @@ export default function CanvasButtons({
 }: CanvasButtonsProps) {
   // const { canvasRef, randomLines, daily, submitUrl, redirectUrl } =
   //   useContext(CanvasContext);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
@@ -36,21 +37,26 @@ export default function CanvasButtons({
     if (canvas && context && randomLines) {
       undoLastStroke(canvas, context, randomLines);
     } else {
-      alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
+      // alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
     }
   };
 
   const handleSubmit = () => {
+    setIsSubmitting(true);
     if (canvas && context) {
       if (daily && description) {
-        submitDrawing(
-          submitUrl,
-          canvas,
-          redirectUrl,
-          daily,
-          description,
-          "NULL_USER"
-        );
+        try {
+          submitDrawing(
+            submitUrl,
+            canvas,
+            redirectUrl,
+            daily,
+            description,
+            "NULL_USER"
+          );
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
   };
