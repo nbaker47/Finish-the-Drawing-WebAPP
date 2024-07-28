@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
@@ -8,6 +10,9 @@ import Trophy from "./trophy.png";
 // import User from "./user.svg";
 
 export default function Footer() {
+  const [drawClicked, setDrawClicked] = React.useState(false);
+  const [viewClicked, setViewClicked] = React.useState(false);
+
   return (
     <>
       <div
@@ -45,7 +50,11 @@ export default function Footer() {
                   alt="Home"
                   width={40}
                   height={40}
-                  className="w-12 h-12 md:w-14 md:h-14"
+                  id="draw"
+                  className={`w-12 h-12 md:w-14 md:h-14 ${
+                    drawClicked ? "ani-bubble" : ""
+                  }`}
+                  onClick={() => setDrawClicked(!drawClicked)}
                 />
               </Link>
             </div>
@@ -57,7 +66,11 @@ export default function Footer() {
                   alt="View"
                   width={40}
                   height={40}
-                  className="w-12 h-12 md:w-14 md:h-14"
+                  id="view"
+                  className={`w-12 h-12 md:w-14 md:h-14 ${
+                    viewClicked ? "ani-bubble" : ""
+                  }`}
+                  onClick={() => setViewClicked(!viewClicked)}
                 />
               </Link>
             </div>
