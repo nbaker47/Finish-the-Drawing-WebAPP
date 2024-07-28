@@ -83,10 +83,6 @@ export default function Canvas({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        // const { width, height } = container.getBoundingClientRect();
-        // canvas.width = width;
-        // canvas.height = height - 40;
-
         const context = canvas.getContext("2d");
         if (context) {
           // Generate random lines if not already generated
@@ -102,7 +98,14 @@ export default function Canvas({
             }
           }
           // add event listeners
+          let { width, height } = container.getBoundingClientRect();
+          canvas.width = width;
+          canvas.height = height - 40;
           initializeCanvas(canvasRef, randomLinesRef.current, context);
+          // width = container.getBoundingClientRect().width;
+          // height = container.getBoundingClientRect().height;
+          // canvas.width = width;
+          // canvas.height = height - 40;
 
           // Draw the lines
           if (lines) {
@@ -125,6 +128,19 @@ export default function Canvas({
       window.removeEventListener("resize", initializeAndResizeCanvas);
     };
   }, [canvasRef, daily.seed]);
+
+  // useEffect(() => {
+  //   if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
+  //     console.log("Initializing canvas");
+
+  //     const container = containerRef.current;
+  //     const canvas = canvasRef.current;
+  //     if (!canvas) return;
+  //     const { width, height } = container.getBoundingClientRect();
+  //     canvas.width = width;
+  //     canvas.height = height - 40;
+  //   }
+  // }, [containerRef]);
 
   // TODO: HACK, when the window is resized, refresh the window
   // const refresh = () => {
