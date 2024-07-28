@@ -93,13 +93,14 @@ export default function PencilMan({
           "justify-center", // Add this line
           "text-center", // Add this line\
           "mx-auto",
-          "w-4/5",
+          // "w-4/5",
           "text-[0.6rem]",
           // "sm:text-[1rem]",
           "md:text-[0.8rem]",
           "lg:text-[1rem]",
           "text-black",
-          "w-[350px]",
+          "w-[220px]",
+          "sm:w-[300px]",
           "h-[50px]",
           "md:w-[600px]",
           "rounded-md",
