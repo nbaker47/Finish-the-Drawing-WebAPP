@@ -83,7 +83,7 @@ export default function PencilMan({
         <Image
           src={images[imageIndex]}
           alt="Pencil"
-          className="w-[50%] md:w-[100%] h-full"
+          className="w-[90%] md:w-[100%] h-full"
         />
       </div>
       <div
