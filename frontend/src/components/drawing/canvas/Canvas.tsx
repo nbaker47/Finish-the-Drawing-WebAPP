@@ -110,7 +110,7 @@ export default function Canvas({
         // let { width, height } = container.getBoundingClientRect();
 
         // canvas.width = containerWidth;
-        // canvas.height = containerHeight;
+        // canvas.height = containerHeight - 40;
 
         // canvas.width = width;
         // canvas.height = height - 40;
@@ -250,7 +250,9 @@ export default function Canvas({
             "border-dashed",
             "border-gray-700",
             "border-2",
-            "w-[100%]"
+            "w-[100%]",
+            "max-h-[40vh]"
+            // "max-w-[60vh]"
           )}
         >
           <div className="flex flex-grow">
@@ -261,8 +263,8 @@ export default function Canvas({
                 onClick={() => {
                   setClickCount((prevCount) => prevCount + 1);
                 }}
-                // width={containerWidth}
-                // height={containerHeight}
+                width={containerWidth}
+                height={containerHeight}
               ></canvas>
             )}
           </div>
