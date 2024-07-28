@@ -84,6 +84,11 @@ export default function Canvas({
         if (!canvas) return;
 
         const context = canvas.getContext("2d");
+
+        let { width, height } = container.getBoundingClientRect();
+        canvas.width = width;
+        canvas.height = height - 40;
+
         if (context) {
           // Generate random lines if not already generated
           if (randomLinesRef.current.length === 0) {
@@ -123,7 +128,7 @@ export default function Canvas({
     return () => {
       window.removeEventListener("resize", initializeAndResizeCanvas);
     };
-  }, [canvasRef, daily.seed]);
+  }, [canvasRef, daily.seed, containerRef]);
 
   // useEffect(() => {
   //   if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
