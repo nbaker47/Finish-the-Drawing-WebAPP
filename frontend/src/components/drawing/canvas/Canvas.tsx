@@ -91,9 +91,9 @@ export default function Canvas({
         const canvas = canvasRef.current;
         if (!canvas) return;
 
-        const { width, height } = container.getBoundingClientRect();
-        canvas.width = width;
-        canvas.height = height - 40;
+        // const { width, height } = container.getBoundingClientRect();
+        // canvas.width = width;
+        // canvas.height = height - 40;
 
         const context = canvas.getContext("2d");
         if (context) {
