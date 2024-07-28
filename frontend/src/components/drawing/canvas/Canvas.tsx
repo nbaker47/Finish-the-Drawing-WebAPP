@@ -71,14 +71,6 @@ export default function Canvas({
   }, [containerRef]);
 
   useEffect(() => {
-    console.log("Canvas.tsx: canvasRef", canvasRef);
-  }, [canvasRef]);
-
-  useEffect(() => {
-    console.log("Canvas.tsx: clickCount", clickCount);
-  }, [clickCount]);
-
-  useEffect(() => {
     const initializeAndResizeCanvas = () => {
       if (
         containerRef.current &&

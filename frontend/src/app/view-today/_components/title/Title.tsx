@@ -4,7 +4,7 @@ import TitlePNG from "./todays_submissions.png";
 
 function Title({ className }: { className?: string }) {
   return (
-    <div className={`text-center ${className}`}>
+    <div className={`text-center px-2 ${className}`}>
       <Image
         src={TitlePNG}
         alt="logo"
