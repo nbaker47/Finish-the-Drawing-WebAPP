@@ -93,7 +93,7 @@ export default function Canvas({
 
         const { width, height } = container.getBoundingClientRect();
         canvas.width = width;
-        canvas.height = height;
+        canvas.height = height - 40;
 
         const context = canvas.getContext("2d");
         if (context) {
@@ -146,8 +146,11 @@ export default function Canvas({
   return (
     <div
       className={clsx(
-        // "flex",
-        // "flex-col",
+        "flex",
+        "flex-col",
+        "flex-grow",
+        "items-center",
+        "justify-center",
         "bg-pokadot",
         "border-[1.1px]",
         "border-gray-700",
@@ -155,41 +158,36 @@ export default function Canvas({
         "px-2",
         "pt-3",
         "pb-2",
-        // "w-full",
-        // "h-full",
-
-        // "h-[77%]",
-        // "w-full",
-        // "h-full",
-        // "h-min-c",
-        // "flex-grow",
-        // "max-w-[90%]",
-        // "min-h-[400px]",
-        "md:w-[45vw]",
+        "sm:max-w-[90%]",
+        // "items-center",
+        // "justify-center",
         "mx-auto",
-        // "h-fit",
         className
       )}
       style={{ boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)" }}
     >
       {shareBar && <Sharebar className="mb-3" />}
-
       <div
-        className={clsx(
-          "flex",
-          "flex-col",
-          "items-center",
-          "justify-center",
-          // "aspect-[1/1]",
-          "w-[100%]",
-          "h-[100%]",
-          "max-w-[99vw]",
-          // "max-w-[90%]",
-          "min-h-[55vh]",
-          // "min-w-[150px]",
-          "mx-auto"
-          // "screen-height-grow"
-        )}
+        className={
+          clsx(
+            "flex",
+            "flex-col",
+            "flex-grow",
+            "items-center",
+            "justify-center",
+            "max-w-[98vw]",
+            "sm:max-w-[90%]"
+          )
+          // // "aspect-[1/1]",
+          // "w-[100%]",
+          // "h-[100%]",
+          // "max-w-[99vw]",
+          // // "max-w-[90%]",
+          // "min-h-[55vh]",
+          // // "min-w-[150px]",
+          // "mx-auto"
+          // // "screen-height-grow"
+        }
       >
         {pencilMan && (
           <div className="w-11/12">
@@ -206,23 +204,16 @@ export default function Canvas({
           ref={containerRef}
           className={clsx(
             "bg-white",
-            // "ftd-border",
             "rounded-3xl",
+            "flex",
             "flex-grow",
             "border-dashed",
             "border-gray-700",
             "border-2",
-            // "w-full",
             "w-[95%]"
-
-            // "md:w-[60%]"
           )}
-          // onClick={() => {
-          //   setClickCount((count) => count + 1);
-          //   console.log("Canvas.tsx: clickCount", clickCount);
-          // }}
         >
-          <div className="flex-grow w-[100%] min-h-[200px]">
+          <div className="flex flex-grow">
             <canvas
               className="static fade-in cursor-crosshair w-full h-full  ani-fade-in"
               ref={canvasRef as RefObject<HTMLCanvasElement>}

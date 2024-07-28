@@ -17,7 +17,7 @@ export default function Footer() {
           "justify-center",
           "bg-pokadot",
           "sticky",
-          "bottom-1",
+          "bottom-2",
           //   "top-[95vh]",
           "z-50",
           "border-gray-700",
@@ -26,12 +26,13 @@ export default function Footer() {
           "mx-auto",
           "py-4",
           "px-4",
-          "w-[97%]",
-          // "h-[10vh]",
-          "sm:w-fit",
+          "w-[95%]",
+          "h-[10vh]",
+          "sm:w-[78vw]",
           "sm:px-12",
           // "md:w-[40%]",
-          "md:min-w-[50vw]"
+          // "w-[50vw]",
+          "lg:w-[50vw]"
         )}
       >
         <div className="flex items-center justify-between">
@@ -87,7 +88,7 @@ export default function Footer() {
           </div>
 
           {/* Copyright marker */}
-          <div className="text-xs ml-3 sm:ml-14 md:ml-80 sm:text-2xl  flex-row items-center justify-center flex">
+          <div className="text-xs ml-3 sm:ml-14  sm:text-2xl  flex-row items-center justify-center flex">
             <div className="flex flex-row items-center justify-center">
               <img
                 src={"/beaumont_studios_logo_transparent.png"}

@@ -50,13 +50,18 @@ export default function Page() {
           "border-2",
           "border-gray-700",
           "rounded-3xl",
-          "py-4",
+          "pt-2",
+          "pb-5",
           "px-1",
           "sm:px-12",
-          "sm:py-8",
-          "mx-auto"
-          // "flex"
-          // "flex-col",
+          "md:pb-3",
+          "mx-auto",
+          "h-[85vh]",
+          "sm:h-[85vh]",
+          "flex",
+          "flex-col",
+          "w-full",
+          "lg:w-[50vw]"
           // "items-center"
           // "mt-1"
         )}

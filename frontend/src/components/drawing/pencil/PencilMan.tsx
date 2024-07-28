@@ -67,7 +67,9 @@ export default function PencilMan({
       <div
         className={clsx(
           "p-2",
-          "w-1/5",
+          "w-[50px]",
+          "md:w-[50px]",
+          "lg:w-[70px]",
           // "border-r-2",
           // "border-gray-700",
           "flex",
@@ -78,7 +80,11 @@ export default function PencilMan({
           "rounded-md"
         )}
       >
-        <Image src={images[imageIndex]} alt="Pencil" width={40} height={40} />
+        <Image
+          src={images[imageIndex]}
+          alt="Pencil"
+          className="w-[50%] md:w-[100%] h-full"
+        />
       </div>
       <div
         className={clsx(
@@ -89,7 +95,9 @@ export default function PencilMan({
           "mx-auto",
           "w-4/5",
           "text-[0.6rem]",
-          "sm:text-[0.8rem]",
+          // "sm:text-[1rem]",
+          "md:text-[0.8rem]",
+          "lg:text-[1rem]",
           "text-black",
           "w-[350px]",
           "h-[50px]",

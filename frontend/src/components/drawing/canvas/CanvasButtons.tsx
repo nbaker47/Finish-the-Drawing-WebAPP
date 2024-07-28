@@ -56,7 +56,7 @@ export default function CanvasButtons({
   };
 
   return (
-    <div className={`${className} flex justify-between mt-3`}>
+    <div className={`${className} flex justify-between pt-3`}>
       <button
         id="back-button"
         className="text-lg w-full flex justify-center items-center xs:text-2xl text-black"
