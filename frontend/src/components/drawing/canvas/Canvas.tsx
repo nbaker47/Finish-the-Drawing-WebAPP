@@ -73,10 +73,19 @@ export default function Canvas({
   }, [containerRef]);
 
   useEffect(() => {
-    if (containerRef.current) {
-      setContainerHeight(containerRef.current?.clientHeight - 40 ?? 0);
-      setContainerWidth(containerRef.current?.clientWidth ?? 0);
-    }
+    console.log("containerHeight", containerHeight);
+    console.log("containerWidth", containerWidth);
+    // set timeout
+    setTimeout(() => {
+      if (containerRef.current) {
+        setContainerHeight(containerRef.current?.clientHeight ?? 0);
+        setContainerWidth(containerRef.current?.clientWidth ?? 0);
+      }
+    }, 100);
+    // if (containerRef.current) {
+    //   setContainerHeight(containerRef.current?.clientHeight ?? 0);
+    //   setContainerWidth(containerRef.current?.clientWidth ?? 0);
+    // }
   }, [containerRef]);
 
   useEffect(() => {
@@ -84,9 +93,13 @@ export default function Canvas({
       if (
         containerRef.current &&
         canvasRef &&
+        containerHeight !== 0 &&
+        containerWidth !== 0 &&
         typeof canvasRef !== "function"
       ) {
         console.log("Initializing canvas");
+        console.log("containerHeight", containerHeight);
+        console.log("containerWidth", containerWidth);
 
         const container = containerRef.current;
         const canvas = canvasRef.current;
@@ -94,7 +107,7 @@ export default function Canvas({
 
         const context = canvas.getContext("2d");
 
-        let { width, height } = container.getBoundingClientRect();
+        // let { width, height } = container.getBoundingClientRect();
 
         // canvas.width = containerWidth;
         // canvas.height = containerHeight;
@@ -141,7 +154,7 @@ export default function Canvas({
     return () => {
       window.removeEventListener("resize", initializeAndResizeCanvas);
     };
-  }, [canvasRef, daily.seed, containerRef, containerWidth, containerHeight]);
+  }, [containerWidth, containerHeight, canvasRef, lines, containerRef]);
 
   // useEffect(() => {
   //   if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
@@ -200,6 +213,7 @@ export default function Canvas({
             "items-center",
             "justify-center",
             "w-[100%]",
+            "h-[100%]",
             "max-w-[98vw]",
             "sm:max-w-[90%]"
           )
@@ -247,8 +261,8 @@ export default function Canvas({
                 onClick={() => {
                   setClickCount((prevCount) => prevCount + 1);
                 }}
-                width={containerWidth}
-                height={containerHeight}
+                // width={containerWidth}
+                // height={containerHeight}
               ></canvas>
             )}
           </div>
