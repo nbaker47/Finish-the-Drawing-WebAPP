@@ -29,6 +29,7 @@ func NewDailyController(dailyService dailyService.DailyService) *DailyController
 // @Failure 500 {object} map[string]interface{}
 // @Router /daily [get]
 func (h *DailyController) GetToday(c *gin.Context) {
+	h.DailyService.Create()
 	daily, err := h.DailyService.GetToday()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

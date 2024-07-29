@@ -65,7 +65,7 @@ func main() {
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	// Generate the daily
-	dailyService.Create()
+	// dailyService.Create()
 
 	// Generate the guest user
 	userService.CreateGuest()
