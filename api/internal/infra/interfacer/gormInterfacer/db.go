@@ -1,4 +1,4 @@
-package gormInterface
+package gormInterfacer
 
 import (
 	"gorm.io/driver/sqlite"

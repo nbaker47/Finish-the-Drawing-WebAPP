@@ -2,54 +2,44 @@ package repositoryImpl
 
 import (
 	"api/internal/domain/domainObject"
-	"api/internal/infra/interface/gormInterface"
-
-	"gorm.io/gorm"
+	"api/internal/infra/interfacer/gormInterfacer"
 )
 
-// IMPLEMENTATION
 type UserRepositoryImpl struct {
-	DB *gorm.DB
+	gormInterfacer.GormRepository
 }
 
-// INIT
 func NewUserRepository() *UserRepositoryImpl {
 	return &UserRepositoryImpl{
-		DB: gormInterface.GetGormDBConnection(),
+		GormRepository: gormInterfacer.GormRepository{
+			DB: gormInterfacer.GetGormDBConnection(),
+		},
 	}
 }
 
-// CREATE
 func (r *UserRepositoryImpl) Create(value *domainObject.User) error {
-	return gormInterface.Create(r.DB, value)
+	return r.GormRepository.Create(value)
 }
 
-// GET ALL
 func (r *UserRepositoryImpl) GetAll(result *[]domainObject.User) error {
-	err := gormInterface.GetAll(r.DB, result)
-	return err
+	return r.GormRepository.GetAll(result)
 }
 
-// GET BY ID
 func (r *UserRepositoryImpl) GetByID(id string) (domainObject.User, error) {
 	var user domainObject.User
-	err := gormInterface.GetByUUID(r.DB, id, &user)
+	err := r.GormRepository.GetByUUID(id, &user)
 	return user, err
 }
 
-// GET BY FIELD
 func (r *UserRepositoryImpl) GetByField(field string, value string, store *[]domainObject.User) error {
-	err := gormInterface.GetByField(r.DB, field, value, store)
-	return err
+	return r.GormRepository.GetByField(field, value, store)
 }
 
-// UPDATE
 func (r *UserRepositoryImpl) Update(id string, value *domainObject.User) error {
-	return gormInterface.UpdateByUUID(r.DB, id, value)
+	return r.GormRepository.UpdateByUUID(id, value)
 }
 
-// DELETE
 func (r *UserRepositoryImpl) Delete(id string) error {
 	var model domainObject.User
-	return gormInterface.DeleteByUUID(r.DB, id, model)
+	return r.GormRepository.DeleteByUUID(id, &model)
 }
