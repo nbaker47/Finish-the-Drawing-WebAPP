@@ -5,6 +5,34 @@ let isDrawing = false;
 let userDrawings: { points: { x: number; y: number }[] }[] = []; // Array to store user's drawings
 let currentLine: { points: { x: number; y: number }[] } | null = null; // Variable to store the current line segment
 
+export function drawLines(
+  context: CanvasRenderingContext2D,
+  lines: { x: number; y: number }[][],
+  lineWidth: number = 3,
+  lineCap: CanvasLineCap = "round",
+  strokeStyle: string = "#8F95FF"
+) {
+  context.lineWidth = lineWidth;
+  context.lineCap = lineCap;
+  context.strokeStyle = strokeStyle;
+
+  lines.forEach((line) => {
+    context.beginPath();
+    context.moveTo(line[0].x, line[0].y);
+
+    if (line.length > 1) {
+      for (let i = 1; i < line.length; i++) {
+        context.lineTo(line[i].x, line[i].y);
+      }
+    } else {
+      // If it's a single point, draw a small circle
+      context.arc(line[0].x, line[0].y, lineWidth / 2, 0, 2 * Math.PI);
+    }
+
+    context.stroke();
+  });
+}
+
 ////////////////////////////////
 // Entry function
 ////////////////////////////////
@@ -21,18 +49,6 @@ export function initializeCanvas(
     context = canvas.getContext("2d");
 
     drawRandomLines(randomLines, canvasRef, contextRef);
-
-    userDrawings = [];
-
-    userDrawings.forEach(function (line) {
-      if (!context) return;
-      context.beginPath();
-      context.moveTo(line.points[0].x, line.points[0].y);
-      for (let i = 1; i < line.points.length; i++) {
-        context.lineTo(line.points[i].x, line.points[i].y);
-      }
-      context.stroke();
-    });
 
     // Event listeners for drawing
     canvas.addEventListener("mousedown", startDrawing);
@@ -157,14 +173,13 @@ export function undoLastStroke(
   drawRandomLines(randomLines, { current: canvas }, context);
 
   // Redraw all the user's line segments
-  userDrawings.forEach(function (line) {
-    context.beginPath();
-    context.moveTo(line.points[0].x, line.points[0].y);
-    for (let i = 1; i < line.points.length; i++) {
-      context.lineTo(line.points[i].x, line.points[i].y);
-    }
-    context.stroke();
-  });
+  drawLines(
+    context,
+    userDrawings.map((line) => line.points),
+    3,
+    "round",
+    "black"
+  );
 }
 
 ////////////////////////////////
@@ -181,31 +196,18 @@ export function drawRandomLines(
     // console.log("drawRandomLines: canvas.current", canvas.current);
 
     context.clearRect(0, 0, canvas.current.width, canvas.current.height);
-    userDrawings.forEach(function (line) {
-      if (!context) return;
-      context.beginPath();
-      context.moveTo(line.points[0].x, line.points[0].y);
-      for (let i = 1; i < line.points.length; i++) {
-        context.lineTo(line.points[i].x, line.points[i].y);
-      }
-      context.stroke();
-    });
+    // Draw the user lines
+    drawLines(
+      context,
+      userDrawings.map((line) => line.points),
+      3,
+      "round",
+      "black"
+    );
 
-    context.lineWidth = 3;
-    context.lineCap = "round";
-    context.strokeStyle = "#8F95FF"; // Set the line color to blue
-
-    randomLines.forEach((linePoints) => {
-      context.beginPath();
-      context.moveTo(linePoints[0].x, linePoints[0].y);
-      for (var i = 1; i < linePoints.length; i++) {
-        context.lineTo(linePoints[i].x, linePoints[i].y);
-      }
-      context.stroke();
-    });
+    // draw the random lines
+    drawLines(context, randomLines, 3, "round", "#8F95FF");
   }
-
-  context.strokeStyle = "black"; // Set the line color back to black
 }
 
 function draw(
@@ -232,26 +234,13 @@ function draw(
     //return;
   }
 
-  context.lineWidth = 3;
-  context.lineCap = "round";
-
   currentLine.points.push({ x: x_temp, y: y_temp });
-
   // clear the canvas
   context.clearRect(0, 0, canvas.width, canvas.height);
   // redraw random lines:
   drawRandomLines(randomLines, { current: canvas }, context);
 
-  userDrawings.forEach(function (line) {
-    if (!context) return;
-    context.beginPath();
-    context.moveTo(line.points[0].x, line.points[0].y);
-    for (let i = 1; i < line.points.length; i++) {
-      context.lineTo(line.points[i].x, line.points[i].y);
-    }
-    context.stroke();
-  });
-
+  context.strokeStyle = "black";
   context.beginPath();
   context.moveTo(currentLine.points[0].x, currentLine.points[0].y);
   for (let i = 1; i < currentLine.points.length; i++) {
@@ -270,32 +259,4 @@ function stopDrawing() {
   }
   // Call the updatePencilText function
   // updatePencilText();
-}
-
-export function drawLines(
-  context: CanvasRenderingContext2D,
-  lines: { x: number; y: number }[][],
-  lineWidth: number = 3,
-  lineCap: CanvasLineCap = "round",
-  strokeStyle: string = "#8F95FF"
-) {
-  context.lineWidth = lineWidth;
-  context.lineCap = lineCap;
-  context.strokeStyle = strokeStyle;
-
-  lines.forEach((line) => {
-    context.beginPath();
-    context.moveTo(line[0].x, line[0].y);
-
-    if (line.length > 1) {
-      for (let i = 1; i < line.length; i++) {
-        context.lineTo(line[i].x, line[i].y);
-      }
-    } else {
-      // If it's a single point, draw a small circle
-      context.arc(line[0].x, line[0].y, lineWidth / 2, 0, 2 * Math.PI);
-    }
-
-    context.stroke();
-  });
 }

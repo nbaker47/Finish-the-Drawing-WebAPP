@@ -6,9 +6,7 @@ import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
 import Sharebar from "@/components/Sharebar";
 import PencilMan from "@/components/drawing/pencil/PencilMan";
 import words from "@/components/drawing/pencil/words";
-import { daily } from "@/types/daily";
 import {
-  drawRandomLines,
   initializeCanvas,
   drawLines,
 } from "@/components/drawing/canvas/drawing";
