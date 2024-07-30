@@ -35,6 +35,28 @@ interface CanvasProps {
   redirectUrl: string;
 }
 
+async function fetchRandomLines(
+  containerWidth: number,
+  containerHeight: number
+) {
+  try {
+    let url =
+      process.env.NEXT_PUBLIC_API_URL +
+      "/daily/random-lines?canvas-width=" +
+      containerWidth +
+      "&canvas-height=" +
+      containerHeight;
+    console.log("Fetching daily data from:", url);
+    let response = await fetch(url, { cache: "no-store" });
+    var data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching daily data:", error);
+    // Provide fallback data
+    return { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
+  }
+}
+
 export default function Canvas({
   className,
   pencilMan,
@@ -55,6 +77,22 @@ export default function Canvas({
   const [clickCount, setClickCount] = useState(0);
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
+  const [randomLines, setRandomLines] = useState<{ x: number; y: number }[][]>(
+    []
+  );
+
+  useEffect(() => {
+    const fetchRandomLinesCaller = async (): Promise<
+      { x: number; y: number }[][]
+    > => {
+      let randomLines = await fetchRandomLines(containerWidth, containerHeight);
+      return randomLines;
+    };
+    fetchRandomLinesCaller().then((randomLines) => {
+      console.log("Canvas.tsx: fetchRandomLines", randomLines);
+      setRandomLines(randomLines);
+    });
+  }, [containerWidth, containerHeight]);
 
   useEffect(() => {
     setCanvasLoaded(true);
@@ -89,7 +127,7 @@ export default function Canvas({
   }, [containerRef]);
 
   useEffect(() => {
-    const initializeAndResizeCanvas = () => {
+    const initializeAndResizeCanvas = async () => {
       if (
         containerRef.current &&
         canvasRef &&
@@ -143,6 +181,9 @@ export default function Canvas({
               pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
             }
             drawRandomLines(randomLinesRef.current, canvasRef, context);
+            console.log(
+              "Canvas.tsx: drawRandomLines" + JSON.stringify(randomLines)
+            );
           }
         }
       }

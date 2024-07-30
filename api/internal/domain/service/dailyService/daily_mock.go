@@ -21,10 +21,14 @@ func (m *MockDailyService) GetTodaysDate() time.Time {
 	return args.Get(0).(time.Time)
 }
 
-func (m *MockDailyService) Create() error {
+// func (m *MockDailyService) Create() error {
+// 	panic("unimplemented")
+// }
+
+func (m *MockDailyService) GetRandomWord() string {
 	panic("unimplemented")
 }
 
-func (m *MockDailyService) GetRandomWord() string {
+func (m *MockDailyService) GetRandomLines(canvasWidth int, canvasHeight int) ([][][]float64, error) {
 	panic("unimplemented")
 }

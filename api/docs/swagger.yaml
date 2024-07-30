@@ -108,6 +108,30 @@ paths:
       summary: Get the seed and word of today
       tags:
       - Daily
+  /daily/random-lines:
+    get:
+      operationId: get-today-daily-random-lines
+      parameters:
+      - description: Canvas Width
+        in: query
+        name: canvas-width
+        required: true
+        type: integer
+      - description: Canvas Height
+        in: query
+        name: canvas-height
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "500":
+          description: Internal Server Error
+      summary: Get the line array for today
+      tags:
+      - Daily
   /drawing:
     get:
       description: Get all drawings

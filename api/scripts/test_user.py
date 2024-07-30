@@ -38,6 +38,7 @@ class TestUser:
 
     def get_user(self, user_id: str) -> None:
         response = requests.get(f'{self.url}/{user_id}')
+        print("GET USER RESPONSE", response.json())
         assert response.status_code == 200
         assert response.json()['id'] == user_id
         assert response.json()['username'] != None

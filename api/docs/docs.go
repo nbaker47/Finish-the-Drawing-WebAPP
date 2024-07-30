@@ -43,6 +43,42 @@ const docTemplate = `{
                 }
             }
         },
+        "/daily/random-lines": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Daily"
+                ],
+                "summary": "Get the line array for today",
+                "operationId": "get-today-daily-random-lines",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Canvas Width",
+                        "name": "canvas-width",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Canvas Height",
+                        "name": "canvas-height",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        },
         "/drawing": {
             "get": {
                 "description": "Get all drawings",

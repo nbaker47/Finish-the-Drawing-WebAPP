@@ -24,6 +24,9 @@ export function pushRandomLines(
   var canvasWidth = canvas.current?.width || 0;
   var canvasHeight = canvas.current?.height || 0;
 
+  console.log("pushRandomLines: canvasWidth", canvasWidth);
+  console.log("pushRandomLines: canvasHeight", canvasHeight);
+
   var centerX = canvasWidth / 2;
   var centerY = canvasHeight / 2;
 
