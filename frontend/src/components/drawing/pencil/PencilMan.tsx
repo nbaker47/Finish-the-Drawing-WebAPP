@@ -12,14 +12,12 @@ export default function PencilMan({
   clickCount,
   randomWord,
   setRandomWord,
-  canvasLoaded,
 }: {
   className?: string;
   speech?: string;
   clickCount: number;
   randomWord: string;
   setRandomWord: (word: string) => void;
-  canvasLoaded: boolean;
 }) {
   const images = [PencilNeutral, PencilHappy]; // Array of images
   const [imageIndex, setImageIndex] = useState(0); // New state variable
@@ -51,7 +49,6 @@ export default function PencilMan({
       className={clsx(
         "flex",
         "flex-row",
-        // "flex-grow",
         "gap-0",
         "ftd-border",
         "rounded-md",
@@ -70,12 +67,9 @@ export default function PencilMan({
           "w-[50px]",
           "md:w-[50px]",
           "lg:w-[70px]",
-          // "border-r-2",
-          // "border-gray-700",
           "flex",
           "items-center",
           "justify-center",
-          // "bg-diagonal",
           bubbleAnimation && "ani-bubble",
           "rounded-md"
         )}
@@ -93,9 +87,7 @@ export default function PencilMan({
           "justify-center", // Add this line
           "text-center", // Add this line\
           "mx-auto",
-          // "w-4/5",
           "text-[0.6rem]",
-          // "sm:text-[1rem]",
           "md:text-[0.8rem]",
           "lg:text-[1rem]",
           "text-black",
@@ -109,9 +101,7 @@ export default function PencilMan({
           bubbleAnimation && "ani-bubble"
         )}
       >
-        {canvasLoaded && (
-          <span className="">{speech ? speech : randomWord}</span>
-        )}
+        <span className="">{speech ? speech : randomWord}</span>
       </div>
     </div>
   );

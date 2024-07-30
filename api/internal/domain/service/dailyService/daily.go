@@ -34,25 +34,24 @@ func NewDailyService(repo repository.DailyRepository) *DailyServiceImpl {
 
 func (s *DailyServiceImpl) GetRandomLines(canvasWidth int, canvasHeight int) ([][][]float64, error) {
 
-	getSeed := func() (int, error) {
+	getSeed := func() (float64, error) {
 		// is there a daily for today?
 		todaysDaily, err := s.GetToday()
 		if err != nil {
 			return 0, err
 		}
 		seed := todaysDaily.Seed
-		return seed, nil
+		return float64(seed), nil
 	}
 
-	jumbleUp := func(seed int) (int, error) {
+	jumbleUp := func(seed float64) (float64, error) {
 		x := math.Sin(float64(seed)) * 10000
-		return int(x - math.Floor(x)), nil
+		return float64(x - math.Floor(x)), nil
 	}
 
 	// generate 7 lines
 	randomLines := [][][]float64{}
-	for i := 0; i < 7; i++ {
-
+	for i := 0.0; i < 7; i++ {
 		// HYPER PARAMS
 		// line segments (500 points)
 		n := 500
@@ -74,9 +73,10 @@ func (s *DailyServiceImpl) GetRandomLines(canvasWidth int, canvasHeight int) ([]
 		if err != nil {
 			return nil, err
 		}
+
 		// get random x and y start pos based on seed
-		xSeed := int(i) * seed
-		ySeed := int(i) * seed * 2
+		xSeed := i * seed
+		ySeed := i * seed * 2
 		xSeed, err = jumbleUp(xSeed)
 		if err != nil {
 			return nil, err
@@ -93,7 +93,7 @@ func (s *DailyServiceImpl) GetRandomLines(canvasWidth int, canvasHeight int) ([]
 
 		linePoints := [][]float64{}
 		for k := 1; k <= n; k++ {
-			randomizedPoint, err := jumbleUp((i * seed) * 3)
+			randomizedPoint, err := jumbleUp((i * seed * 3))
 			if err != nil {
 				return nil, err
 			}
@@ -106,7 +106,7 @@ func (s *DailyServiceImpl) GetRandomLines(canvasWidth int, canvasHeight int) ([]
 			maxLength := min(maxDistanceX, maxDistanceY)
 
 			remainingLength := minLength - lineLength
-			randomizedPoint, err = jumbleUp((i * seed) * 4)
+			randomizedPoint, err = jumbleUp((i * seed * 4))
 			if err != nil {
 				return nil, err
 			}

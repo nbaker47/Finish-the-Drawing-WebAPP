@@ -1,27 +1,14 @@
 "use client";
 
-import React, {
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-  RefObject,
-  useContext,
-  use,
-} from "react";
+import React, { useEffect, useRef, useState, RefObject } from "react";
 import clsx from "clsx";
 import CanvasButtons from "@/components/drawing/canvas/CanvasButtons";
 import Sharebar from "@/components/Sharebar";
 import PencilMan from "@/components/drawing/pencil/PencilMan";
-import {
-  drawRandomLines,
-  initializeCanvas,
-} from "@/components/drawing/canvas/drawing";
 import words from "@/components/drawing/pencil/words";
-import { CanvasContext } from "@/app/draw/CanvasContext";
-import { pushRandomLines } from "./randomLines";
-import { time } from "console";
 import { daily } from "@/types/daily";
+import { drawLines } from "./drawingReworked";
+import { pushRandomLines } from "./randomLines";
 
 interface CanvasProps {
   className?: string;
@@ -68,163 +55,75 @@ export default function Canvas({
   submitUrl,
   redirectUrl,
 }: CanvasProps) {
-  // const { daily, canvasRef } = useContext(CanvasContext);
-  const [canvasLoaded, setCanvasLoaded] = useState(false);
-  const [containerLoaded, setContainerLoaded] = useState(false);
+  // Refs for canvas and container
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const randomLinesRef = useRef<{ x: number; y: number }[][]>([]);
-  const [clickCount, setClickCount] = useState(0);
+  // State for container dimensions
   const [containerWidth, setContainerWidth] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
+  const [containerLoaded, setContainerLoaded] = useState(false);
+  // State for drawing
   const [randomLines, setRandomLines] = useState<{ x: number; y: number }[][]>(
     []
   );
-
-  useEffect(() => {
-    const fetchRandomLinesCaller = async (): Promise<
-      { x: number; y: number }[][]
-    > => {
-      let randomLines = await fetchRandomLines(containerWidth, containerHeight);
-      return randomLines;
-    };
-    fetchRandomLinesCaller().then((randomLines) => {
-      console.log("Canvas.tsx: fetchRandomLines", randomLines);
-      setRandomLines(randomLines);
-    });
-  }, [containerWidth, containerHeight]);
-
-  useEffect(() => {
-    setCanvasLoaded(true);
-  }, [canvasRef]);
-
-  useEffect(() => {
-    setContainerLoaded(true);
-    containerRef.current?.addEventListener("click", () => {
-      setClickCount((prevCount) => prevCount + 1);
-      console.log("Canvas.tsx: clickCount", clickCount);
-    });
-    containerRef.current?.addEventListener("touchstart", () => {
-      setClickCount((prevCount) => prevCount + 1);
-      console.log("Canvas.tsx: clickCount", clickCount);
-    });
-  }, [containerRef]);
-
-  useEffect(() => {
-    console.log("containerHeight", containerHeight);
-    console.log("containerWidth", containerWidth);
-    // set timeout
-    setTimeout(() => {
-      if (containerRef.current) {
-        setContainerHeight(containerRef.current?.clientHeight ?? 0);
-        setContainerWidth(containerRef.current?.clientWidth ?? 0);
-      }
-    }, 100);
-    // if (containerRef.current) {
-    //   setContainerHeight(containerRef.current?.clientHeight ?? 0);
-    //   setContainerWidth(containerRef.current?.clientWidth ?? 0);
-    // }
-  }, [containerRef]);
-
-  useEffect(() => {
-    const initializeAndResizeCanvas = async () => {
-      if (
-        containerRef.current &&
-        canvasRef &&
-        containerHeight !== 0 &&
-        containerWidth !== 0 &&
-        typeof canvasRef !== "function"
-      ) {
-        console.log("Initializing canvas");
-        console.log("containerHeight", containerHeight);
-        console.log("containerWidth", containerWidth);
-
-        const container = containerRef.current;
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        const context = canvas.getContext("2d");
-
-        // let { width, height } = container.getBoundingClientRect();
-
-        // canvas.width = containerWidth;
-        // canvas.height = containerHeight - 40;
-
-        // canvas.width = width;
-        // canvas.height = height - 40;
-
-        if (context) {
-          // Generate random lines if not already generated
-          if (randomLinesRef.current.length === 0) {
-            for (var i = 0; i < 7; i++) {
-              pushRandomLines(
-                i,
-                randomLinesRef.current,
-                canvasRef,
-                context,
-                daily.seed
-              );
-            }
-          }
-          // add event listeners
-          // let { width, height } = container.getBoundingClientRect();
-          // canvas.width = width;
-          // canvas.height = height - 40;
-          initializeCanvas(canvasRef, randomLinesRef.current, context);
-
-          // Draw the lines
-          if (lines) {
-            let randomLines: { x: number; y: number }[][] = [];
-            for (var i = 0; i < 7; i++) {
-              //   console.log(i);
-              //   console.log(randomLines);
-              pushRandomLines(i, randomLines, canvasRef, context, daily.seed);
-            }
-            drawRandomLines(randomLinesRef.current, canvasRef, context);
-            console.log(
-              "Canvas.tsx: drawRandomLines" + JSON.stringify(randomLines)
-            );
-          }
-        }
-      }
-    };
-
-    initializeAndResizeCanvas();
-    window.addEventListener("resize", initializeAndResizeCanvas);
-
-    return () => {
-      window.removeEventListener("resize", initializeAndResizeCanvas);
-    };
-  }, [containerWidth, containerHeight, canvasRef, lines, containerRef]);
-
-  // useEffect(() => {
-  //   if (containerRef.current && canvasRef && typeof canvasRef !== "function") {
-  //     console.log("Initializing canvas");
-
-  //     const container = containerRef.current;
-  //     const canvas = canvasRef.current;
-  //     if (!canvas) return;
-  //     const { width, height } = container.getBoundingClientRect();
-  //     canvas.width = width;
-  //     canvas.height = height - 40;
-  //   }
-  // }, [containerRef]);
-
-  // TODO: HACK, when the window is resized, refresh the window
-  // const refresh = () => {
-  //   window.location.reload();
-  // };
-  // window.addEventListener("resize", refresh);
-
   // State for pencil text
   const [randomWord, setRandomWord] = useState(words[0]);
+  const [clickCount, setClickCount] = useState(0);
+
+  // When the canvas container is loaded capture its dimensions
+  useEffect(() => {
+    if (containerRef.current) {
+      setContainerWidth(containerRef.current.offsetWidth);
+      setContainerHeight(containerRef.current.offsetHeight);
+      setContainerLoaded(true);
+    }
+  }, [containerRef.current]);
+
+  // Fetch random lines on component mount
+  useEffect(() => {
+    console.log(
+      "containerWidth",
+      containerWidth,
+      "containerHeight",
+      containerHeight
+    );
+    if (lines) {
+      fetchRandomLines(containerWidth, containerHeight).then((lines) => {
+        const transformedLines = lines.map((line: any[]) =>
+          line.map((point) => ({ x: point[0], y: point[1] }))
+        );
+        setRandomLines(transformedLines);
+      });
+    }
+    // if (canvasRef.current) {
+    //   for (var i = 0; i < 7; i++) {
+    //     pushRandomLines(
+    //       i,
+    //       randomLines,
+    //       canvasRef,
+    //       canvasRef.current.getContext("2d"),
+    //       daily.seed
+    //     );
+    //   }
+    // }
+  }, [containerWidth, containerHeight]);
+
+  // Draw random lines on canvas
+  useEffect(() => {
+    console.log("Canvas.tsx: randomLines", randomLines);
+    if (canvasRef.current && randomLines) {
+      const context = canvasRef.current.getContext("2d");
+      if (context) {
+        drawLines(context, randomLines);
+      }
+    }
+  }, [randomLines]);
 
   return (
     <div
       className={clsx(
         "flex",
         "flex-col",
-        // "flex-grow",
         "items-center",
         "justify-center",
         "bg-pokadot",
@@ -237,8 +136,6 @@ export default function Canvas({
         "w-[100%]",
         "xs:w-[100%]",
         "sm:w-[90%]",
-        // "items-center",
-        // "justify-center",
         "h-fit",
         "mx-auto",
         className
@@ -247,29 +144,15 @@ export default function Canvas({
     >
       {shareBar && <Sharebar className="mb-3" />}
       <div
-        className={
-          clsx(
-            "flex",
-            "flex-col",
-            // "flex-grow",
-            "items-center",
-            "justify-center",
-            "w-[100%]",
-            // "h-[100%]",
-            "max-w-[98vw]",
-            "sm:max-w-[90%]"
-            // "max-h-[10vh]"
-          )
-          // // "aspect-[1/1]",
-          // "w-[100%]",
-          // "h-[100%]",
-          // "max-w-[99vw]",
-          // // "max-w-[90%]",
-          // "min-h-[55vh]",
-          // // "min-w-[150px]",
-          // "mx-auto"
-          // // "screen-height-grow"
-        }
+        className={clsx(
+          "flex",
+          "flex-col",
+          "items-center",
+          "justify-center",
+          "w-[100%]",
+          "max-w-[98vw]",
+          "sm:max-w-[90%]"
+        )}
       >
         {pencilMan && (
           <div className="w-11/12">
@@ -278,7 +161,6 @@ export default function Canvas({
               clickCount={clickCount}
               randomWord={randomWord}
               setRandomWord={setRandomWord}
-              canvasLoaded={canvasLoaded}
             />
           </div>
         )}
@@ -289,18 +171,16 @@ export default function Canvas({
             "rounded-3xl",
             "flex",
             "flex-grow",
-            // "aspect-square",
             "border-dashed",
             "border-gray-700",
             "border-2",
             "w-[100%]",
             "max-h-[40vh]",
             "min-h-[40vh]"
-            // "max-w-[60vh]"
           )}
         >
           <div className="flex flex-grow">
-            {containerHeight !== 0 && containerWidth !== 0 && (
+            {containerLoaded && (
               <canvas
                 className="static fade-in cursor-crosshair ani-fade-in w-[100%] h-[100%]"
                 ref={canvasRef as RefObject<HTMLCanvasElement>}
@@ -314,16 +194,14 @@ export default function Canvas({
           </div>
         </div>
         <div className="w-full">
-          {(canvasLoaded && (
-            <CanvasButtons
-              description={randomWord}
-              canvasRef={canvasRef}
-              randomLines={randomLinesRef.current}
-              daily={daily}
-              submitUrl={submitUrl}
-              redirectUrl={redirectUrl}
-            />
-          )) ?? <p>Loading...</p>}
+          <CanvasButtons
+            description={randomWord}
+            canvasRef={canvasRef}
+            randomLines={randomLines}
+            daily={daily}
+            submitUrl={submitUrl}
+            redirectUrl={redirectUrl}
+          />
         </div>
       </div>
     </div>
