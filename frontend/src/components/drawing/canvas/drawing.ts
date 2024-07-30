@@ -48,7 +48,7 @@ export function initializeCanvas(
   if (canvas) {
     context = canvas.getContext("2d");
 
-    drawRandomLines(randomLines, canvasRef, contextRef);
+    drawAllLines(randomLines, canvasRef, contextRef);
 
     // Event listeners for drawing
     canvas.addEventListener("mousedown", startDrawing);
@@ -170,7 +170,7 @@ export function undoLastStroke(
   // Clear the canvas
   context.clearRect(0, 0, canvas.width, canvas.height);
   // redraw random lines:
-  drawRandomLines(randomLines, { current: canvas }, context);
+  drawAllLines(randomLines, { current: canvas }, context);
 
   // Redraw all the user's line segments
   drawLines(
@@ -187,13 +187,13 @@ export function undoLastStroke(
 ////////////////////////////////
 
 // Draw all randomly generated lines
-export function drawRandomLines(
+export function drawAllLines(
   randomLines: { x: number; y: number }[][],
   canvas: React.RefObject<HTMLCanvasElement>,
   context: CanvasRenderingContext2D
 ): void {
   if (canvas.current) {
-    // console.log("drawRandomLines: canvas.current", canvas.current);
+    // console.log("drawAllLines: canvas.current", canvas.current);
 
     context.clearRect(0, 0, canvas.current.width, canvas.current.height);
     // Draw the user lines
@@ -219,26 +219,26 @@ function draw(
   // Get the coordinates of the cursor
   const [x_temp, y_temp] = getXY(event);
 
-  // Check if the current line segment intersects with any of the random lines
-  const isIntersecting = checkIntersection(
-    currentLine.points[0].x,
-    currentLine.points[0].y,
-    x_temp,
-    y_temp,
-    randomLines
-  );
+  // // Check if the current line segment intersects with any of the random lines
+  // const isIntersecting = checkIntersection(
+  //   currentLine.points[0].x,
+  //   currentLine.points[0].y,
+  //   x_temp,
+  //   y_temp,
+  //   randomLines
+  // );
 
-  if (isIntersecting) {
-    // If intersection occurs, stop drawing
-    //stopDrawing();
-    //return;
-  }
+  // if (isIntersecting) {
+  //   // If intersection occurs, stop drawing
+  //   //stopDrawing();
+  //   //return;
+  // }
 
   currentLine.points.push({ x: x_temp, y: y_temp });
   // clear the canvas
   context.clearRect(0, 0, canvas.width, canvas.height);
   // redraw random lines:
-  drawRandomLines(randomLines, { current: canvas }, context);
+  drawAllLines(randomLines, { current: canvas }, context);
 
   context.strokeStyle = "black";
   context.beginPath();

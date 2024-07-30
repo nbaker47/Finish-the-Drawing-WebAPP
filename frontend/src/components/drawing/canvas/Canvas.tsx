@@ -112,7 +112,6 @@ export default function Canvas({
       if (!canvas) return;
       const context = canvas.getContext("2d");
       if (context) {
-        // Generate random lines if not already generated
         initializeCanvas(canvasRef, randomLines, context);
       }
     }
