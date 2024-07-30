@@ -1,12 +1,7 @@
-// Define a counter variable to keep track of the number of strokes
-let strokeCounter = 0;
-
 // Variables for canvas and drawing
 let canvas: HTMLCanvasElement | null = null;
 let context: CanvasRenderingContext2D | null = null;
-
 let isDrawing = false;
-let isFirstTouch = true; // Flag to differentiate between first touch and random lines
 let userDrawings: { points: { x: number; y: number }[] }[] = []; // Array to store user's drawings
 let currentLine: { points: { x: number; y: number }[] } | null = null; // Variable to store the current line segment
 
@@ -275,4 +270,32 @@ function stopDrawing() {
   }
   // Call the updatePencilText function
   // updatePencilText();
+}
+
+export function drawLines(
+  context: CanvasRenderingContext2D,
+  lines: { x: number; y: number }[][],
+  lineWidth: number = 3,
+  lineCap: CanvasLineCap = "round",
+  strokeStyle: string = "#8F95FF"
+) {
+  context.lineWidth = lineWidth;
+  context.lineCap = lineCap;
+  context.strokeStyle = strokeStyle;
+
+  lines.forEach((line) => {
+    context.beginPath();
+    context.moveTo(line[0].x, line[0].y);
+
+    if (line.length > 1) {
+      for (let i = 1; i < line.length; i++) {
+        context.lineTo(line[i].x, line[i].y);
+      }
+    } else {
+      // If it's a single point, draw a small circle
+      context.arc(line[0].x, line[0].y, lineWidth / 2, 0, 2 * Math.PI);
+    }
+
+    context.stroke();
+  });
 }

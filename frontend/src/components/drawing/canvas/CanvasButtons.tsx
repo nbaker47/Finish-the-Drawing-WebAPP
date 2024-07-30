@@ -6,26 +6,22 @@ import { submitDrawing } from "./submitDrawing";
 import { daily } from "@/types/daily";
 import { useAtom } from "jotai";
 import { submitUrlAtom, redirectUrlAtom, dailyAtom } from "@/app/draw/page";
-import { undo } from "./Canvas";
+import { undoLastStroke } from "./drawing";
 
 interface CanvasButtonsProps {
   className?: string;
   description?: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  randomLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>;
-  userDrawnLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>;
-  setUserDrawnLines: React.Dispatch<
-    React.SetStateAction<{ x: number; y: number }[][]>
-  >;
+  randomLines: { x: number; y: number }[][];
+  userDrawnLines: { x: number; y: number }[][];
 }
 
 export default function CanvasButtons({
   className,
   description,
   canvasRef,
-  randomLinesRef,
-  userDrawnLinesRef,
-  setUserDrawnLines,
+  randomLines,
+  userDrawnLines,
 }: CanvasButtonsProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const canvas = canvasRef.current;
@@ -35,23 +31,31 @@ export default function CanvasButtons({
   const [daily] = useAtom(dailyAtom);
 
   const handleUndo = () => {
-    undo(canvasRef, userDrawnLinesRef, setUserDrawnLines, randomLinesRef);
+    if (canvas && context && randomLines) {
+      undoLastStroke(canvas, context, randomLines);
+    } else {
+      // alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
+      // TODO: Hack: reload page
+      // location.reload();
+    }
   };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    if (canvas && context && daily && description && !isSubmitting) {
-      try {
-        submitDrawing(
-          submitUrl,
-          canvas,
-          redirectUrl,
-          daily,
-          description,
-          "NULL_USER"
-        );
-      } finally {
-        setIsSubmitting(false);
+    if (canvas && context) {
+      if (daily && description) {
+        try {
+          submitDrawing(
+            submitUrl,
+            canvas,
+            redirectUrl,
+            daily,
+            description,
+            "NULL_USER"
+          );
+        } finally {
+          setIsSubmitting(false);
+        }
       }
     }
   };

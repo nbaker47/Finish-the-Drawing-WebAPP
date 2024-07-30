@@ -7,6 +7,11 @@ import Sharebar from "@/components/Sharebar";
 import PencilMan from "@/components/drawing/pencil/PencilMan";
 import words from "@/components/drawing/pencil/words";
 import { daily } from "@/types/daily";
+import {
+  drawRandomLines,
+  initializeCanvas,
+  drawLines,
+} from "@/components/drawing/canvas/drawing";
 
 async function fetchRandomLines(
   containerWidth: number,
@@ -27,56 +32,6 @@ async function fetchRandomLines(
     console.error("Error fetching daily data:", error);
     // Provide fallback data
     return { date: "fallback", id: "fallback", word: "fallback", seed: 511 };
-  }
-}
-
-export function drawLines(
-  context: CanvasRenderingContext2D,
-  lines: { x: number; y: number }[][],
-  lineWidth: number = 3,
-  lineCap: CanvasLineCap = "round",
-  strokeStyle: string = "#8F95FF"
-) {
-  context.lineWidth = lineWidth;
-  context.lineCap = lineCap;
-  context.strokeStyle = strokeStyle;
-
-  lines.forEach((line) => {
-    context.beginPath();
-    context.moveTo(line[0].x, line[0].y);
-
-    if (line.length > 1) {
-      for (let i = 1; i < line.length; i++) {
-        context.lineTo(line[i].x, line[i].y);
-      }
-    } else {
-      // If it's a single point, draw a small circle
-      context.arc(line[0].x, line[0].y, lineWidth / 2, 0, 2 * Math.PI);
-    }
-
-    context.stroke();
-  });
-}
-
-export function undo(
-  canvasRef: RefObject<HTMLCanvasElement>,
-  userDrawnLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>,
-  setUserDrawnLines: React.Dispatch<
-    React.SetStateAction<{ x: number; y: number }[][]>
-  >,
-  randomLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>
-) {
-  if (canvasRef.current && randomLinesRef.current) {
-    // Clear the canvas
-    let context = canvasRef.current.getContext("2d");
-    if (!context) return;
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-
-    setUserDrawnLines(
-      userDrawnLinesRef.current.slice(0, userDrawnLinesRef.current.length - 1)
-    );
-
-    drawLines(context, randomLinesRef.current);
   }
 }
 
@@ -102,56 +57,13 @@ export default function Canvas({
   // State for pencil text
   const [randomWord, setRandomWord] = useState(words[0]);
   const [clickCount, setClickCount] = useState(0);
-
-  const [currentLine, setCurrentLine] = useState<{
-    points: { x: number; y: number }[];
-  } | null>(null);
-  const currentLineRef = useRef(currentLine);
-  useEffect(() => {
-    currentLineRef.current = currentLine;
-  }, [currentLine]);
-
-  //////////////////////////////////////////////////////////////
-  // RANDOM LINES///////////////////////////////////////////////
-  //////////////////////////////////////////////////////////////
-
   // State for random lines
   const [randomLines, setRandomLines] = useState<{ x: number; y: number }[][]>(
     []
   );
-  // Ref for random lines
-  const randomLinesRef = useRef(randomLines);
-  // When randomLines state changes, update the ref
-  useEffect(() => {
-    randomLinesRef.current = randomLines;
-  }, [randomLines]);
-
-  //////////////////////////////////////////////////////////////
-  // USER DRAWN LINES///////////////////////////////////////////
-  //////////////////////////////////////////////////////////////
-
-  // State for user drawn lines
   const [userDrawnLines, setUserDrawnLines] = useState<
     { x: number; y: number }[][]
   >([]);
-  // Refs for drawing
-  const userDrawnLinesRef = useRef(userDrawnLines);
-  // When userDrawnLines state changes, update the ref
-  useEffect(() => {
-    userDrawnLinesRef.current = userDrawnLines;
-    let context = canvasRef.current?.getContext("2d");
-    if (context) {
-      drawLines(context, userDrawnLinesRef.current, 2, "round", "#000000");
-    }
-    console.log("User drawn lines:", userDrawnLinesRef.current);
-  }, [userDrawnLines]);
-
-  useEffect(() => {
-    console.log("currentLine", currentLine);
-  }, [currentLine]);
-
-  // Local vars for drawing
-  let isDrawing = false;
 
   //////////////////////////////////////////////////////////////
   // EFFECTS///////////////////////////////////////////////////
@@ -183,103 +95,30 @@ export default function Canvas({
     if (canvasRef.current && randomLines) {
       const context = canvasRef.current.getContext("2d");
       if (context) {
-        initializeCanvas();
+        initializeCanvasWrapper();
         drawLines(context, randomLines);
       }
     }
   }, [randomLines]);
 
   // DRAWING FUNCTIONS
-  function initializeCanvas() {
-    if (!containerRef.current || !canvasRef.current) return;
-    const context = canvasRef.current.getContext("2d");
-
-    // Wipe the canvas clean
-    clearCanvas();
-
-    if (canvasRef.current) {
-      // Event listeners for drawing
-      canvasRef.current.addEventListener("mousedown", (e) => startDrawing(e));
-      canvasRef.current.addEventListener("mousemove", (e) => draw(e));
-      canvasRef.current.addEventListener("mouseup", () => stopDrawing());
-      canvasRef.current.addEventListener("mouseout", () => stopDrawing());
-
-      // Touch event listeners for drawing
-      canvasRef.current.addEventListener("touchstart", (e) => startDrawing(e));
-      canvasRef.current.addEventListener("touchmove", (e) => draw(e));
-      canvasRef.current.addEventListener("touchend", () => stopDrawing());
-    }
-  }
-
-  function clearCanvas() {
-    if (!canvasRef.current) return;
-    const context = canvasRef.current?.getContext("2d");
-    if (!context) return;
-    context.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
-  }
-
-  function startDrawing(event: MouseEvent | TouchEvent) {
-    event.preventDefault(); // Prevent scrolling on touch devices
-    isDrawing = true;
-    // Get the coordinates of the cursor
-    const [x_temp, y_temp] = getXY(event);
-    // Set the starting point of the line segment
-    setCurrentLine({ points: [{ x: x_temp, y: y_temp }] });
-  }
-
-  function getXY(event: MouseEvent | TouchEvent): [number, number] {
-    if (!canvasRef.current) return [0, 0];
-    const rect = canvasRef.current.getBoundingClientRect();
-    let x_temp: number = 0,
-      y_temp: number = 0;
-
-    if (event.type.startsWith("touch")) {
-      if (event instanceof TouchEvent) {
-        x_temp = event.touches[0].clientX - rect.left;
-        y_temp = event.touches[0].clientY - rect.top;
+  const initializeCanvasWrapper = () => {
+    if (
+      containerRef.current &&
+      canvasRef &&
+      containerHeight !== 0 &&
+      containerWidth !== 0 &&
+      typeof canvasRef !== "function"
+    ) {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      const context = canvas.getContext("2d");
+      if (context) {
+        // Generate random lines if not already generated
+        initializeCanvas(canvasRef, randomLines, context);
       }
-    } else {
-      x_temp = (event as MouseEvent).clientX - rect.left;
-      y_temp = (event as MouseEvent).clientY - rect.top;
     }
-
-    // Scale the coordinates
-    const scaleX = canvasRef.current.width / rect.width;
-    const scaleY = canvasRef.current.height / rect.height;
-
-    return [x_temp * scaleX, y_temp * scaleY];
-  }
-
-  function draw(event: MouseEvent | TouchEvent) {
-    if (!canvasRef.current) return;
-    let context = canvasRef.current.getContext("2d");
-    if (!context) return;
-    if (!isDrawing || !context || !canvasRef.current || !currentLine) return;
-
-    // Get the coordinates of the cursor
-    const [x_temp, y_temp] = getXY(event);
-    setCurrentLine({
-      points: [...currentLine.points, { x: x_temp, y: y_temp }],
-    });
-
-    // draw the current line
-    drawLines(context, [currentLine.points], 2, "round", "#000000");
-  }
-
-  function stopDrawing() {
-    console.log("stopDrawing called");
-    if (!isDrawing) return;
-    isDrawing = false;
-    // Store the completed line segment in the userDrawings array
-    if (currentLineRef.current && currentLineRef.current.points) {
-      console.log("stopDrawing calleddwadaw");
-      setUserDrawnLines([
-        ...userDrawnLinesRef.current,
-        currentLineRef.current.points,
-      ]);
-      setCurrentLine(null);
-    }
-  }
+  };
 
   return (
     <div
@@ -359,9 +198,8 @@ export default function Canvas({
           <CanvasButtons
             description={randomWord}
             canvasRef={canvasRef}
-            randomLinesRef={randomLinesRef}
-            userDrawnLinesRef={userDrawnLinesRef}
-            setUserDrawnLines={setUserDrawnLines}
+            randomLines={randomLines}
+            userDrawnLines={userDrawnLines}
           />
         </div>
       </div>
