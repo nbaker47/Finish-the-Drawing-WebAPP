@@ -7,7 +7,7 @@ let context: CanvasRenderingContext2D | null = null;
 
 let isDrawing = false;
 let isFirstTouch = true; // Flag to differentiate between first touch and random lines
-const userDrawings: { points: { x: number; y: number }[] }[] = []; // Array to store user's drawings
+let userDrawings: { points: { x: number; y: number }[] }[] = []; // Array to store user's drawings
 let currentLine: { points: { x: number; y: number }[] } | null = null; // Variable to store the current line segment
 
 ////////////////////////////////
@@ -26,6 +26,8 @@ export function initializeCanvas(
     context = canvas.getContext("2d");
 
     drawRandomLines(randomLines, canvasRef, contextRef);
+
+    userDrawings = [];
 
     userDrawings.forEach(function (line) {
       if (!context) return;

@@ -194,7 +194,7 @@ export default function Canvas({
         "pt-3",
         "pb-2",
         "w-[100%]",
-        "xs:w-[85%]",
+        "xs:w-[100%]",
         "sm:w-[90%]",
         // "items-center",
         // "justify-center",

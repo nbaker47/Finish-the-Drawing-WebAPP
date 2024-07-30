@@ -38,6 +38,8 @@ export default function CanvasButtons({
       undoLastStroke(canvas, context, randomLines);
     } else {
       // alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
+      // TODO: Hack: reload page
+      // location.reload();
     }
   };
 
