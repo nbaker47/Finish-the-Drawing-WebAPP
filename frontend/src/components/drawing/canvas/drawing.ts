@@ -233,8 +233,8 @@ function draw(
 
   if (isIntersecting) {
     // If intersection occurs, stop drawing
-    stopDrawing();
-    return;
+    //stopDrawing();
+    //return;
   }
 
   context.lineWidth = 3;

@@ -1,64 +1,57 @@
 "use client";
 
 import { FaUndo } from "react-icons/fa";
-import React, { useContext, useState } from "react";
-import { undoLastStroke } from "./drawing";
+import React, { useState } from "react";
 import { submitDrawing } from "./submitDrawing";
 import { daily } from "@/types/daily";
-import { CanvasContext } from "@/app/draw/CanvasContext";
+import { useAtom } from "jotai";
+import { submitUrlAtom, redirectUrlAtom, dailyAtom } from "@/app/draw/page";
+import { undo } from "./Canvas";
 
 interface CanvasButtonsProps {
   className?: string;
   description?: string;
   canvasRef: React.RefObject<HTMLCanvasElement>;
-  randomLines: { x: number; y: number }[][];
-  daily: daily;
-  submitUrl: string;
-  redirectUrl: string;
+  randomLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>;
+  userDrawnLinesRef: React.MutableRefObject<{ x: number; y: number }[][]>;
+  setUserDrawnLines: React.Dispatch<
+    React.SetStateAction<{ x: number; y: number }[][]>
+  >;
 }
 
 export default function CanvasButtons({
   className,
   description,
   canvasRef,
-  randomLines,
-  daily,
-  submitUrl,
-  redirectUrl,
+  randomLinesRef,
+  userDrawnLinesRef,
+  setUserDrawnLines,
 }: CanvasButtonsProps) {
-  // const { canvasRef, randomLines, daily, submitUrl, redirectUrl } =
-  //   useContext(CanvasContext);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const canvas = canvasRef.current;
   const context = canvas?.getContext("2d");
+  const [submitUrl] = useAtom(submitUrlAtom);
+  const [redirectUrl] = useAtom(redirectUrlAtom);
+  const [daily] = useAtom(dailyAtom);
 
   const handleUndo = () => {
-    if (canvas && context && randomLines) {
-      undoLastStroke(canvas, context, randomLines);
-    } else {
-      // alert(`canvas: ${canvas} context:${context} randomLines:${randomLines}`);
-      // TODO: Hack: reload page
-      // location.reload();
-    }
+    undo(canvasRef, userDrawnLinesRef, setUserDrawnLines, randomLinesRef);
   };
 
   const handleSubmit = () => {
     setIsSubmitting(true);
-    if (canvas && context) {
-      if (daily && description) {
-        try {
-          submitDrawing(
-            submitUrl,
-            canvas,
-            redirectUrl,
-            daily,
-            description,
-            "NULL_USER"
-          );
-        } finally {
-          setIsSubmitting(false);
-        }
+    if (canvas && context && daily && description && !isSubmitting) {
+      try {
+        submitDrawing(
+          submitUrl,
+          canvas,
+          redirectUrl,
+          daily,
+          description,
+          "NULL_USER"
+        );
+      } finally {
+        setIsSubmitting(false);
       }
     }
   };

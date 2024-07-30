@@ -5,6 +5,7 @@ import Title from "@/app/draw/Title";
 import clsx from "clsx";
 import { daily } from "@/types/daily";
 import Canvas from "@/components/drawing/canvas/Canvas";
+import { atom, useAtom } from "jotai";
 
 async function fetchDaily() {
   try {
@@ -20,13 +21,18 @@ async function fetchDaily() {
   }
 }
 
+// Create atoms
+export const submitUrlAtom = atom(`${process.env.NEXT_PUBLIC_API_URL}/drawing`);
+export const redirectUrlAtom = atom("/view-today");
+export const dailyAtom = atom<daily | null>(null);
+
 export default function Page() {
-  const [daily, setData] = useState<daily | null>(null);
+  const [daily, setDaily] = useAtom(dailyAtom);
 
   useEffect(() => {
     const fetchData = async () => {
       const dailyData = await fetchDaily();
-      setData(dailyData);
+      setDaily(dailyData);
     };
     fetchData();
   }, []);
@@ -35,19 +41,11 @@ export default function Page() {
     return <div>Loading...</div>;
   }
 
-  // get data
-
   return (
     <div className="flex flex-col items-center justify-center">
       <div
         className={clsx(
-          //
-          // "sm:w-min",
-          // "h-min",
           "mt-0",
-          // //
-          // "w-11/12",
-          //
           "bg-blue-zigzag",
           "border-2",
           "border-gray-700",
@@ -61,30 +59,17 @@ export default function Page() {
           "h-[fit]",
           "w-[100vw]",
           "sm:w-[90vw]",
-          // "sm:h-[85vh]",
           "flex",
           "flex-col",
           "w-full",
           "xl:w-[50vw]"
-          // "items-center"
-          // "mt-1"
         )}
         style={{
           boxShadow: "3px 3px 3px 2px rgba(0, 0, 0, 0.23)",
-          // maxHeight: "calc(100vh - 10rem)",
         }}
       >
         <Title word={daily.word} className="mt-2 mb-2" wordClassName="" />
-        <Canvas
-          pencilMan={true}
-          shareBar={true}
-          // canvasRef={canvasRef}
-          // randomLines={randomLines}
-          lines={true}
-          daily={daily}
-          submitUrl={`${process.env.NEXT_PUBLIC_API_URL}/drawing`}
-          redirectUrl="/view-today"
-        />
+        <Canvas pencilMan={true} shareBar={true} lines={true} />
       </div>
     </div>
   );

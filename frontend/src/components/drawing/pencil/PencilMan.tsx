@@ -19,9 +19,9 @@ export default function PencilMan({
   randomWord: string;
   setRandomWord: (word: string) => void;
 }) {
-  const images = [PencilNeutral, PencilHappy]; // Array of images
-  const [imageIndex, setImageIndex] = useState(0); // New state variable
-  const [bubbleAnimation, setBubbleAnimation] = useState(false); // New state variable
+  const images = [PencilNeutral, PencilHappy];
+  const [imageIndex, setImageIndex] = useState(0);
+  const [bubbleAnimation, setBubbleAnimation] = useState(false);
 
   useEffect(() => {
     console.log("PencilMan.tsx: clickCount: ", clickCount);
@@ -55,8 +55,8 @@ export default function PencilMan({
         "shadow-inner",
         "bg-lined-faint",
         "items-center",
-        "justify-center", // Add this line
-        "text-center", // Add this line\
+        "justify-center",
+        "text-center",
         className
       )}
       style={{ width: "100% !important" }}
@@ -84,8 +84,8 @@ export default function PencilMan({
         className={clsx(
           "flex",
           "items-center",
-          "justify-center", // Add this line
-          "text-center", // Add this line\
+          "justify-center",
+          "text-center",
           "mx-auto",
           "text-[0.6rem]",
           "md:text-[0.8rem]",
